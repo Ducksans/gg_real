@@ -4,7 +4,7 @@
 # created: 2025-09-22 14:46 UTC / 2025-09-22 23:46 KST
 # updated: 2025-09-22 14:46 UTC / 2025-09-22 23:46 KST
 # purpose: 사이드카(.meta.yaml) 기반 메타 검사(문서/코드 주석 불가 파일 대체)
-# doc_refs: ["AGENTS.md", "admin/plan/improvement-rounds.md"]
+# doc_refs: ["AGENTS.md", "admin/plan/improvement-rounds.md", "admin/plan/m1-kickoff.md"]
 set -euo pipefail
 
 # 검사 범위: admin/**, apps/**, scripts/**, docs/**, 주요 루트 문서
@@ -60,4 +60,3 @@ fi
 
 echo "[OK] validate_sidecar_meta: 통과" >&2
 exit 0
-

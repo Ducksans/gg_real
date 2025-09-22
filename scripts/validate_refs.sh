@@ -4,7 +4,7 @@
 # created: 2025-09-22 08:26 UTC / 2025-09-22 17:26 KST
 # updated: 2025-09-22 10:59 UTC / 2025-09-22 19:59 KST
 # purpose: 문서↔코드 상호 참조 검증(R9) — 경로 존재/패턴/쌍방 매칭/데드 링크 리포트
-# doc_refs: ["admin/plan/improvement-rounds.md", "AGENTS.md", "admin/runbooks/release.md"]
+# doc_refs: ["admin/plan/improvement-rounds.md", "AGENTS.md", "admin/runbooks/release.md", "admin/plan/m1-kickoff.md"]
 set -euo pipefail
 
 shopt -s nullglob

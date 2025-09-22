@@ -4,7 +4,7 @@
 # created: 2025-09-22 14:45 UTC / 2025-09-22 23:45 KST
 # updated: 2025-09-22 14:45 UTC / 2025-09-22 23:45 KST
 # purpose: 코드 파일 헤더(생성/업데이트/상호참조) 강제 검사
-# doc_refs: ["AGENTS.md", "admin/templates/code-header.ts.tmpl", "admin/templates/code-header.sh.tmpl"]
+# doc_refs: ["AGENTS.md", "admin/templates/code-header.ts.tmpl", "admin/templates/code-header.sh.tmpl", "admin/plan/m1-kickoff.md"]
 set -euo pipefail
 
 shopt -s nullglob
@@ -53,4 +53,3 @@ fi
 
 echo "[OK] validate_code_headers: 통과" >&2
 exit 0
-
