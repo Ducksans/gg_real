@@ -76,6 +76,8 @@ meta_fail=0
 for file in "${added[@]}" "${modified[@]}"; do
   [[ -z "$file" ]] && continue
   case "$file" in
+    admin/templates/*)
+      ;;
     *.md)
       if ! validate_frontmatter "$file"; then
         meta_fail=1

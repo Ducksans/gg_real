@@ -1,0 +1,16 @@
+{
+  "doc_refs": ["basesettings.md", "admin/plan/m1-kickoff.md"],
+  "description": "샘플 의존 그래프 – 라우팅/데이터/관측 모듈 관계",
+  "nodes": [
+    { "id": "web", "type": "app", "label": "apps/web", "status": "planning" },
+    { "id": "api", "type": "app", "label": "apps/api", "status": "planning" },
+    { "id": "data", "type": "data", "label": "admin/data", "status": "ready" },
+    { "id": "ci", "type": "infra", "label": "GitHub Actions", "status": "ready" }
+  ],
+  "edges": [
+    { "from": "data", "to": "web", "type": "feeds" },
+    { "from": "data", "to": "api", "type": "feeds" },
+    { "from": "ci", "to": "web", "type": "validates" },
+    { "from": "ci", "to": "api", "type": "validates" }
+  ]
+}

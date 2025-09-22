@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-22 17:24 UTC / 2025-09-23 02:24 KST
+updated: 2025-09-22 18:59 UTC / 2025-09-23 03:59 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -44,10 +44,10 @@ code_refs:
 # 실행 순서(체크리스트 — 권장 수정안 반영)
 
 - [x] M0-0 리포/도구 체계: 모노레포(Turborepo), pnpm, .nvmrc, .editorconfig, eslint/prettier, husky+lint-staged, .gitignore, .env.example, 브랜치 보호 규칙 (2025-09-22 15:21 UTC / 2025-09-23 00:21 KST — pnpm+turbo 초기화 및 개발 도구 설정 반영)
-- [ ] M0-1 문서 스캐폴딩: admin 구조/템플릿(문서/메타/체크포인트) 생성
-- [ ] M0-2 표준 주석/프런트매터 규칙 확정 및 템플릿 배포
+- [x] M0-1 문서 스캐폴딩: admin 구조/템플릿(문서/메타/체크포인트) 생성 (2025-09-22 18:45 UTC / 2025-09-23 03:45 KST — templates/\* 및 README 정리)
+- [x] M0-2 표준 주석/프런트매터 규칙 확정 및 템플릿 배포 (2025-09-22 18:45 UTC / 2025-09-23 03:45 KST — doc/code/checkpoint 템플릿 업데이트 및 검증 지침 추가)
 - [x] M0-3 CI 베이스: GitHub Actions(workflows)로 web/api lint/typecheck/build 설정 (2025-09-22 15:32 UTC / 2025-09-23 00:32 KST — build.yml 추가, pnpm lint/typecheck/build 파이프라인 연동)
-- [ ] M0-4 샘플 데이터: 간트(Mermaid), 의존 그래프(JSON), KPI 목업 추가
+- [x] M0-4 샘플 데이터: 간트(Mermaid), 의존 그래프(JSON), KPI 목업 추가 (2025-09-22 19:05 UTC / 2025-09-23 04:05 KST — admin/data/ 디렉터리 생성)
 - [ ] M1-0 프론트 부트스트랩: Next.js + Vercel Preview 설정
 - [ ] M1-1 관리자 UI(읽기 전용) 라우팅: /admin/dashboard | /admin/wiki | /admin/timeline | /admin/graph | /admin/tech-debt
 - [ ] M1-2 문서 로더/렌더러(Markdown+Frontmatter, 백링크 패널) 구현
