@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/schemas/hub.schema.json",
+  "title": "Hub Manifest Schema",
+  "type": "object",
+  "required": ["id", "name", "type", "stage", "owner"],
+  "additionalProperties": true,
+  "properties": {
+    "id": { "type": "string", "minLength": 3 },
+    "name": { "type": "string", "minLength": 1 },
+    "type": { "type": "string", "enum": ["service", "job", "doc", "ui", "data"] },
+    "stage": { "type": "string", "enum": ["design", "proto", "dev", "test", "prod"] },
+    "owner": { "type": "string" },
+    "repo_path": { "type": "string" },
+    "docs": { "type": "array", "items": { "type": "string" } },
+    "depends_on": { "type": "array", "items": { "type": "string" } },
+    "provides": { "type": "array", "items": { "type": "string" } },
+    "healthcheck": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["http", "command", "none"] },
+        "url": { "type": "string" },
+        "expected_status": { "type": "integer" },
+        "command": { "type": "string" },
+        "interval_seconds": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": true
+    },
+    "run": {
+      "type": "object",
+      "properties": {
+        "up": { "type": "string" },
+        "down": { "type": "string" },
+        "logs": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "acceptance": { "type": "array", "items": { "type": "string" } },
+    "gaps": { "type": "array", "items": { "type": "string" } },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "doc": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

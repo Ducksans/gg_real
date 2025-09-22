@@ -1,0 +1,21 @@
+# doc_refs: ["docs/hub-manifest.md"]
+id: contenthub.admin.ui
+name: "Admin UI"
+type: ui
+stage: design
+owner: "덕산"
+repo_path: "apps/web"
+docs:
+  - "basesettings.md"
+  - "admin/plan/improvement-rounds.md"
+depends_on:
+  - contenthub.docs
+provides: []
+healthcheck:
+  type: none
+run: {}
+acceptance:
+  - "runtime/graph.json 렌더(향후)"
+gaps:
+  - "React Flow 그래프 뷰 초안 필요"
+decisions: []

@@ -1,0 +1,21 @@
+# doc_refs: ["docs/hub-manifest.md"]
+id: contenthub.docs
+name: "Project Docs"
+type: doc
+stage: design
+owner: "덕산"
+repo_path: "admin"
+docs:
+  - "AGENTS.md"
+  - "basesettings.md"
+  - "admin/plan/improvement-rounds.md"
+depends_on: []
+provides: []
+healthcheck:
+  type: none
+run: {}
+acceptance:
+  - "문서 프런트매터/UTC·KST 포맷 검증 통과"
+gaps:
+  - "code_refs/doc_refs 상호참조 100% 달성 필요"
+decisions: []

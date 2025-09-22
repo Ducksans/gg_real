@@ -56,4 +56,15 @@ else
   done
 fi
 
+# hub manifests 간단 검사(도구 미설치 환경용 최소 체크)
+if ls admin/manifests/*.yaml >/dev/null 2>&1; then
+  for y in admin/manifests/*.yaml; do
+    for key in id name type stage owner; do
+      if ! grep -qE "^${key}:" "$y"; then echo "[ERR] hub manifest missing key: $key in $y"; fail=1; fi
+    done
+    if ! grep -qE '^type: (service|job|doc|ui|data)$' "$y"; then echo "[ERR] hub manifest type invalid: $y"; fail=1; fi
+    if ! grep -qE '^stage: (design|proto|dev|test|prod)$' "$y"; then echo "[ERR] hub manifest stage invalid: $y"; fail=1; fi
+  done
+fi
+
 exit $fail

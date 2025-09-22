@@ -3,7 +3,7 @@ file: admin/plan/improvement-rounds.md
 title: 개선 라운드 실행안(드리프트 방지/추적성/거버넌스/호환성/보안 강화)
 owner: duksan
 created: 2025-09-22 08:00 UTC / 2025-09-22 17:00 KST
-updated: 2025-09-22 09:33 UTC / 2025-09-22 18:33 KST
+updated: 2025-09-22 09:50 UTC / 2025-09-22 18:50 KST
 status: in_progress
 tags: [plan, improvement, governance]
 schemaVersion: 1
@@ -77,7 +77,7 @@ description: 공백/취약점 개선을 라운드(1~11)로 묶어 실행·수용
 # Round 3 — 품질 게이트(Pre-commit/CI 1차)
 - [x] scripts/validate_docs.sh, scripts/validate_refs.sh 초안
 - [x] 프런트매터 필수키, code_refs/doc_refs, 상태 enum, UTC/KST 포맷 검사(기본 루틴)
-- [ ] 호환성 매트릭스 존재 여부 및 필수 필드 검사(support-matrix)
+- [x] 호환성 매트릭스 존재 여부 및 필수 필드 검사(support-matrix)
 - 수용기준
   - [x] 로컬 검증 스크립트로 기본 오류 감지, CI 연동 계획 수립
 
@@ -88,14 +88,14 @@ description: 공백/취약점 개선을 라운드(1~11)로 묶어 실행·수용
   - [x] session.json에 모드/라운드/타임스탬프 기록
 
 # Round 5 — 체크포인트 자동화
-- [ ] scripts/checkpoint.sh(변경 파일 자동 수집→체크포인트 생성)
+- [x] scripts/checkpoint.sh(변경 파일 자동 수집→체크포인트 생성)
 - 수용기준
   - [ ] 문서 변경 포함 커밋 시 체크포인트가 자동 생성
 
 # Round 6 — PR/리뷰 표준화
-- [ ] .github/pull_request_template.md, .github/ISSUE_TEMPLATE/*
+- [x] .github/pull_request_template.md, .github/ISSUE_TEMPLATE/*
 - 수용기준
-  - [ ] 회의모드 해제·동기화 승인·code_refs/doc_refs·체크포인트 항목 확인
+  - [x] 회의모드 해제·동기화 승인·code_refs/doc_refs·체크포인트 항목 확인
 
 # Round 7 — 보안/비밀정보 게이트
 - [ ] SECURITY.md, THREAT_MODEL.md(STRIDE) 초안
