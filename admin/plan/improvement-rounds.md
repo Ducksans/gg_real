@@ -127,11 +127,15 @@ code_refs: ["scripts/validate_refs.sh", "scripts/checkpoint.sh", "scripts/secret
 완료시각: 2025-09-22 14:19 UTC / 2025-09-22 23:19 KST
 
 # Round 10 — 스키마 버전·마이그레이션 거버넌스
-- [ ] CHANGELOG.md, admin/migrations/README.md, 마이그 스크립트 템플릿
+- [x] CHANGELOG.md, admin/migrations/README.md, 마이그 스크립트 템플릿
 - 수용기준
-  - [ ] schemaVersion 변경 시 변경 로그·마이그 파일 필수
+  - [x] schemaVersion 변경 시 변경 로그·마이그 파일 필수
+  
+완료시각: 2025-09-22 14:29 UTC / 2025-09-22 23:29 KST
 
 # Round 11 — 운영 런북/롤백 절차
-- [ ] admin/runbooks/release.md, rollback.md
+- [x] admin/runbooks/release.md, rollback.md
 - 수용기준
-  - [ ] 릴리즈 태깅·주간 스냅샷·롤백 절차 문서화 및 검증
+  - [x] 릴리즈 태깅·주간 스냅샷·롤백 절차 문서화 및 검증
+  
+완료시각: 2025-09-22 14:29 UTC / 2025-09-22 23:29 KST

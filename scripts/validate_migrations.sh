@@ -4,7 +4,7 @@
 # created: 2025-09-22 14:22 UTC / 2025-09-22 23:22 KST
 # updated: 2025-09-22 14:22 UTC / 2025-09-22 23:22 KST
 # purpose: Round 10 — schemaVersion 변경 감지 시 CHANGELOG와 admin/migrations 변경 존재를 검증
-# doc_refs: ["admin/migrations/README.md", "CHANGELOG.md", "admin/plan/improvement-rounds.md"]
+# doc_refs: ["admin/migrations/README.md", "CHANGELOG.md", "admin/plan/improvement-rounds.md", "admin/runbooks/release.md"]
 set -euo pipefail
 
 ROOT_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
@@ -85,4 +85,3 @@ fi
 
 echo "[OK] validate_migrations: schemaVersion 변경과 동반 변경 요건 충족" >&2
 exit 0
-
