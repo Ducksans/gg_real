@@ -3,7 +3,7 @@ file: admin/plan/improvement-rounds.md
 title: 개선 라운드 실행안(드리프트 방지/추적성/거버넌스/호환성/보안 강화)
 owner: duksan
 created: 2025-09-22 08:00 UTC / 2025-09-22 17:00 KST
-updated: 2025-09-22 09:50 UTC / 2025-09-22 18:50 KST
+updated: 2025-09-22 10:59 UTC / 2025-09-22 19:59 KST
 status: in_progress
 tags: [plan, improvement, governance]
 schemaVersion: 1
@@ -90,7 +90,7 @@ description: 공백/취약점 개선을 라운드(1~11)로 묶어 실행·수용
 # Round 5 — 체크포인트 자동화
 - [x] scripts/checkpoint.sh(변경 파일 자동 수집→체크포인트 생성)
 - 수용기준
-  - [ ] 문서 변경 포함 커밋 시 체크포인트가 자동 생성
+  - [x] 문서 변경 포함 커밋 시 체크포인트가 자동 생성
 
 # Round 6 — PR/리뷰 표준화
 - [x] .github/pull_request_template.md, .github/ISSUE_TEMPLATE/*

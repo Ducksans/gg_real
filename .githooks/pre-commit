@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Git pre-commit hook: 문서 변경 포함 시 자동 체크포인트 생성 후 스테이징
+set -euo pipefail
+
+# 현재 스테이징된 파일 목록
+staged=$(git diff --cached --name-only --diff-filter=ACMR || true)
+
+# 문서 변경이 있는지 검사(.md 또는 admin/docs 디렉토리 등)
+if echo "$staged" | grep -Eq '\.(md)$|^AGENTS\.md$|^admin/|^docs/'; then
+  # 체크포인트 생성하고 파일을 커밋에 포함
+  if [ -x scripts/checkpoint.sh ]; then
+    cpfile=$(bash scripts/checkpoint.sh)
+    if [ -n "$cpfile" ] && [ -f "$cpfile" ]; then
+      git add "$cpfile"
+      echo "[pre-commit] checkpoint added: $cpfile" >&2
+    fi
+  else
+    echo "[pre-commit] scripts/checkpoint.sh not executable or missing" >&2
+  fi
+else
+  echo "[pre-commit] no doc changes detected; skip checkpoint" >&2
+fi
+
+exit 0
