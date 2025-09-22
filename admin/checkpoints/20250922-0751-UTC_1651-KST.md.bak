@@ -1,0 +1,18 @@
+---
+file: admin/checkpoints/20250922-0751-UTC_1651-KST.md
+title: 체크포인트 - 실행 순서 수정(권장안 반영)
+owner: duksan
+created: 2025-09-22 07:51 UTC / 2025-09-22 16:51 KST
+updated: 2025-09-22 07:51 UTC / 2025-09-22 16:51 KST
+status: completed
+tags: [checkpoint, plan]
+description: basesettings.md의 실행 순서/완료 기준을 권장 수정안으로 업데이트
+---
+
+## 변경 요약
+- 실행 순서에 M0-0(모노레포/도구), M0-3(CI 베이스), M1-5(API 스켈레톤), M1-6(관측) 등을 추가하고 의존성 최적화
+- 완료 기준에 CI/헬스체크/OpenAPI/관측 항목 추가
+
+## 변경/신규 파일
+- M basesettings.md
+

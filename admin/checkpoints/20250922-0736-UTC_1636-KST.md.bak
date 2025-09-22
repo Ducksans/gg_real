@@ -1,0 +1,19 @@
+---
+file: admin/checkpoints/20250922-0736-UTC_1636-KST.md
+title: 체크포인트 - basesettings.md 생성
+owner: duksan
+created: 2025-09-22 07:36 UTC / 2025-09-22 16:36 KST
+updated: 2025-09-22 07:36 UTC / 2025-09-22 16:36 KST
+status: completed
+tags: [checkpoint, bootstrap]
+description: 기준 문서 생성 기록 및 변경 목록
+---
+
+## 변경 요약
+- 기준 문서 `basesettings.md` 신규 생성(베이스 실행 계획/체크리스트/완료 기준 포함)
+
+## 생성 파일
+- basesettings.md
+
+## 참고
+- 향후 스캐폴딩(M0-1~3) 단계에서 admin/* 문서/템플릿 추가 예정

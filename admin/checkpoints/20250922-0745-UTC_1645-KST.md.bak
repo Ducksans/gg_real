@@ -1,0 +1,21 @@
+---
+file: admin/checkpoints/20250922-0745-UTC_1645-KST.md
+title: 체크포인트 - 아키텍처 반영 및 회의모드 규칙 추가
+owner: duksan
+created: 2025-09-22 07:45 UTC / 2025-09-22 16:45 KST
+updated: 2025-09-22 07:45 UTC / 2025-09-22 16:45 KST
+status: completed
+tags: [checkpoint, architecture, policy]
+description: basesettings.md 보강(백엔드/프론트/호스팅/성능/AI 파이프라인) 및 AGENTS.md 회의모드 규칙 추가
+---
+
+## 변경 요약
+- basesettings.md: 백엔드·프론트엔드·미들웨어·호스팅 맵, 성능 목표, AI/임베딩 파이프라인, PWA 체크리스트 등 추가 및 갱신
+- AGENTS.md: 회의모드 규칙(해제 시그널 "실행하라"/"반영하라") 명시, 기존 정책 정리
+
+## 변경/신규 파일
+- M basesettings.md
+- A AGENTS.md
+
+## 참고
+- 다음 단계: M0 스캐폴딩(admin 구조/템플릿, 샘플 간트/그래프, 체크포인트 스크립트)

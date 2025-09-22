@@ -1,0 +1,19 @@
+---
+file: admin/checkpoints/20250922-0826-UTC_1726-KST.md
+title: 체크포인트 - 라운드 2~4 실행(MVP) 완료
+owner: duksan
+created: 2025-09-22 08:26 UTC / 2025-09-22 17:26 KST
+updated: 2025-09-22 08:26 UTC / 2025-09-22 17:26 KST
+status: completed
+tags: [checkpoint, rounds]
+description: decisions/index.md, 검증 스크립트, 세션 부팅/상태 파일 추가 및 improvement-rounds 체크 갱신
+---
+
+## 생성/변경 파일
+- A admin/decisions/index.md
+- A scripts/validate_docs.sh
+- A scripts/validate_refs.sh
+- A scripts/session_boot.sh
+- A admin/state/session.json
+- M admin/plan/improvement-rounds.md (Round 2~4 체크)
+
