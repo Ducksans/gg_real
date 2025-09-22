@@ -3,7 +3,7 @@ file: AGENTS.md
 title: 에이전트 운영 규칙
 owner: duksan
 created: 2025-09-22 07:45 UTC / 2025-09-22 16:45 KST
-updated: 2025-09-22 15:50 UTC / 2025-09-23 00:51 KST
+updated: 2025-09-22 17:53 UTC / 2025-09-23 02:53 KST
 status: active
 tags: [policy, language, workflow]
 schemaVersion: 1
@@ -16,6 +16,7 @@ code_refs:
     'scripts/validate_refs.sh',
     'scripts/fix_checkpoints.sh',
     'scripts/update_frontmatter_time.sh',
+    'scripts/update_frontmatter_time.js',
     'scripts/validate_sidecar_meta.sh',
     'scripts/validate_code_headers.sh',
     'scripts/backfill_metadata.sh',

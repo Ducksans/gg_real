@@ -13,7 +13,7 @@
     "format": "prettier --check .",
     "format:write": "prettier --write .",
     "lint": "turbo lint",
-    "precommit:meta": "bash scripts/update_frontmatter_time.sh && bash scripts/validate_refs.sh",
+    "precommit:meta": "pnpm exec node scripts/update_frontmatter_time.js --staged && pnpm run validate:refs",
     "prepare": "husky install",
     "test": "turbo test",
     "typecheck": "turbo typecheck",

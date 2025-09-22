@@ -3,7 +3,7 @@ file: admin/plan/improvement-rounds.md
 title: 개선 라운드 실행안(드리프트 방지/추적성/거버넌스/호환성/보안 강화)
 owner: duksan
 created: 2025-09-22 08:00 UTC / 2025-09-22 17:00 KST
-updated: 2025-09-22 17:25 UTC / 2025-09-23 02:25 KST
+updated: 2025-09-22 17:53 UTC / 2025-09-23 02:53 KST
 status: in_progress
 tags: [plan, improvement, governance]
 schemaVersion: 1
@@ -17,6 +17,7 @@ code_refs:
     'scripts/validate_migrations.sh',
     'scripts/validate_sidecar_meta.sh',
     'scripts/update_frontmatter_time.sh',
+    'scripts/update_frontmatter_time.js',
     'scripts/gh_protect_main.sh',
     'scripts/gh_enable_automerge.sh',
   ]
@@ -227,6 +228,9 @@ code_refs:
   - [P1] `package.json`에 `precommit:meta`를 `pnpm exec node scripts/update_frontmatter_time.js --staged` 형태로 재정의하고, `pnpm run validate:refs`를 체인 실행하도록 정리
   - [P1] `.husky/pre-commit`에서 `pnpm -s precommit:meta` 호출 뒤 lint-staged를 이어 실행하도록 스텝 순서 조정 및 실행 권한 확인
   - [P2] `scripts/update_frontmatter_time.sh` 백업 유지 여부 검토 및 README/런북에 자동 타임스탬프 동작 추가 문서화
+
+- 진행 상황
+  - [완료] 2025-09-22 17:36 UTC / 2025-09-23 02:36 KST — update_frontmatter_time.js Node 전환, precommit:meta 체인 구성, release 런북/스타일 가이드 업데이트 (쉘 래퍼 유지)
 
 ### Phase 3 — CI 동기화
 

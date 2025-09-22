@@ -1,2 +1,5 @@
 #!/usr/bin/env sh
+set -e
+
+pnpm -s precommit:meta
 pnpm exec lint-staged
