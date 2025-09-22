@@ -3,7 +3,7 @@ file: admin/plan/m1-kickoff.md
 title: 관리자 페이지 MVP 착수 계획(M0-0/M0-3/M1)
 owner: duksan
 created: 2025-09-22 15:05 UTC / 2025-09-23 00:05 KST
-updated: 2025-09-22 15:21 UTC / 2025-09-23 00:21 KST
+updated: 2025-09-22 15:32 UTC / 2025-09-23 00:32 KST
 status: ready
 tags: [plan, mvp, web, api, ci]
 schemaVersion: 1
@@ -25,6 +25,7 @@ code_refs:
     'lint-staged.config.cjs',
     '.husky/pre-commit',
     '.gitignore',
+    '.github/workflows/build.yml',
   ]
 ---
 
@@ -54,6 +55,8 @@ code_refs:
   - 캐시 설정(pnpm), 병렬 잡 구성
 - 수용 기준
   - PR에서 build 잡이 통과해야만 머지 가능(요건 명시)
+- 진행 상황
+  - [완료] 2025-09-22 15:32 UTC / 2025-09-23 00:32 KST — CI build 워크플로(.github/workflows/build.yml) 추가, pnpm lint/typecheck/build 스크립트 확장, Turbo 파이프라인(typecheck) 구성
 
 ## M0-4 — 샘플 데이터(선택적 선행)
 

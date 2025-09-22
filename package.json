@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
     "build": "turbo build",
     "test": "turbo test",
     "format": "prettier --check .",
