@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # gitleaks가 PR 범위를 계산할 수 있게 전체 히스토리 필요
 
       - name: Run gitleaks
         uses: zricethezav/gitleaks-action@v2
