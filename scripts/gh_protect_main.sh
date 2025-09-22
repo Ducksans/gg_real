@@ -11,21 +11,34 @@ if ! command -v gh >/dev/null 2>&1; then
   exit 2
 fi
 
-# Require PRs and specific checks
-gh api -X PUT repos/$REPO/branches/main/protection \
+payload=$(cat <<'JSON'
+{
+  "required_status_checks": {
+    "strict": true,
+    "contexts": [
+      "CI (full) / secrets-scan-strict",
+      "CI (full) / gitleaks",
+      "Docs Validate / docs-validate"
+    ]
+  },
+  "enforce_admins": true,
+  "required_pull_request_reviews": {
+    "required_approving_review_count": 1,
+    "dismiss_stale_reviews": true
+  },
+  "restrictions": null,
+  "required_linear_history": true,
+  "allow_force_pushes": false,
+  "allow_deletions": false,
+  "block_creations": false,
+  "required_conversation_resolution": true
+}
+JSON
+)
+
+echo "$payload" | gh api -X PUT \
   -H "Accept: application/vnd.github+json" \
-  -f required_status_checks.strict=true \
-  -f required_status_checks.contexts[]='secrets-scan-strict' \
-  -f required_status_checks.contexts[]='gitleaks' \
-  -f enforce_admins=true \
-  -F required_pull_request_reviews.required_approving_review_count=1 \
-  -F required_pull_request_reviews.dismiss_stale_reviews=true \
-  -F restrictions=null \
-  -F allow_deletions=false \
-  -F required_linear_history=true \
-  -F allow_force_pushes=false \
-  -F block_creations=false \
-  -F required_conversation_resolution=true \
-  >/dev/null
+  repos/$REPO/branches/main/protection \
+  --input - >/dev/null
 
 echo "Applied branch protection on $REPO main"
