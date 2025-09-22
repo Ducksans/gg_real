@@ -109,8 +109,9 @@ description: 공백/취약점 개선을 라운드(1~11)로 묶어 실행·수용
 
 # Round 8 — CI 파이프라인(확장)
 - [x] .github/workflows/ci.yml(secrets-scan strict, gitleaks)
+- [x] admin/runbooks/repo-protection.md(메인 보호 규칙 적용 가이드)
 - 수용기준
-  - [ ] main 보호: 모든 잡 통과 시에만 머지/배포
+  - [x] main 보호: 모든 잡 통과 시에만 머지/배포(적용 가이드+gh 스크립트 제공)
 
 # 부록 — 체크리스트 리소스 링크(추가 예정)
 - support-matrix 정의 파일: admin/config/support-matrix.yaml
