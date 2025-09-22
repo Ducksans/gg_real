@@ -1,0 +1,33 @@
+---
+file: admin/config/taxonomy.yaml
+title: 태그/택소노미 규약
+owner: duksan
+created: 2025-09-22 08:00 UTC / 2025-09-22 17:00 KST
+updated: 2025-09-22 08:00 UTC / 2025-09-22 17:00 KST
+status: active
+tags: [config, taxonomy]
+schemaVersion: 1
+description: 문서/코드 공통 태그 규약 및 화이트리스트
+---
+
+allowed_tags:
+  - admin
+  - plan
+  - improvement
+  - governance
+  - status
+  - timeline
+  - vector
+  - postgres
+  - security
+  - ci
+  - docs
+  - ui
+  - api
+  - search
+  - embedding
+
+rules:
+  kebab_case: true
+  max_per_item: 8
+
