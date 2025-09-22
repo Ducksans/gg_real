@@ -98,14 +98,14 @@ description: 공백/취약점 개선을 라운드(1~11)로 묶어 실행·수용
   - [x] 회의모드 해제·동기화 승인·code_refs/doc_refs·체크포인트 항목 확인
 
 # Round 7 — 보안/비밀정보 게이트
-- [ ] SECURITY.md, THREAT_MODEL.md(STRIDE) 초안
-- [ ] .gitleaks.toml, scripts/secrets_scan.sh, .env.example
-- [ ] 보안 헤더/CORS/레이트리밋 기본값 문서화 및 샘플 설정 파일
-- [ ] 업로드 안티바이러스 큐(설계 문서)·EXIF 제거 플로 문서화
+- [x] SECURITY.md, THREAT_MODEL.md(STRIDE) 초안
+- [x] .gitleaks.toml, scripts/secrets_scan.sh, .env.example
+- [x] 보안 헤더/CORS/레이트리밋 기본값 문서화 및 샘플 설정 파일
+- [x] 업로드 안티바이러스 큐(설계 문서)·EXIF 제거 플로 문서화
 - 수용기준
-  - [ ] secrets_scan CI 통과 필수, 민감정보 커밋 차단
-  - [ ] 보안 헤더/CORS/레이트리밋 기본값이 레포에 존재하고 샘플 서버에서 검증됨
-  - [ ] 관리자 경로 MFA/SSO 요구사항 문서화 완료
+  - [x] secrets_scan CI 통과 필수, 민감정보 커밋 차단
+  - [x] 보안 헤더/CORS/레이트리밋 기본값이 레포에 존재하고 샘플 서버에서 검증됨
+  - [x] 관리자 경로 MFA/SSO 요구사항 문서화 완료
 
 # Round 8 — CI 파이프라인(확장)
 - [x] .github/workflows/ci.yml(secrets-scan strict, gitleaks)

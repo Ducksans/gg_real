@@ -3,8 +3,8 @@ file: SECURITY.md
 title: 보안 정책(초안)
 owner: duksan
 created: 2025-09-22 11:05 UTC / 2025-09-22 20:05 KST
-updated: 2025-09-22 11:05 UTC / 2025-09-22 20:05 KST
-status: in_progress
+updated: 2025-09-22 11:16 UTC / 2025-09-22 20:16 KST
+status: active
 tags: [security, policy]
 schemaVersion: 1
 description: 비밀정보 관리, 취약점 제보, 기본 보안 기준(헤더/CORS/레이트리밋) 요약 초안
@@ -24,4 +24,4 @@ description: 비밀정보 관리, 취약점 제보, 기본 보안 기준(헤더/
 - 헤더: HSTS, CSP, Frame-Ancestors, Referrer-Policy, Permissions-Policy
 
 # code_refs
-- code_refs: ["scripts/secrets_scan.sh", "apps/api/config/security.sample.json"]
+- code_refs: ["scripts/secrets_scan.sh", ".gitleaks.toml", "apps/api/config/security.sample.json", ".github/workflows/ci.yml"]

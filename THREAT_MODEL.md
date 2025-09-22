@@ -3,8 +3,8 @@ file: THREAT_MODEL.md
 title: 위협 모델(STRIDE) 초안
 owner: duksan
 created: 2025-09-22 11:06 UTC / 2025-09-22 20:06 KST
-updated: 2025-09-22 11:06 UTC / 2025-09-22 20:06 KST
-status: in_progress
+updated: 2025-09-22 11:16 UTC / 2025-09-22 20:16 KST
+status: active
 tags: [security, threat-model]
 schemaVersion: 1
 description: STRIDE 관점의 핵심 위험과 통제 초안
