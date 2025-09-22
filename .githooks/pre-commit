@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Git pre-commit hook: 문서 변경 포함 시 자동 체크포인트 생성 후 스테이징
+# Git pre-commit hook: 민감 파일 가드 + 문서 updated 자동 스탬프 + 문서 변경 시 체크포인트
 set -euo pipefail
 
 # 현재 스테이징된 파일 목록
@@ -25,6 +25,22 @@ if [[ -n "$staged" ]]; then
       fi
     done
   done
+fi
+
+# 문서 updated: 자동 스탬프(UTC/KST)
+if [ -n "$staged" ]; then
+  if [ -x scripts/update_frontmatter_time.sh ]; then
+    bash scripts/update_frontmatter_time.sh >/dev/null 2>&1 || true
+  fi
+fi
+
+# 핵심 검사: 문서/참조/마이그/코드헤더/사이드카
+if [ -n "$staged" ]; then
+  bash scripts/validate_docs.sh
+  bash scripts/validate_refs.sh
+  bash scripts/validate_migrations.sh
+  bash scripts/validate_code_headers.sh
+  bash scripts/validate_sidecar_meta.sh
 fi
 
 # 문서 변경이 있는지 검사(.md 또는 admin/docs 디렉토리 등)

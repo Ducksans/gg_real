@@ -3,7 +3,7 @@
 # owner: duksan
 # created: 2025-09-22 14:22 UTC / 2025-09-22 23:22 KST
 # updated: 2025-09-22 14:22 UTC / 2025-09-22 23:22 KST
-# purpose: Round 10 — schemaVersion 변경 감지 시 CHANGELOG와 admin/migrations 변경 존재를 검증
+# purpose: Round 10 — schemaVersion 변경 감지 시 CHANGELOG와 admin/migrations 변경 존재를 검증(JSON/YAML 포함)
 # doc_refs: ["admin/migrations/README.md", "CHANGELOG.md", "admin/plan/improvement-rounds.md", "admin/runbooks/release.md"]
 set -euo pipefail
 
@@ -47,6 +47,21 @@ for f in $CHANGED; do
   else
     newv=""
   fi
+  if [ -n "$oldv" ] && [ -n "$newv" ] && [ "$oldv" != "$newv" ]; then
+    schema_bumps+=("$f:$oldv->$newv")
+  fi
+done
+
+# JSON/YAML의 schemaVersion 변경 감지(상단 200줄 근사)
+for f in $CHANGED; do
+  case "$f" in *.json|*.yaml|*.yml) : ;; *) continue ;; esac
+  # 이전/현재 버전 추출
+  if [ -n "$BASE" ] && git cat-file -e "$BASE:$f" 2>/dev/null; then
+    oldv=$(git show "$BASE:$f" | head -n 200 | sed -n 's/.*schemaVersion[^0-9]*\([0-9][0-9]*\).*/\1/p' | head -n1 || true)
+  else oldv=""; fi
+  if [ -f "$f" ]; then
+    newv=$(head -n 200 "$f" | sed -n 's/.*schemaVersion[^0-9]*\([0-9][0-9]*\).*/\1/p' | head -n1 || true)
+  else newv=""; fi
   if [ -n "$oldv" ] && [ -n "$newv" ] && [ "$oldv" != "$newv" ]; then
     schema_bumps+=("$f:$oldv->$newv")
   fi

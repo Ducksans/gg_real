@@ -8,7 +8,7 @@ status: active
 tags: [policy, language, workflow]
 schemaVersion: 1
 description: 프로젝트 전반에 적용되는 운영 규칙과 회의모드 시그널 정의
-code_refs: ["scripts/validate_docs.sh", "scripts/checkpoint.sh", "scripts/session_boot.sh", "scripts/validate_refs.sh", "scripts/fix_checkpoints.sh"]
+code_refs: ["scripts/validate_docs.sh", "scripts/checkpoint.sh", "scripts/session_boot.sh", "scripts/validate_refs.sh", "scripts/fix_checkpoints.sh", "scripts/update_frontmatter_time.sh", "scripts/validate_sidecar_meta.sh", "scripts/validate_code_headers.sh", "scripts/backfill_metadata.sh"]
 ---
 
 # 1. 언어 정책

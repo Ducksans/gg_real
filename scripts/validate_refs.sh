@@ -99,8 +99,13 @@ done < <(find . -type f \( -name "*.sh" -o -name "*.ts" -o -name "*.tsx" -o -nam
 for doc in "${!doc_to_codes[@]}"; do
   for code in ${doc_to_codes["$doc"]}; do
     listed_docs=${code_to_docs["$code"]:-}
-    # 코드 파일이 doc_refs를 제공하지 않는 경우(비코드/템플릿 등) 상호 참조 강제 생략
+    # 코드가 scripts/* 또는 apps/* 위치에 있는데 doc_refs가 없다면 오류(템플릿/샘플 제외)
     if [ -z "$listed_docs" ]; then
+      case "$code" in
+        ./scripts/*|./apps/*)
+          case "$code" in *.tmpl|*.sample.*) : ;; *) echo "[ERR] missing doc_refs in code header: $code"; err=1 ;; esac
+        ;;
+      esac
       continue
     fi
     found=0
@@ -115,14 +120,16 @@ done
 #   b) code -> doc 존재 시, 해당 doc의 code_refs에 code가 포함되어야 함
 for code in "${!code_to_docs[@]}"; do
   for doc in ${code_to_docs["$code"]}; do
-  fm=$(extract_frontmatter "$doc")
-  refs=$(printf "%s\n" "$fm" | parse_yaml_array code_refs || true)
-  has=0
-  while IFS= read -r r; do [ "$(norm_rel "$r")" = "$code" ] && has=1 && break; done <<< "$refs"
-  if [ $has -eq 0 ]; then
-    echo "[ERR] missing reciprocal code_ref: $doc -> $code"
-    err=1
-  fi
+    # 문서 reciprocal 검사는 Markdown(frontmatter 보유)인 경우에만 수행
+    case "$doc" in *.md) : ;; *) continue ;; esac
+    fm=$(extract_frontmatter "$doc")
+    refs=$(printf "%s\n" "$fm" | parse_yaml_array code_refs || true)
+    has=0
+    while IFS= read -r r; do [ "$(norm_rel "$r")" = "$code" ] && has=1 && break; done <<< "$refs"
+    if [ $has -eq 0 ]; then
+      echo "[ERR] missing reciprocal code_ref: $doc -> $code"
+      err=1
+    fi
   done
 done
 

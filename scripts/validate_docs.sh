@@ -59,6 +59,8 @@ fi
 # hub manifests 간단 검사(도구 미설치 환경용 최소 체크)
 if ls admin/manifests/*.yaml >/dev/null 2>&1; then
   for y in admin/manifests/*.yaml; do
+    # 메타 사이드카는 제외
+    case "$y" in *.meta.yaml) continue ;; esac
     for key in id name type stage owner; do
       if ! grep -qE "^${key}:" "$y"; then echo "[ERR] hub manifest missing key: $key in $y"; fail=1; fi
     done

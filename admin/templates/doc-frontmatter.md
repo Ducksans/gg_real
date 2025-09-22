@@ -8,7 +8,7 @@ status: in_progress
 tags: [tag1, tag2]
 schemaVersion: 1
 description: 문서 목적/요약을 1~2줄로 적습니다.
-code_refs: ["PATH/TO/RELATED/CODE.ts", "scripts/some_tool.sh"]
+code_refs: ["PATH/TO/RELATED/CODE.ts", "scripts/some_tool.sh", "scripts/backfill_metadata.sh"]
 ---
 
 # 개요
@@ -16,4 +16,3 @@ code_refs: ["PATH/TO/RELATED/CODE.ts", "scripts/some_tool.sh"]
 
 # 상세
 - 필요한 세부 내용을 추가하세요.
-

@@ -36,6 +36,12 @@ jobs:
       - name: Run migration governance validator (R10)
         run: bash scripts/validate_migrations.sh
 
+      - name: Run code header validator (P1)
+        run: bash scripts/validate_code_headers.sh
+
+      - name: Run sidecar meta validator (P3)
+        run: bash scripts/validate_sidecar_meta.sh
+
       - name: Validate hub manifests against schema
         if: ${{ always() }}
         run: |

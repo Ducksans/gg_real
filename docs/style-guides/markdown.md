@@ -8,7 +8,7 @@ status: active
 tags: [docs, style, markdown]
 schemaVersion: 1
 description: 채팅/문서 환경에서 일관된 목록 번호와 우선순위 표기 규칙 정의
-code_refs: ["scripts/validate_docs.sh", "scripts/fix_checkpoints.sh", "scripts/checkpoint.sh"]
+code_refs: ["scripts/validate_docs.sh", "scripts/fix_checkpoints.sh", "scripts/checkpoint.sh", "scripts/update_frontmatter_time.sh"]
 ---
 
 # 목적
