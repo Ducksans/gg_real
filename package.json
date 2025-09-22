@@ -8,25 +8,33 @@
     "node": ">=20.10.0"
   },
   "scripts": {
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "typecheck": "turbo typecheck",
     "build": "turbo build",
-    "test": "turbo test",
+    "dev": "turbo dev",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
-    "prepare": "husky install"
+    "lint": "turbo lint",
+    "precommit:meta": "bash scripts/update_frontmatter_time.sh && bash scripts/validate_refs.sh",
+    "prepare": "husky install",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck",
+    "validate:docs": "bash scripts/validate_docs.sh",
+    "validate:refs": "bash scripts/validate_refs.sh"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@types/node": "^20.14.9",
+    "ajv": "^8.17.1",
+    "ajv-cli": "^5.0.0",
+    "ajv-formats": "^3.0.1",
     "eslint": "^9.9.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "husky": "^9.1.4",
+    "js-yaml": "^4.1.0",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.3",
     "turbo": "^2.1.1",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "yaml": "^2.5.0"
   }
 }
