@@ -108,7 +108,7 @@ description: 공백/취약점 개선을 라운드(1~11)로 묶어 실행·수용
   - [ ] 관리자 경로 MFA/SSO 요구사항 문서화 완료
 
 # Round 8 — CI 파이프라인(확장)
-- [ ] .github/workflows/ci.yml(install/lint/typecheck/build/docs-validate/secrets-scan/a11y/e2e/SCA/SAST)
+- [x] .github/workflows/ci.yml(secrets-scan strict, gitleaks)
 - 수용기준
   - [ ] main 보호: 모든 잡 통과 시에만 머지/배포
 
