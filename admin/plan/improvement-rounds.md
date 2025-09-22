@@ -3,7 +3,7 @@ file: admin/plan/improvement-rounds.md
 title: 개선 라운드 실행안(드리프트 방지/추적성/거버넌스/호환성/보안 강화)
 owner: duksan
 created: 2025-09-22 08:00 UTC / 2025-09-22 17:00 KST
-updated: ${UTC_NOW} / ${KST_NOW}
+updated: 2025-09-22 09:33 UTC / 2025-09-22 18:33 KST
 status: in_progress
 tags: [plan, improvement, governance]
 schemaVersion: 1
@@ -14,10 +14,10 @@ description: 공백/취약점 개선을 라운드(1~11)로 묶어 실행·수용
 - 문서/코드 드리프트 방지, 리부트 내구성 강화, 추적성·거버넌스·보안 자동화를 달성한다.
 
 # 삭제 프로토콜(최종)
-1) 모든 라운드의 수용기준을 100% 충족한다.
-2) 최신 체크포인트에 완료 보고를 남긴다.
-3) 스냅샷 태그(예: `improve-rounds-done-YYYYMMDD`)를 생성한다.
-4) 사용자로부터 “삭제 승인”을 받은 후 PR로 본 문서를 제거한다.
+1. 모든 라운드의 수용기준을 100% 충족한다.
+2. 최신 체크포인트에 완료 보고를 남긴다.
+3. 스냅샷 태그(예: `improve-rounds-done-YYYYMMDD`)를 생성한다.
+4. 사용자로부터 “삭제 승인”을 받은 후 PR로 본 문서를 제거한다.
 
 # 라운드 개요
 - Round 1: Single Source of Truth(SoT) 도입

@@ -1,0 +1,28 @@
+name: Docs Validate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  docs-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install markdownlint-cli
+        run: npm i -g markdownlint-cli@0.38.0
+
+      - name: Run markdownlint (MD029 ordered)
+        run: markdownlint -q -c .markdownlint.json "**/*.md"
+
+      - name: Run local docs validator
+        run: bash scripts/validate_docs.sh
