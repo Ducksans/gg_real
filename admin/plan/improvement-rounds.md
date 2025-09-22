@@ -3,7 +3,7 @@ file: admin/plan/improvement-rounds.md
 title: 개선 라운드 실행안(드리프트 방지/추적성/거버넌스/호환성/보안 강화)
 owner: duksan
 created: 2025-09-22 08:00 UTC / 2025-09-22 17:00 KST
-updated: 2025-09-22 18:04 UTC / 2025-09-23 03:04 KST
+updated: 2025-09-22 18:08 UTC / 2025-09-23 03:08 KST
 status: in_progress
 tags: [plan, improvement, governance]
 schemaVersion: 1
@@ -253,6 +253,9 @@ code_refs:
 1. `scripts/checkpoint.sh`에 필수 메타 누락 검사 로직을 추가한다.
 2. `pnpm run validate:docs`와 `pnpm run validate:refs`를 실행하여 회귀 테스트를 통과시킨다.
 3. 빌드 파이프라인이 통과한 PR을 생성하고 main 병합 후 체크포인트 기록을 갱신한다.
+
+- 진행 상황
+  - [완료] 2025-09-22 18:08 UTC / 2025-09-23 03:08 KST — checkpoint.sh에 frontmatter 메타 검증 추가, validate:docs/refs 회귀 테스트 통과, 체크포인트 생성
 
 ## 인수 기준
 
