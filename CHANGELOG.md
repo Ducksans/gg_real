@@ -3,7 +3,7 @@ file: CHANGELOG.md
 title: 변경 로그
 owner: duksan
 created: 2025-09-22 14:22 UTC / 2025-09-22 23:22 KST
-updated: 2025-09-22 20:02 UTC / 2025-09-23 05:02 KST
+updated: 2025-09-22 20:50 UTC / 2025-09-23 05:50 KST
 status: active
 tags: [changelog, governance]
 schemaVersion: 1
@@ -41,3 +41,9 @@ code_refs: ['scripts/validate_migrations.sh', 'admin/migrations/README.md']
 - apps/web Next.js 14 부트스트랩 및 관리자 라우트(/admin/\*) 스켈레톤 추가
 - Markdown 로더(lib/content.ts)와 MarkdownContent 컴포넌트로 admin 문서/데이터 연결
 - 배포용 README 갱신, lint 스크립트 검증
+
+# 2025-09-22 — Sprint 4 API 골조 구축
+
+- apps/api NestJS Fastify 스켈레톤 추가 (/healthz, /ready, /metrics 구현)
+- 관측 토글 파일(observability.ts)과 metrics service 도입
+- admin 문서(basesettings.md, m1-kickoff.md) 체크박스 업데이트, README 전환
