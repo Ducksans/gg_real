@@ -3,7 +3,7 @@ file: admin/plan/m1-kickoff.md
 title: 관리자 페이지 MVP 착수 계획(M0-0/M0-3/M1)
 owner: duksan
 created: 2025-09-22 15:05 UTC / 2025-09-23 00:05 KST
-updated: 2025-09-22 20:02 UTC / 2025-09-23 05:02 KST
+updated: 2025-09-22 20:45 UTC / 2025-09-23 05:45 KST
 status: ready
 tags: [plan, mvp, web, api, ci]
 schemaVersion: 1
@@ -33,6 +33,12 @@ code_refs:
     'apps/web/src/app/admin/timeline/page.tsx',
     'apps/web/src/app/admin/graph/page.tsx',
     'apps/web/src/app/admin/tech-debt/page.tsx',
+    'apps/api/src/main.ts',
+    'apps/api/src/app.module.ts',
+    'apps/api/src/app.controller.ts',
+    'apps/api/src/app.service.ts',
+    'apps/api/src/metrics.service.ts',
+    'apps/api/src/observability.ts',
   ]
 ---
 
@@ -81,6 +87,8 @@ code_refs:
   - Markdown+Frontmatter 로더(백링크/태그/상태 배지 표시 최소)
 - 수용 기준
   - dev 서버 구동, 각 라우트가 200으로 스켈레톤 화면 표시
+- 진행 상황
+  - [완료] 2025-09-22 19:20 UTC / 2025-09-23 04:20 KST — Next.js 14 부트스트랩, /admin/\* 라우트 및 Markdown 로더 연결
 
 ## M1-5/6 — API/관측 골조
 
@@ -89,6 +97,8 @@ code_refs:
   - /healthz 200, /metrics 노출(기본 메트릭), Sentry/OTel 토글
 - 수용 기준
   - 로컬에서 서버 구동 및 엔드포인트 응답 확인
+- 진행 상황
+  - [완료] 2025-09-22 19:25 UTC / 2025-09-23 04:25 KST — NestJS Fastify 스켈레톤, /healthz · /ready · /metrics 구현 및 관측 토글 추가
 
 # 새 채팅 트리거 문구(선택 실행)
 
