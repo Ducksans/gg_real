@@ -99,6 +99,10 @@ done < <(find . -type f \( -name "*.sh" -o -name "*.ts" -o -name "*.tsx" -o -nam
 for doc in "${!doc_to_codes[@]}"; do
   for code in ${doc_to_codes["$doc"]}; do
     listed_docs=${code_to_docs["$code"]:-}
+    # 코드 파일이 doc_refs를 제공하지 않는 경우(비코드/템플릿 등) 상호 참조 강제 생략
+    if [ -z "$listed_docs" ]; then
+      continue
+    fi
     found=0
     for d in $listed_docs; do [ "$d" = "$doc" ] && found=1 && break; done
     if [ $found -eq 0 ]; then

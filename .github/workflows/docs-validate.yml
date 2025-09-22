@@ -33,6 +33,9 @@ jobs:
       - name: Run cross-ref validator (R9)
         run: bash scripts/validate_refs.sh
 
+      - name: Run migration governance validator (R10)
+        run: bash scripts/validate_migrations.sh
+
       - name: Validate hub manifests against schema
         if: ${{ always() }}
         run: |

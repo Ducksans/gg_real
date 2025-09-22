@@ -8,7 +8,7 @@ status: in_progress
 tags: [plan, improvement, governance]
 schemaVersion: 1
 description: 공백/취약점 개선을 라운드(1~11)로 묶어 실행·수용기준·삭제 프로토콜을 정의
-code_refs: ["scripts/validate_refs.sh", "scripts/checkpoint.sh", "scripts/secrets_scan.sh"]
+code_refs: ["scripts/validate_refs.sh", "scripts/checkpoint.sh", "scripts/secrets_scan.sh", "scripts/validate_migrations.sh"]
 ---
 
 # 목적
