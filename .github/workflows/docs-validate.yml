@@ -30,6 +30,9 @@ jobs:
       - name: Run local docs validator
         run: bash scripts/validate_docs.sh
 
+      - name: Run cross-ref validator (R9)
+        run: bash scripts/validate_refs.sh
+
       - name: Validate hub manifests against schema
         if: ${{ always() }}
         run: |
