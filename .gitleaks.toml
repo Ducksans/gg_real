@@ -1,0 +1,5 @@
+# Minimal gitleaks config (placeholder) — 강화는 후속 R8-풀에서 적용
+title = "gg_real baseline"
+
+[rules]
+

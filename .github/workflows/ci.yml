@@ -1,0 +1,20 @@
+name: CI (mini)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  secrets-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run secrets scan (soft)
+        run: |
+          chmod +x scripts/secrets_scan.sh || true
+          bash scripts/secrets_scan.sh || true
+
