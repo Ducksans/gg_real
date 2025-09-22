@@ -21,6 +21,25 @@ const codeToDocs = new Map(); // key -> Set of doc paths
 
 const skipDirNames = new Set(['.git', 'node_modules', '.turbo', '.pnpm', 'dist', 'build', 'coverage', 'tmp', 'vendor']);
 const codeExtensions = new Set(['.sh', '.ts', '.tsx', '.js', '.jsx']);
+const allowedExactPaths = new Set([
+  './package.json',
+  './pnpm-workspace.yaml',
+  './turbo.json',
+  './.editorconfig',
+  './.nvmrc',
+  './prettier.config.cjs',
+  './lint-staged.config.cjs',
+  './.gitignore',
+  './CHANGELOG.md',
+  './admin/migrations/README.md'
+]);
+const allowedPrefixPaths = [
+  './.github/workflows/',
+  './.husky/',
+  './admin/checkpoints/',
+  './admin/migrations/templates/'
+];
+
 
 main();
 
@@ -316,6 +335,14 @@ function trimPrefix(normalizedPath) {
 }
 
 function isTypicalCodePath(normalizedPath) {
+  if (allowedExactPaths.has(normalizedPath)) {
+    return true;
+  }
+  for (const prefix of allowedPrefixPaths) {
+    if (normalizedPath.startsWith(prefix)) {
+      return true;
+    }
+  }
   const pathWithoutPrefix = normalizedPath.replace(/^\.\//, '');
   if (/^scripts\//.test(pathWithoutPrefix) || /^apps\//.test(pathWithoutPrefix) || /^packages\//.test(pathWithoutPrefix)) {
     return true;
