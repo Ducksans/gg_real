@@ -3,13 +3,14 @@ file: admin/plan/improvement-rounds.md
 title: 개선 라운드 실행안(드리프트 방지/추적성/거버넌스/호환성/보안 강화)
 owner: duksan
 created: 2025-09-22 08:00 UTC / 2025-09-22 17:00 KST
-updated: 2025-09-22 16:47 UTC / 2025-09-23 01:47 KST
+updated: 2025-09-22 17:25 UTC / 2025-09-23 02:25 KST
 status: in_progress
 tags: [plan, improvement, governance]
 schemaVersion: 1
 description: 공백/취약점 개선을 라운드(1~11)로 묶어 실행·수용기준·삭제 프로토콜을 정의
 code_refs:
   [
+    'scripts/validate_docs.sh',
     'scripts/validate_refs.sh',
     'scripts/checkpoint.sh',
     'scripts/secrets_scan.sh',
@@ -17,6 +18,7 @@ code_refs:
     'scripts/validate_sidecar_meta.sh',
     'scripts/update_frontmatter_time.sh',
     'scripts/gh_protect_main.sh',
+    'scripts/gh_enable_automerge.sh',
   ]
 ---
 
@@ -211,11 +213,20 @@ code_refs:
 2. `scripts/validate_docs.sh`에 ajv 스키마 검증, created≤updated 확인, frontmatter.file 경로 일치 검증을 추가한다.
 3. `admin/schemas/frontmatter.schema.json`을 작성하고 스키마 버전을 문서화한다.
 
+- 진행 상황
+  - [완료] 2025-09-22 17:22 UTC / 2025-09-23 02:22 KST — validate_docs/validate_refs Node 전환 및 frontmatter 스키마 작성, Phase 1 인수조건 충족
+
 ### Phase 2 — 타임스탬프 자동화
 
 1. `scripts/update_frontmatter_time.sh`를 작성하여 스테이징된 Markdown의 updated를 UTC/KST 동시 갱신한다.
 2. `package.json`에 `precommit:meta` 스크립트를 추가하고 `pnpm exec` 기반으로 구성한다.
 3. `.husky/pre-commit`에서 `pnpm -s precommit:meta`를 호출하도록 갱신 후 실행 권한을 설정한다.
+
+- 계획
+  - [P1] `scripts/update_frontmatter_time.sh`를 Node+YAML 파서 기반으로 재작성해 스테이징 파일 집합을 안전하게 파싱하고, `updated`만 교체하도록 단위 테스트(샘플 문서) 포함
+  - [P1] `package.json`에 `precommit:meta`를 `pnpm exec node scripts/update_frontmatter_time.js --staged` 형태로 재정의하고, `pnpm run validate:refs`를 체인 실행하도록 정리
+  - [P1] `.husky/pre-commit`에서 `pnpm -s precommit:meta` 호출 뒤 lint-staged를 이어 실행하도록 스텝 순서 조정 및 실행 권한 확인
+  - [P2] `scripts/update_frontmatter_time.sh` 백업 유지 여부 검토 및 README/런북에 자동 타임스탬프 동작 추가 문서화
 
 ### Phase 3 — CI 동기화
 

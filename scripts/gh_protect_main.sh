@@ -2,9 +2,9 @@
 # file: scripts/gh_protect_main.sh
 # owner: duksan
 # created: 2025-09-22 13:57 UTC / 2025-09-22 22:57 KST
-# updated: 2025-09-22 15:58 UTC / 2025-09-23 00:58 KST
+# updated: 2025-09-22 17:23 UTC / 2025-09-23 02:23 KST
 # purpose: gh CLI로 main 브랜치 보호 규칙을 설정/갱신하여 필수 검사 목록을 일괄 적용
-# doc_refs: ["AGENTS.md", "basesettings.md", "admin/plan/m1-kickoff.md"]
+# doc_refs: ["AGENTS.md", "basesettings.md", "admin/plan/m1-kickoff.md", "admin/runbooks/repo-protection.md", "admin/plan/improvement-rounds.md"]
 # usage: GH_TOKEN=... bash scripts/gh_protect_main.sh Ducksans/gg_real
 set -euo pipefail
 

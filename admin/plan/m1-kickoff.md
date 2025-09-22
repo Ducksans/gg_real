@@ -3,7 +3,7 @@ file: admin/plan/m1-kickoff.md
 title: 관리자 페이지 MVP 착수 계획(M0-0/M0-3/M1)
 owner: duksan
 created: 2025-09-22 15:05 UTC / 2025-09-23 00:05 KST
-updated: 2025-09-22 15:32 UTC / 2025-09-23 00:32 KST
+updated: 2025-09-22 17:24 UTC / 2025-09-23 02:24 KST
 status: ready
 tags: [plan, mvp, web, api, ci]
 schemaVersion: 1
@@ -26,6 +26,7 @@ code_refs:
     '.husky/pre-commit',
     '.gitignore',
     '.github/workflows/build.yml',
+    'scripts/gh_protect_main.sh',
   ]
 ---
 

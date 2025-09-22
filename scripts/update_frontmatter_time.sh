@@ -2,9 +2,9 @@
 # file: scripts/update_frontmatter_time.sh
 # owner: duksan
 # created: 2025-09-22 14:36 UTC / 2025-09-22 23:36 KST
-# updated: 2025-09-22 14:36 UTC / 2025-09-22 23:36 KST
+# updated: 2025-09-22 17:23 UTC / 2025-09-23 02:23 KST
 # purpose: 변경된 Markdown 파일의 frontmatter `updated:` 값을 현재 시각(UTC/KST)으로 자동 갱신
-# doc_refs: ["AGENTS.md", "docs/style-guides/markdown.md"]
+# doc_refs: ["AGENTS.md", "docs/style-guides/markdown.md", "admin/plan/improvement-rounds.md"]
 set -euo pipefail
 
 # 대상 파일 목록: 인자로 받으면 그 목록, 없으면 git staged 중 .md
