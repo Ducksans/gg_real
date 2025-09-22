@@ -5,6 +5,28 @@ set -euo pipefail
 # 현재 스테이징된 파일 목록
 staged=$(git diff --cached --name-only --diff-filter=ACMR || true)
 
+# [Guard] 비밀/민감 파일 스테이징 차단(.env/키/자격증명 등)
+if [[ -n "$staged" ]]; then
+  # 차단 패턴 목록(확장 가능)
+  deny_patterns=(
+    '^\.env(\..*)?$'            # .env, .env.*
+    '(^|/)\.env(\..*)?$'        # any path/.env*
+    '\.pem$'                     # private keys
+    '\b(id_rsa|id_ecdsa|id_ed25519)(\.pub)?$'
+    '\.p8$'                      # Apple keys
+    '\bservice-account.*\.json$'
+  )
+  for f in $staged; do
+    for pat in "${deny_patterns[@]}"; do
+      if [[ $f =~ $pat ]]; then
+        echo "[pre-commit][BLOCK] 민감 파일 스테이징 감지: $f" >&2
+        echo "[pre-commit] 해당 파일은 .gitignore에 추가하고 커밋에서 제외하세요." >&2
+        exit 1
+      fi
+    done
+  done
+fi
+
 # 문서 변경이 있는지 검사(.md 또는 admin/docs 디렉토리 등)
 if echo "$staged" | grep -Eq '\.(md)$|^AGENTS\.md$|^admin/|^docs/'; then
   # 체크포인트 생성하고 파일을 커밋에 포함

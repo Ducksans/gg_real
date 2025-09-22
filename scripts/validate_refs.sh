@@ -50,6 +50,8 @@ parse_yaml_array() {
 # 1) 문서에서 code_refs 수집 및 존재/패턴 검증
 for doc in ./*.md admin/**/*.md docs/**/*.md; do
   [ -f "$doc" ] || continue
+  # 템플릿 디렉토리는 검사 제외
+  case "$doc" in ./admin/templates/*|admin/templates/*) continue ;; esac
   fm=$(extract_frontmatter "$doc")
   refs=$(printf "%s\n" "$fm" | parse_yaml_array code_refs || true)
   if [ -n "$refs" ]; then
