@@ -29,9 +29,10 @@ jobs:
 
       - name: Run gitleaks
         uses: zricethezav/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          config-path: .gitleaks.toml
-          fail: true
+          args: "--source . --no-banner"
 
   summary:
     runs-on: ubuntu-latest
