@@ -120,9 +120,11 @@ code_refs: ["scripts/validate_refs.sh", "scripts/checkpoint.sh", "scripts/secret
 - 샘플 헤더/CORS/레이트리밋 설정: apps/api/config/security.sample.json
 
 # Round 9 — 문서↔코드 상호 참조 강제
-- [ ] validate_refs 강화(경로 존재/패턴 검사), dead link 리포트
+- [x] validate_refs 강화(경로 존재/패턴 검사), dead link 리포트
 - 수용기준
-  - [ ] 문서 code_refs↔코드 doc_refs 쌍방 매칭 100%
+  - [x] 문서 code_refs↔코드 doc_refs 쌍방 매칭 100%
+  
+완료시각: 2025-09-22 14:19 UTC / 2025-09-22 23:19 KST
 
 # Round 10 — 스키마 버전·마이그레이션 거버넌스
 - [ ] CHANGELOG.md, admin/migrations/README.md, 마이그 스크립트 템플릿
