@@ -11,8 +11,13 @@ set -euo pipefail
 STRICT=0
 if [[ "${1:-}" == "--strict" ]]; then STRICT=1; fi
 
-if ! command -v rg >/dev/null 2>&1; then
-  echo "ripgrep(rg) 필요" >&2; exit 2
+# 검색 실행기 선택: rg 우선, 없으면 grep 폴백
+SEARCHER=""
+if command -v rg >/dev/null 2>&1; then
+  SEARCHER="rg --hidden --ignore-file .gitignore -n -U -g '!**/*.png' -g '!**/*.jpg' -g '!**/*.jpeg' -g '!**/*.gif' -g '!**/*.pdf' -e"
+else
+  echo "[secrets-scan] ripgrep(rg) 미설치: grep 폴백 사용" >&2
+  SEARCHER="grep -RInE --exclude-dir=.git --exclude=*.png --exclude=*.jpg --exclude=*.jpeg --exclude=*.gif --exclude=*.pdf"
 fi
 
 echo "[secrets-scan] scanning workspace..." >&2
@@ -31,8 +36,10 @@ patterns=(
 
 found=0
 for pat in "${patterns[@]}"; do
-  if rg --hidden --ignore-file .gitignore -n -U -g '!**/*.png' -g '!**/*.jpg' -g '!**/*.jpeg' -g '!**/*.gif' -g '!**/*.pdf' -e "$pat" .; then
-    found=1
+  if [[ -n "$SEARCHER" ]]; then
+    if eval $SEARCHER "$pat" .; then
+      found=1
+    fi
   fi
 done
 
