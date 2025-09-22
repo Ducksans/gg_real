@@ -3,7 +3,7 @@ file: admin/plan/improvement-rounds.md
 title: 개선 라운드 실행안(드리프트 방지/추적성/거버넌스/호환성/보안 강화)
 owner: duksan
 created: 2025-09-22 08:00 UTC / 2025-09-22 17:00 KST
-updated: 2025-09-22 10:59 UTC / 2025-09-22 19:59 KST
+updated: 2025-09-22 14:59 UTC / 2025-09-22 23:59 KST
 status: in_progress
 tags: [plan, improvement, governance]
 schemaVersion: 1
@@ -132,6 +132,23 @@ code_refs: ["scripts/validate_refs.sh", "scripts/checkpoint.sh", "scripts/secret
   - [x] schemaVersion 변경 시 변경 로그·마이그 파일 필수
   
 완료시각: 2025-09-22 14:29 UTC / 2025-09-22 23:29 KST
+
+# 보완 계획(P1~P3)
+
+## [P1] 즉시 강화 항목
+- 프리커밋에서 핵심 검사 실행: validate_docs / validate_refs / validate_migrations / validate_code_headers / validate_sidecar_meta
+- 결정 로그 카드 채우기: admin/decisions/index.md에 최근 결정(자동 후속 실행 정책, .env 차단, R9/R10/R11 도입) 기록
+- schemaVersion 감시 확장: JSON/YAML도 포함(admin/state/*.json, admin/config/*.yaml)
+
+## [P2] 자동화·강제화
+- 주간 스냅샷 태그를 GitHub Actions로 자동화
+- R9 강도 상향: scripts/*, apps/*에는 doc_refs 의무화(템플릿 제외)
+- 문서 updated 자동 스탬프: 프리커밋 훅으로 UTC/KST 동기화(재발 방지 대책)
+
+## [P3] 앱 골조·운영 편의
+- M1-0/1/2: Next.js 스캐폴딩, 관리자 읽기 전용 라우팅, 문서 로더
+- M1-5/6: API 스켈레톤(healthz/metrics) + 관측(Sentry/OTel)
+- 마이그 새 문서/스크립트 생성기(scripts/migration_new.sh)
 
 # Round 11 — 운영 런북/롤백 절차
 - [x] admin/runbooks/release.md, rollback.md
