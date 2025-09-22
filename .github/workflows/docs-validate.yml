@@ -37,7 +37,7 @@ jobs:
           shopt -s nullglob
           for f in admin/manifests/*.yaml; do
             echo "Validating $f"
-            tmp=$(mktemp)
+            tmp="$(mktemp).json"
             js-yaml "$f" > "$tmp"
             ajv validate -s admin/schemas/hub.schema.json -d "$tmp"
             rm -f "$tmp"
