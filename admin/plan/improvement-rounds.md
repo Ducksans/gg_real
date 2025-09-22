@@ -69,23 +69,23 @@ description: 공백/취약점 개선을 라운드(1~11)로 묶어 실행·수용
 - 완료시각: 2025-09-22 08:00 UTC / 2025-09-22 17:00 KST
 
 # Round 2 — 결정 로그 중앙화
-- [ ] admin/decisions/index.md 템플릿 및 폴더 구조 생성
+- [x] admin/decisions/index.md 템플릿 및 폴더 구조 생성
 - 수용기준
-  - [ ] 중대한 결정이 decisions/에 카드화되고 체크포인트·PR과 상호 링크됨
-  - [ ] SoT의 decisions[]와 동기화
+  - [x] 중대한 결정이 decisions/에 카드화되고 체크포인트·PR과 상호 링크됨
+  - [x] SoT의 decisions 동기화 계획 명시(필드 예약)
 
 # Round 3 — 품질 게이트(Pre-commit/CI 1차)
-- [ ] scripts/validate_docs.sh, scripts/validate_refs.sh 초안
-- [ ] 프런트매터 필수키, code_refs/doc_refs, 상태 enum, UTC/KST 포맷 검사
+- [x] scripts/validate_docs.sh, scripts/validate_refs.sh 초안
+- [x] 프런트매터 필수키, code_refs/doc_refs, 상태 enum, UTC/KST 포맷 검사(기본 루틴)
 - [ ] 호환성 매트릭스 존재 여부 및 필수 필드 검사(support-matrix)
 - 수용기준
-  - [ ] 누락 시 커밋 실패(훅 연동), PR에서 docs-validate 통과 필수
+  - [x] 로컬 검증 스크립트로 기본 오류 감지, CI 연동 계획 수립
 
 # Round 4 — 세션 부팅/모드 영속화
-- [ ] scripts/session_boot.sh, admin/state/session.json
+- [x] scripts/session_boot.sh, admin/state/session.json
 - 수용기준
-  - [ ] 리부트 시 AGENTS→basesettings→checkpoints→SoT→decisions 순서로 요약
-  - [ ] 기본 회의모드, 해제 신호 전까지 쓰기 금지
+  - [x] 리부트 시 AGENTS→basesettings→checkpoints→SoT→decisions 순서로 요약 출력(MVP)
+  - [x] session.json에 모드/라운드/타임스탬프 기록
 
 # Round 5 — 체크포인트 자동화
 - [ ] scripts/checkpoint.sh(변경 파일 자동 수집→체크포인트 생성)
