@@ -3,7 +3,7 @@ file: AGENTS.md
 title: 에이전트 운영 규칙
 owner: duksan
 created: 2025-09-22 07:45 UTC / 2025-09-22 16:45 KST
-updated: ${UTC_NOW} / ${KST_NOW}
+updated: 2025-09-22 09:02 UTC / 2025-09-22 18:02 KST
 status: active
 tags: [policy, language, workflow]
 schemaVersion: 1
@@ -55,3 +55,15 @@ description: 프로젝트 전반에 적용되는 운영 규칙과 회의모드 �
   - 코드 파일(헤더 주석)에 `doc_refs: ["admin/specs/...md", "admin/plan/...md"]`를 기재한다.
   - 리뷰 체크: 신규/변경 파일에 상응하는 문서 링크가 있는지, 문서에 코드 참조가 있는지 확인한다.
 - 품질 게이트(후속): pre-commit 훅으로 프런트매터/헤더 주석의 존재를 검사하고, 누락 시 커밋을 차단한다.
+
+# 10. 세션 부팅 체크리스트(리부트 대비)
+- 새 채팅/재기동 시 기본 모드는 회의모드다. “실행하라/반영하라” 수신 전까지 쓰기/명령 금지.
+- 부팅 순서(읽기 순서):
+  1) AGENTS.md 운영 규칙 확인
+  2) basesettings.md 아키텍처/로드맵 확인
+  3) admin/checkpoints/ 최신 파일 1개 요약 확인
+  4) SoT: admin/state/project.json, admin/config/status.yaml, admin/config/taxonomy.yaml
+  5) 라운드 계획: admin/plan/improvement-rounds.md
+  6) 결정 로그 인덱스: admin/decisions/index.md
+- 위 순서를 완료한 후, 에이전트는 “현재 위치/다음 우선 작업”을 요약 보고한다.
+- 중대한 변경 제안 시에는 먼저 “깃 허브에 동기화 할까요?”라고 확인한다.

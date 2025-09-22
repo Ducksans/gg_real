@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "current_mode": "execution",
-  "last_checkpoint": "",
+  "current_mode": "meeting",
+  "last_checkpoint": "admin/checkpoints/20250922-0826-UTC_1726-KST.md",
   "next_round": "Round 5 — 체크포인트 자동화",
   "created": "2025-09-22 08:26 UTC / 2025-09-22 17:26 KST",
-  "updated": "2025-09-22 08:26 UTC / 2025-09-22 17:26 KST"
+  "updated": "2025-09-22 09:02 UTC / 2025-09-22 18:02 KST"
 }
