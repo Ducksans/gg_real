@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-22 07:45 UTC / 2025-09-22 16:45 KST
+updated: 2025-09-22 07:57 UTC / 2025-09-22 16:57 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -21,30 +21,39 @@ description: 관리자 페이지 구축을 위한 기준 문서. 실행 순서, 
 - 검색: 하이브리드(키워드+벡터) 설계 반영, MVP는 문서 로딩/표시까지
 - 거버넌스: 표준 주석 메타, 체크포인트 로그, Git 기준의 롤백
 
-# 실행 순서(체크리스트)
-- [ ] M0-1 스캐폴딩: admin 구조/템플릿(문서/메타/체크포인트) 생성
+# 실행 순서(체크리스트 — 권장 수정안 반영)
+- [ ] M0-0 리포/도구 체계: 모노레포(Turborepo), pnpm, .nvmrc, .editorconfig, eslint/prettier, husky+lint-staged, .gitignore, .env.example, 브랜치 보호 규칙
+- [ ] M0-1 문서 스캐폴딩: admin 구조/템플릿(문서/메타/체크포인트) 생성
 - [ ] M0-2 표준 주석/프런트매터 규칙 확정 및 템플릿 배포
-- [ ] M0-3 샘플 타임라인(간트)·의존 그래프(React Flow JSON/Mermaid) 데이터 추가
+- [ ] M0-3 CI 베이스: GitHub Actions(workflows)로 web/api lint/typecheck/build 설정
+- [ ] M0-4 샘플 데이터: 간트(Mermaid), 의존 그래프(JSON), KPI 목업 추가
+- [ ] M1-0 프론트 부트스트랩: Next.js + Vercel Preview 설정
 - [ ] M1-1 관리자 UI(읽기 전용) 라우팅: /admin/dashboard | /admin/wiki | /admin/timeline | /admin/graph | /admin/tech-debt
 - [ ] M1-2 문서 로더/렌더러(Markdown+Frontmatter, 백링크 패널) 구현
-- [ ] M1-3 Mermaid 간트·FullCalendar 월/주 뷰 표시
-- [ ] M1-4 그래프 뷰어(React Flow) 읽기 전용
+- [ ] M1-3 Timeline: Mermaid 간트·FullCalendar 월/주 뷰 표시
+- [ ] M1-4 Graph: React Flow 뷰어(읽기 전용)
+- [ ] M1-5 API 스켈레톤(NestJS+Fastify): healthz/metrics, 공통 에러/로깅, CORS/레이트리밋, OpenAPI
+- [ ] M1-6 관측 베이스: Sentry DSN/OTel 훅(토글 가능)
 - [ ] M2-1 안전한 쓰기: 편집→브랜치→PR 생성(헤더 메타 자동 갱신)
-- [ ] M2-2 AI 액션(대화 요약→할일/결정/리스크 초안) 버튼 목업→API 연결
-- [ ] M2-3 하이브리드 검색 API 초안(키워드 우선, 벡터 인터페이스만 정의)
-- [ ] M3-1 DB 스키마 초안(Postgres+pgvector+PostGIS) 및 마이그레이션 스크립트
-- [ ] M3-2 문서 임베딩 파이프라인(청크/임베딩/색인) 워커 설계 및 목업
-- [ ] M3-3 그래프 편집/내보내기(React Flow→Mermaid/PNG) & 캘린더 ICS 내보내기
+- [ ] M2-2 인증/RBAC 골격: Auth.js(이메일/SMS/소셜), Redis 세션/레이트리밋
+- [ ] M2-3 실시간(초기): Ably/Pusher 알림/채팅 목업 연결
+- [ ] M2-4 하이브리드 검색 API 초안: 키워드 우선, 벡터 인터페이스 정의
+- [ ] M3-1 DB 프로비저닝: Neon(Postgres+pgvector+PostGIS), Prisma 스키마/마이그/seed
+- [ ] M3-2 임베딩 워커: BullMQ(청크/임베딩/색인) 및 하이브리드 검색 연결
+- [ ] M3-3 그래프 편집 양방향: React Flow ↔ Mermaid/PNG, 캘린더 ICS 내보내기
 
 # 완료 기준(관리자 페이지 MVP)
-- [ ] 리포지토리에 표준 메타가 있는 문서 구조(admin/*)가 존재하고 체크포인트가 자동/반자동으로 추가된다.
-- [ ] /admin/wiki에서 문서 렌더, 백링크/태그/상태 배지가 표시된다.
-- [ ] /admin/timeline에서 간트와 캘린더로 마일스톤/태스크가 보인다.
-- [ ] /admin/graph에서 의존관계 그래프를 시각적으로 확인할 수 있다(읽기 전용).
-- [ ] 상태 필터(진행중/대기/보류/실패/설계변경중)가 UI에서 동작한다.
-- [ ] “편집→브랜치→PR 생성” 플로우가 동작하고 문서 헤더의 updated가 자동 갱신된다.
-- [ ] 검색 창에 키워드 기반 검색이 가능하며, 벡터 검색을 위한 인터페이스가 정의되어 있다.
-- [ ] README에 운영/개발 방법과 롤백 절차가 문서화되어 있다.
+- [ ] 리포에 표준 메타 문서 구조(admin/*) 존재, 체크포인트 자동/반자동 기록
+- [ ] CI 베이스가 PR에서 lint/typecheck/build를 수행하고, 실패 시 머지 차단
+- [ ] /admin/wiki 문서 렌더 + 백링크/태그/상태 배지 표시
+- [ ] /admin/timeline 간트/캘린더에서 마일스톤/태스크 표시
+- [ ] /admin/graph에서 의존 그래프 확인(읽기 전용)
+- [ ] API 스켈레톤의 /healthz 200, /metrics 노출, OpenAPI 스펙 생성
+- [ ] Sentry/OTel가 베타 환경에서 에러/트레이스 수집(토글 가능)
+- [ ] 상태 필터(진행중/대기/보류/실패/설계변경중) UI 동작
+- [ ] “편집→브랜치→PR 생성” 플로우 정상, 문서 헤더 updated 자동 갱신
+- [ ] 키워드 검색 동작, 벡터 검색 인터페이스 정의(후속 연결 가능)
+- [ ] README에 운영/개발/롤백 절차 문서화
 
 # 데이터/검색 설계(베이스)
 - DB: PostgreSQL
@@ -132,6 +141,14 @@ description: 지도/필터/정렬/지오서치 요구사항 요약
 - 그래프: React Flow(노드/엣지 상태 컬러), 내보내기(Mermaid/PNG)
 - 상태 배지: 진행중/대기/보류/실패/설계변경중
 - AI 버튼: 대화 요약→할일/결정/리스크 초안 생성(목업→실연동)
+
+# 설계 원칙(컴포넌트·단일책임·문서-코드 동기화)
+- 컴포넌트화: 사용자 화면은 기능 단위 컴포넌트로 최대한 분리하여 디버깅 책임을 명확히 한다. 공통 UI는 `packages/ui`에, 도메인 전용 UI는 `apps/web` 하위 feature 폴더에 둔다.
+- 단일 책임(1파일 1책임): 각 코드 파일은 하나의 책임만 가진다. 파일이 비대해질 경우 하위 모듈로 분리한다.
+- 문서-코드 동기화: 문서와 코드가 서로를 참조한다.
+  - 문서 프런트매터 예: `code_refs: ["apps/web/components/Timeline.tsx", "apps/api/src/modules/tasks/tasks.service.ts"]`
+  - 코드 헤더 예: `doc_refs: ["admin/specs/timeline.md", "admin/plan/roadmap.md"]`
+  - 리뷰 체크리스트에 상호 참조 여부를 포함한다(후속 pre-commit 훅으로 자동 검사 추가 예정).
 
 # 거버넌스/체크포인트
 - 모든 생성/수정/삭제는 admin/checkpoints/YYYYMMDD-HHMM-UTC_KST.md에 기록
