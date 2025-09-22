@@ -3,7 +3,7 @@ file: admin/plan/improvement-rounds.md
 title: 개선 라운드 실행안(드리프트 방지/추적성/거버넌스/호환성/보안 강화)
 owner: duksan
 created: 2025-09-22 08:00 UTC / 2025-09-22 17:00 KST
-updated: 2025-09-22 17:53 UTC / 2025-09-23 02:53 KST
+updated: 2025-09-22 18:04 UTC / 2025-09-23 03:04 KST
 status: in_progress
 tags: [plan, improvement, governance]
 schemaVersion: 1
@@ -20,6 +20,7 @@ code_refs:
     'scripts/update_frontmatter_time.js',
     'scripts/gh_protect_main.sh',
     'scripts/gh_enable_automerge.sh',
+    '.github/workflows/docs-validate.yml',
   ]
 ---
 
@@ -237,6 +238,15 @@ code_refs:
 1. `.github/workflows/docs-validate.yml`에서 Node 20 + pnpm 셋업을 명시하고 devDependencies를 사용한다.
 2. 워크플로에서 `pnpm run validate:docs`와 `pnpm run validate:refs`를 호출하여 로컬과 동일한 검증을 수행한다.
 3. AJV 설치를 devDependencies 기반으로 수행하고 중복 전역 설치를 제거한다.
+
+- 계획
+  - [P1] docs-validate 워크플로우에서 actions/setup-node 20 + pnpm/action-setup을 사용하고 pnpm install --frozen-lockfile로 devDependencies 기반 환경을 재현
+  - [P1] 워크플로 단계에서 `pnpm run validate:docs`와 `pnpm run validate:refs`를 호출하여 로컬 pre-commit 검사와 동기화
+  - [P1] js-yaml/ajv-cli 등 툴 호출을 `pnpm exec`으로 대체하여 글로벌 설치를 제거
+  - [P2] pnpm 캐시 활용 및 향후 병렬 잡 구조 재검토
+
+- 진행 상황
+  - [완료] 2025-09-22 18:03 UTC / 2025-09-23 03:03 KST — docs-validate.yml을 pnpm 기반으로 재구성하고 validate:docs/refs 실행 단계 반영, devDependencies 활용 확인
 
 ### Phase 4 — 체크포인트 강화 및 회귀 테스트
 

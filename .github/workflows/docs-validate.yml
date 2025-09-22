@@ -2,9 +2,9 @@ name: Docs Validate
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   docs-validate:
@@ -13,34 +13,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'pnpm'
 
-      - name: Install markdownlint-cli
-        run: npm i -g markdownlint-cli@0.38.0
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.12.0
 
-      - name: Install ajv-cli and js-yaml
-        run: npm i -g ajv-cli@5.0.0 js-yaml@4.1.0
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Run markdownlint (MD029 ordered)
-        run: markdownlint -q -c .markdownlint.json "**/*.md"
+      - name: Run precommit:meta (docs + refs)
+        run: pnpm -s precommit:meta
 
-      - name: Run local docs validator
-        run: bash scripts/validate_docs.sh
+      - name: Run docs validator (full suite)
+        run: pnpm run validate:docs
 
       - name: Run cross-ref validator (R9)
-        run: bash scripts/validate_refs.sh
+        run: pnpm run validate:refs
 
       - name: Run migration governance validator (R10)
-        run: bash scripts/validate_migrations.sh
+        run: pnpm exec bash scripts/validate_migrations.sh
 
       - name: Run code header validator (P1)
-        run: bash scripts/validate_code_headers.sh
+        run: pnpm exec bash scripts/validate_code_headers.sh
 
       - name: Run sidecar meta validator (P3)
-        run: bash scripts/validate_sidecar_meta.sh
+        run: pnpm exec bash scripts/validate_sidecar_meta.sh
 
       - name: Validate hub manifests against schema
         if: ${{ always() }}
@@ -50,7 +53,7 @@ jobs:
           for f in admin/manifests/*.yaml; do
             echo "Validating $f"
             tmp="$(mktemp).json"
-            js-yaml "$f" > "$tmp"
-            ajv validate -s admin/schemas/hub.schema.json -d "$tmp"
+            pnpm exec js-yaml "$f" > "$tmp"
+            pnpm exec ajv validate -s admin/schemas/hub.schema.json -d "$tmp"
             rm -f "$tmp"
           done
