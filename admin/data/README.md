@@ -2,14 +2,21 @@
 file: admin/data/README.md
 title: 샘플 데이터 모음
 owner: duksan
-created: 2025-09-22 19:05 UTC / 2025-09-23 04:05 KST
-updated: 2025-09-22 18:59 UTC / 2025-09-23 03:59 KST
+created: 2025-09-22 19:00 UTC / 2025-09-23 04:00 KST
+updated: 2025-09-22 20:02 UTC / 2025-09-23 05:02 KST
 status: active
 tags: [data, template]
 schemaVersion: 1
 description: 관리자 UI 샘플 데이터를 관리하는 디렉터리 설명서
-code_refs: ['admin/data/timeline.gantt.md', 'admin/data/graph.json', 'admin/data/kpi.md']
-doc_refs: ['basesettings.md', 'admin/plan/m1-kickoff.md']
+code_refs:
+  [
+    'admin/data/timeline.gantt.md',
+    'admin/data/graph.json',
+    'admin/data/kpi.md',
+    'apps/web/src/app/admin/wiki/page.tsx',
+    'apps/web/src/app/admin/tech-debt/page.tsx',
+  ]
+doc_refs: ['basesettings.md', 'admin/plan/m1-kickoff.md', 'apps/web/README.md']
 ---
 
 # 목적

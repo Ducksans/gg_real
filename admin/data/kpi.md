@@ -2,14 +2,14 @@
 file: admin/data/kpi.md
 title: 샘플 KPI 지표
 owner: duksan
-created: 2025-09-22 19:05 UTC / 2025-09-23 04:05 KST
-updated: 2025-09-22 18:59 UTC / 2025-09-23 03:59 KST
+created: 2025-09-22 19:00 UTC / 2025-09-23 04:00 KST
+updated: 2025-09-22 20:02 UTC / 2025-09-23 05:02 KST
 status: sample
 tags: [data, kpi]
 schemaVersion: 1
 description: 관리자 대시보드용 가상의 KPI 데이터 표
-code_refs: ['admin/data/README.md']
-doc_refs: ['basesettings.md', 'admin/plan/m1-kickoff.md']
+code_refs: ['admin/data/README.md', 'apps/web/src/app/admin/dashboard/page.tsx']
+doc_refs: ['basesettings.md', 'admin/plan/m1-kickoff.md', 'apps/web/README.md']
 ---
 
 | KPI           | 목표   | 현재 | 메모                             |
