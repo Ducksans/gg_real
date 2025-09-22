@@ -3,7 +3,7 @@ file: admin/plan/improvement-rounds.md
 title: 개선 라운드 실행안(드리프트 방지/추적성/거버넌스/호환성/보안 강화)
 owner: duksan
 created: 2025-09-22 08:00 UTC / 2025-09-22 17:00 KST
-updated: 2025-09-22 16:28 UTC / 2025-09-23 01:28 KST
+updated: 2025-09-22 16:47 UTC / 2025-09-23 01:47 KST
 status: in_progress
 tags: [plan, improvement, governance]
 schemaVersion: 1
@@ -201,6 +201,9 @@ code_refs:
 1. 루트 `package.json`에 ajv/ajv-cli/ajv-formats/js-yaml/yaml을 devDependencies로 추가한다.
 2. `pnpm install`로 의존성을 설치하고 `node_modules` 캐시 상태를 확인한다.
 3. 작업 착수 전 최신 `chore/branch-protection-warmup` 브랜치를 기준으로 체크포인트를 남긴다.
+
+- 진행 상황
+  - [완료] 2025-09-22 16:43 UTC / 2025-09-23 01:43 KST — devDependencies 추가 및 pnpm install, 체크포인트 2건 생성(20250922-1635, 20250922-1641)
 
 ### Phase 1 — 검증 스크립트 고도화
 
