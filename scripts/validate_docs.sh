@@ -4,7 +4,7 @@
 # created: 2025-09-22 08:25 UTC / 2025-09-22 17:25 KST
 # updated: 2025-09-22 09:22 UTC / 2025-09-22 18:22 KST
 # purpose: 문서 검증(MVP) + 목록 번호 규칙(MD029 대체 검사)
-# doc_refs: ["docs/style-guides/markdown.md", "AGENTS.md"]
+# doc_refs: ["docs/style-guides/markdown.md", "AGENTS.md", "basesettings.md"]
 
 set -euo pipefail
 

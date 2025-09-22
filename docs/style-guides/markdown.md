@@ -8,6 +8,7 @@ status: active
 tags: [docs, style, markdown]
 schemaVersion: 1
 description: 채팅/문서 환경에서 일관된 목록 번호와 우선순위 표기 규칙 정의
+code_refs: ["scripts/validate_docs.sh", "scripts/fix_checkpoints.sh", "scripts/checkpoint.sh"]
 ---
 
 # 목적
@@ -22,6 +23,3 @@ description: 채팅/문서 환경에서 일관된 목록 번호와 우선순위 
 # 검증
 - markdownlint MD029을 `ordered`로 강제한다.
 - 도구가 없을 때는 스크립트가 3줄 이상 연속된 `^1[.)] ` 패턴을 경고한다.
-
-# code_refs
-- code_refs: ["scripts/validate_docs.sh", ".markdownlint.json", "AGENTS.md"]

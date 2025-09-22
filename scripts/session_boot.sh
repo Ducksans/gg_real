@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-/*
- File: scripts/session_boot.sh
- Owner: duksan
- Created: 2025-09-22 08:26 UTC / 2025-09-22 17:26 KST
- Updated: 2025-09-22 08:26 UTC / 2025-09-22 17:26 KST
- Purpose: 새 세션/채팅 부팅 시 핵심 문서를 순서대로 요약 출력(MVP)
-*/
+# file: scripts/session_boot.sh
+# owner: duksan
+# created: 2025-09-22 08:26 UTC / 2025-09-22 17:26 KST
+# updated: 2025-09-22 10:59 UTC / 2025-09-22 19:59 KST
+# purpose: 새 세션/채팅 부팅 시 핵심 문서를 순서대로 요약 출력(MVP)
+# doc_refs: ["AGENTS.md", "basesettings.md"]
 set -euo pipefail
 
 echo "=== BOOT: AGENTS.md ==="

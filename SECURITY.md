@@ -8,6 +8,7 @@ status: active
 tags: [security, policy]
 schemaVersion: 1
 description: 비밀정보 관리, 취약점 제보, 기본 보안 기준(헤더/CORS/레이트리밋) 요약 초안
+code_refs: ["scripts/secrets_scan.sh"]
 ---
 
 # 비밀정보 관리
@@ -23,5 +24,3 @@ description: 비밀정보 관리, 취약점 제보, 기본 보안 기준(헤더/
 - 레이트리밋: IP/계정/라우트 단위
 - 헤더: HSTS, CSP, Frame-Ancestors, Referrer-Policy, Permissions-Policy
 
-# code_refs
-- code_refs: ["scripts/secrets_scan.sh", ".gitleaks.toml", "apps/api/config/security.sample.json", ".github/workflows/ci.yml"]

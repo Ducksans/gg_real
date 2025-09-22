@@ -8,6 +8,7 @@ status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
 description: 관리자 페이지 구축을 위한 기준 문서. 실행 순서, 체크리스트, 완료 기준과 데이터/검색 설계를 포함.
+code_refs: ["scripts/session_boot.sh", "scripts/validate_docs.sh", "scripts/checkpoint.sh"]
 ---
 
 # 개요

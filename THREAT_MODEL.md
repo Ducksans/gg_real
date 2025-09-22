@@ -8,6 +8,7 @@ status: active
 tags: [security, threat-model]
 schemaVersion: 1
 description: STRIDE 관점의 핵심 위험과 통제 초안
+code_refs: ["scripts/secrets_scan.sh"]
 ---
 
 # 범위
@@ -21,5 +22,3 @@ description: STRIDE 관점의 핵심 위험과 통제 초안
 - Denial of Service: 레이트리밋, 요청 크기 제한, 재시도 폭주 방지
 - Elevation of Privilege: RBAC, 관리자 경로 보호, 코드 리뷰 필수
 
-# code_refs
-- code_refs: ["scripts/secrets_scan.sh", ".github/workflows/ci.yml"]
