@@ -28,17 +28,32 @@ done
 # 목록 번호 규칙 검사(재발 방지)
 # 1) markdownlint가 있으면 MD029(style: ordered)로 검사
 if command -v markdownlint >/dev/null 2>&1; then
-  echo "[info] markdownlint MD029 검사 실행" >&2
-  if ! markdownlint -q -r MD029 .; then
+  echo "[info] markdownlint 검사 실행(.markdownlint.json)" >&2
+  if ! markdownlint -q -c .markdownlint.json "**/*.md"; then
     echo "[ERR] markdownlint MD029 실패"; fail=1
   fi
 else
   # 2) 도구가 없으면 간단한 휴리스틱: 동일 파일에서 1./1./1.이 3줄 이상 연속되면 경고
   echo "[info] markdownlint 미설치: 휴리스틱 검사 수행" >&2
   while IFS= read -r -d '' md; do
-    if awk '/^1[.)] /{c++; if(c>=3){print FILENAME; exit 0}} !/^1[.)] /{c=0}' "$md" >/dev/null; then
-      echo "[WARN] 의심스러운 번호 목록(1. 반복): $md"; fi
+    if awk '
+      /^1[.)] /{ c++; } !/^1[.)] /{ c=0 }
+      END{ exit (c>=3?0:1) }
+    ' "$md"; then
+      echo "[WARN] 의심스러운 번호 목록(1. 반복): $md"
+    fi
   done < <(find . -type f -name '*.md' -print0)
+fi
+
+# support-matrix 존재 및 필수 키 검사(간단)
+if [ ! -f admin/config/support-matrix.yaml ]; then
+  echo "[ERR] missing support-matrix: admin/config/support-matrix.yaml"; fail=1
+else
+  for key in browsers os devices; do
+    if ! grep -qE "^${key}:" admin/config/support-matrix.yaml; then
+      echo "[ERR] support-matrix missing key: $key"; fail=1
+    fi
+  done
 fi
 
 exit $fail

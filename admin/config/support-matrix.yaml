@@ -1,0 +1,32 @@
+---
+file: admin/config/support-matrix.yaml
+title: 지원 매트릭스(브라우저/OS/디바이스)
+owner: duksan
+created: 2025-09-22 09:38 UTC / 2025-09-22 18:38 KST
+updated: 2025-09-22 09:38 UTC / 2025-09-22 18:38 KST
+status: active
+tags: [config, support-matrix]
+schemaVersion: 1
+description: 최소 지원 대상과 버전 정책, 테스트 우선순위를 정의
+---
+
+browsers:
+  chrome: "last 2"
+  edge: "last 2"
+  firefox: "last 2"
+  safari_ios: "last 2"
+
+os:
+  ios: ">=16.4"
+  android: ">=10"
+  windows: ">=10"
+  macos: ">=12"
+  linux: "LTS"
+
+devices:
+  - mobile
+  - tablet
+  - desktop
+
+notes:
+  - "PWA: iOS 16.4+ 푸시, 오프라인/백그라운드 동기화는 기능 감지 후 폴백"
