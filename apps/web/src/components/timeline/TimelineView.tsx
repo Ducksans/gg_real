@@ -47,10 +47,7 @@ export function TimelineView({ dataset }: TimelineViewProps) {
     [events, selectedMilestones, selectedStatuses],
   );
 
-  const chart = useMemo(
-    () => buildMermaidDiagram(filteredEvents, statuses),
-    [filteredEvents, statuses],
-  );
+  const chart = useMemo(() => buildMermaidDiagram(filteredEvents), [filteredEvents]);
 
   const resetFilters = () => {
     setSelectedStatuses(statusKeys);

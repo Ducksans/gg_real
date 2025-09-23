@@ -54,7 +54,7 @@ const STATUS_KEYWORD_MAP: Record<string, string> = {
   pending: '',
 };
 
-export function buildMermaidDiagram(events: TimelineEvent[], statuses: StatusConfig): string {
+export function buildMermaidDiagram(events: TimelineEvent[]): string {
   if (events.length === 0) {
     return '';
   }
@@ -89,20 +89,6 @@ export function buildMermaidDiagram(events: TimelineEvent[], statuses: StatusCon
           lines.push(`    ${event.title} :${taskParts.join(', ')}, ${event.start}, ${event.end}`);
         });
     });
-
-  const usedStatuses = new Set(events.map((event) => event.status));
-  lines.push('');
-  lines.push('  %% status classes');
-  usedStatuses.forEach((status) => {
-    const definition = statuses[status];
-    const fill = definition?.color ?? '#6b7280';
-    const textColor = '#ffffff';
-    lines.push(`  classDef ${status} fill:${fill},stroke:${fill},color:${textColor};`);
-  });
-  events.forEach((event) => {
-    const taskId = event.id.replace(/[^A-Za-z0-9_]/g, '_');
-    lines.push(`  class ${taskId} ${event.status}`);
-  });
 
   return lines.join('\n');
 }
