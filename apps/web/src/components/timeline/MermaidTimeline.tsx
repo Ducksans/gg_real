@@ -4,31 +4,60 @@
  * file: apps/web/src/components/timeline/MermaidTimeline.tsx
  * owner: duksan
  * created: 2025-09-23 07:25 UTC / 2025-09-23 16:25 KST
- * updated: 2025-09-23 09:27 UTC / 2025-09-23 18:27 KST
- * purpose: Mermaid 간트 문자열을 확대/축소 컨트롤과 함께 렌더링한다
+ * updated: 2025-09-23 09:45 UTC / 2025-09-23 18:45 KST
+ * purpose: Mermaid 간트를 가독성 높은 확대/축소 컨트롤과 함께 렌더링한다
  * doc_refs: ["admin/data/timeline.events.json", "apps/web/src/lib/timeline.ts"]
  */
 
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
 interface MermaidTimelineProps {
   chart: string;
 }
 
+const MIN_ZOOM = 0.6;
+const MAX_ZOOM = 2.0;
+const ZOOM_STEP = 0.05;
+
 export function MermaidTimeline({ chart }: MermaidTimelineProps) {
-  const [svg, setSvg] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [scale, setScale] = useState<number>(1);
+  const [hasDiagram, setHasDiagram] = useState<boolean>(false);
   const id = useId();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const formattedScale = useMemo(() => scale.toFixed(2), [scale]);
+
+  const applyZoom = useCallback((targetScale: number) => {
+    const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+
+    const svgElement = container.querySelector('svg');
+    if (!svgElement) {
+      return;
+    }
+
+    const widthPercent = Math.max(10, Math.round(targetScale * 100));
+    svgElement.style.width = `${widthPercent}%`;
+    svgElement.style.height = 'auto';
+    svgElement.style.maxWidth = 'none';
+    svgElement.setAttribute('preserveAspectRatio', 'xMinYMin meet');
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
 
     async function renderMermaid() {
+      const container = containerRef.current;
+      if (!container) {
+        return;
+      }
+
       if (!chart) {
-        setSvg('');
+        container.innerHTML = '';
+        setHasDiagram(false);
         return;
       }
 
@@ -36,23 +65,34 @@ export function MermaidTimeline({ chart }: MermaidTimelineProps) {
         const mermaid = (await import('mermaid')).default;
         mermaid.initialize({
           startOnLoad: false,
+          securityLevel: 'loose',
           theme: 'default',
+          themeVariables: {
+            fontSize: '16px',
+            ganttAxisTextSize: '14px',
+            ganttTaskFontSize: '14px',
+            ganttSectionFontSize: '14px',
+          },
           gantt: {
-            barHeight: 30,
-            barGap: 8,
-            topPadding: 60,
-            leftPadding: 80,
-            rightPadding: 40,
+            barHeight: 28,
+            barGap: 6,
+            topPadding: 50,
+            leftPadding: 120,
+            rightPadding: 48,
           },
         });
         const { svg } = await mermaid.render(`mermaid-${id}`, chart);
-        if (!cancelled) {
-          setSvg(svg);
+        if (!cancelled && containerRef.current) {
+          containerRef.current.innerHTML = svg;
           setError('');
+          setHasDiagram(true);
+          setScale(1);
+          requestAnimationFrame(() => applyZoom(1));
         }
       } catch (err) {
         if (!cancelled) {
           setError('Mermaid 다이어그램을 렌더링하는 중 문제가 발생했습니다.');
+          setHasDiagram(false);
           console.error(err);
         }
       }
@@ -63,7 +103,20 @@ export function MermaidTimeline({ chart }: MermaidTimelineProps) {
     return () => {
       cancelled = true;
     };
-  }, [chart, id]);
+  }, [chart, id, applyZoom]);
+
+  useEffect(() => {
+    if (!hasDiagram) {
+      return;
+    }
+    applyZoom(scale);
+  }, [applyZoom, hasDiagram, scale]);
+
+  const zoomOut = () =>
+    setScale((value) => Math.max(MIN_ZOOM, Math.round((value - ZOOM_STEP) * 100) / 100));
+  const zoomIn = () =>
+    setScale((value) => Math.min(MAX_ZOOM, Math.round((value + ZOOM_STEP) * 100) / 100));
+  const resetZoom = () => setScale(1);
 
   if (error) {
     return (
@@ -81,10 +134,6 @@ export function MermaidTimeline({ chart }: MermaidTimelineProps) {
     );
   }
 
-  const zoomOut = () => setScale((value) => Math.max(0.6, Math.round((value - 0.1) * 100) / 100));
-  const zoomIn = () => setScale((value) => Math.min(1.8, Math.round((value + 0.1) * 100) / 100));
-  const resetZoom = () => setScale(1);
-
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
@@ -93,26 +142,29 @@ export function MermaidTimeline({ chart }: MermaidTimelineProps) {
           <button
             type="button"
             onClick={zoomOut}
-            className="rounded-full border border-slate-200 px-2 py-1 font-semibold text-slate-600 transition hover:bg-slate-100"
+            className="rounded-full border border-slate-200 px-2 py-1 font-semibold text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="축소"
+            disabled={!hasDiagram}
           >
             -
           </button>
           <input
             type="range"
-            min={0.6}
-            max={1.8}
-            step={0.05}
+            min={MIN_ZOOM}
+            max={MAX_ZOOM}
+            step={ZOOM_STEP}
             value={scale}
             onChange={(event) => setScale(Number(event.target.value))}
-            className="h-1 w-36 cursor-pointer appearance-none rounded-full bg-slate-200 accent-slate-700"
+            className="h-1 w-36 cursor-pointer appearance-none rounded-full bg-slate-200 accent-slate-700 disabled:cursor-not-allowed"
             aria-label="타임라인 확대 비율"
+            disabled={!hasDiagram}
           />
           <button
             type="button"
             onClick={zoomIn}
-            className="rounded-full border border-slate-200 px-2 py-1 font-semibold text-slate-600 transition hover:bg-slate-100"
+            className="rounded-full border border-slate-200 px-2 py-1 font-semibold text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="확대"
+            disabled={!hasDiagram}
           >
             +
           </button>
@@ -121,17 +173,14 @@ export function MermaidTimeline({ chart }: MermaidTimelineProps) {
         <button
           type="button"
           onClick={resetZoom}
-          className="rounded-full border border-slate-200 px-2 py-1 font-medium text-slate-600 transition hover:bg-slate-100"
+          className="rounded-full border border-slate-200 px-2 py-1 font-medium text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={!hasDiagram}
         >
           초기화
         </button>
       </div>
-      <div className="overflow-x-auto">
-        <div
-          className="mermaid inline-block origin-top-left"
-          style={{ transform: `scale(${scale})` }}
-          dangerouslySetInnerHTML={{ __html: svg }}
-        />
+      <div className="w-full overflow-x-auto">
+        <div className="mermaid min-h-[320px]" ref={containerRef} />
       </div>
     </div>
   );

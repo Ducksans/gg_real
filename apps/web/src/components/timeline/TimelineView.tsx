@@ -4,7 +4,7 @@
  * file: apps/web/src/components/timeline/TimelineView.tsx
  * owner: duksan
  * created: 2025-09-23 07:28 UTC / 2025-09-23 16:28 KST
- * updated: 2025-09-23 07:56 UTC / 2025-09-23 16:56 KST
+ * updated: 2025-09-23 09:45 UTC / 2025-09-23 18:45 KST
  * purpose: 타임라인 이벤트 필터링 UI와 Mermaid 렌더러를 결합해 인터랙티브 화면을 구성한다
  * doc_refs: ["apps/web/src/app/admin/timeline/page.tsx", "apps/web/src/lib/timeline.ts"]
  */
@@ -78,7 +78,9 @@ export function TimelineView({ dataset }: TimelineViewProps) {
         onToggleStatus={toggleStatus}
         onReset={resetFilters}
       />
-      <MermaidTimeline chart={chart} />
+      <div className="gg-timeline-wrap w-full overflow-x-auto">
+        <MermaidTimeline chart={chart} />
+      </div>
       <EventList events={filteredEvents} statuses={statuses} />
     </div>
   );
