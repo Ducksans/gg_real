@@ -12,6 +12,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { MermaidTimeline } from './MermaidTimeline';
+import { CalendarView } from './CalendarView';
 import type { TimelineDataset } from '@/lib/timeline';
 import { buildMermaidDiagram, filterEvents } from '@/lib/timeline';
 import { getStatusColor, getStatusLabel } from '@/lib/status';
@@ -29,6 +30,7 @@ export function TimelineView({ dataset }: TimelineViewProps) {
   }, [events, statuses]);
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>(statusKeys);
   const [selectedMilestones, setSelectedMilestones] = useState<string[]>(milestones);
+  const [view, setView] = useState<'gantt' | 'calendar'>('gantt');
 
   useEffect(() => {
     setSelectedStatuses(statusKeys);
@@ -68,6 +70,33 @@ export function TimelineView({ dataset }: TimelineViewProps) {
 
   return (
     <div className="space-y-6">
+      <section className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-xs">
+          <span className="font-semibold text-slate-600">보기</span>
+          <button
+            type="button"
+            onClick={() => setView('gantt')}
+            className={`rounded-full border px-3 py-1 font-medium transition ${
+              view === 'gantt'
+                ? 'border-slate-700 bg-slate-800 text-white'
+                : 'border-slate-200 bg-white text-slate-600'
+            }`}
+          >
+            간트
+          </button>
+          <button
+            type="button"
+            onClick={() => setView('calendar')}
+            className={`rounded-full border px-3 py-1 font-medium transition ${
+              view === 'calendar'
+                ? 'border-slate-700 bg-slate-800 text-white'
+                : 'border-slate-200 bg-white text-slate-600'
+            }`}
+          >
+            캘린더
+          </button>
+        </div>
+      </section>
       <Filters
         milestones={milestones}
         selectedMilestones={selectedMilestones}
@@ -78,9 +107,13 @@ export function TimelineView({ dataset }: TimelineViewProps) {
         onToggleStatus={toggleStatus}
         onReset={resetFilters}
       />
-      <div className="gg-timeline-wrap w-full overflow-x-auto">
-        <MermaidTimeline chart={chart} />
-      </div>
+      {view === 'gantt' ? (
+        <div className="gg-timeline-wrap w-full overflow-x-auto">
+          <MermaidTimeline chart={chart} />
+        </div>
+      ) : (
+        <CalendarView dataset={dataset} />
+      )}
       <EventList events={filteredEvents} statuses={statuses} />
     </div>
   );

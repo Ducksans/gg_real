@@ -178,6 +178,29 @@ export function MermaidTimeline({ chart }: MermaidTimelineProps) {
         >
           초기화
         </button>
+        <button
+          type="button"
+          onClick={() => {
+            const container = containerRef.current;
+            if (!container) return;
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+            const blob = new Blob([svg.outerHTML], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '');
+            a.download = `timeline-${ts}.svg`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+          }}
+          className="ml-2 rounded-full border border-slate-200 px-2 py-1 font-medium text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={!hasDiagram}
+        >
+          SVG 저장
+        </button>
       </div>
       <div className="w-full overflow-x-auto">
         <div className="mermaid min-h-[320px]" ref={containerRef} />

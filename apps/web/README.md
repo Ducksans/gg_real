@@ -3,7 +3,7 @@ file: apps/web/README.md
 title: apps/web 개발 안내
 owner: duksan
 created: 2025-09-22 19:10 UTC / 2025-09-23 04:10 KST
-updated: 2025-09-23 06:36 UTC / 2025-09-23 15:36 KST
+updated: 2025-09-23 14:56 UTC / 2025-09-23 23:56 KST
 status: active
 tags: [docs, setup]
 schemaVersion: 1
@@ -22,6 +22,7 @@ code_refs:
     'apps/web/sentry.config.ts',
     'apps/web/instrumentation.ts',
     'apps/web/next.config.ts',
+    'apps/web/src/app/global-error.tsx',
   ]
 doc_refs: ['admin/plan/m1-kickoff.md', 'basesettings.md']
 ---
@@ -55,6 +56,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 - 클라이언트/서버/Edge 런타임에서 `@sentry/nextjs`가 초기화됩니다.
 - 환경 변수: `NEXT_PUBLIC_ENABLE_SENTRY`, `NEXT_PUBLIC_SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_ENVIRONMENT`, `NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE`, `NEXT_PUBLIC_SENTRY_PROFILES_SAMPLE_RATE`.
+
+## Global Error
+
+- 전역 오류 경계: `apps/web/src/app/global-error.tsx`
+- 치명적 에러 발생 시 사용자에게 재시도 버튼과 함께 안내 UI를 표시하고, 콘솔/관측에 기록됩니다.
 
 ## Scripts
 
