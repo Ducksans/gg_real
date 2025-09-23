@@ -87,9 +87,6 @@ export function buildMermaidDiagram(events: TimelineEvent[], statuses: StatusCon
             taskParts.unshift(keyword);
           }
           lines.push(`    ${event.title} :${taskParts.join(', ')}, ${event.start}, ${event.end}`);
-          if (taskId !== event.id) {
-            lines.push(`    %% original id: ${event.id}`);
-          }
         });
     });
 
