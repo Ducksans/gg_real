@@ -2,7 +2,7 @@
  * file: apps/api/src/observability.ts
  * owner: duksan
  * created: 2025-09-22 19:25 UTC / 2025-09-23 04:25 KST
- * updated: 2025-09-23 06:07 UTC / 2025-09-23 15:08 KST
+ * updated: 2025-09-23 07:09 UTC / 2025-09-23 16:10 KST
  * purpose: Sentry 및 OpenTelemetry 초기화(선택 토글)
  * doc_refs: ["admin/plan/m1-kickoff.md", "basesettings.md", "apps/api/README.md"]
  */
@@ -113,21 +113,20 @@ function setupOpenTelemetry() {
     instrumentations: [getNodeAutoInstrumentations()],
   });
 
-  void (async () => {
-    try {
-      await telemetrySdk?.start();
-      console.log('[observability] OpenTelemetry 트레이싱이 활성화되었습니다.');
-    } catch (error) {
-      console.error('[observability] OpenTelemetry 초기화 실패', error);
-    }
-  })();
+  try {
+    telemetrySdk.start();
+    console.log('[observability] OpenTelemetry 트레이싱이 활성화되었습니다.');
+  } catch (error) {
+    console.error('[observability] OpenTelemetry 초기화 실패', error);
+  }
 
   const shutdown = async () => {
-    if (!telemetrySdk) {
+    const sdk = telemetrySdk;
+    if (!sdk) {
       return;
     }
     try {
-      await telemetrySdk.shutdown();
+      await sdk.shutdown();
     } catch (error) {
       console.error('[observability] OpenTelemetry 종료 실패', error);
     }
