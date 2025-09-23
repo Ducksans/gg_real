@@ -45,6 +45,15 @@ export function filterEvents(events: TimelineEvent[], filters: TimelineFilters):
   });
 }
 
+const STATUS_KEYWORD_MAP: Record<string, string> = {
+  completed: 'done',
+  in_progress: 'active',
+  failed: 'crit',
+  design_change: 'crit',
+  on_hold: 'crit',
+  pending: '',
+};
+
 export function buildMermaidDiagram(events: TimelineEvent[], statuses: StatusConfig): string {
   if (events.length === 0) {
     return '';
@@ -71,7 +80,16 @@ export function buildMermaidDiagram(events: TimelineEvent[], statuses: StatusCon
       milestoneEvents
         .sort((a, b) => a.start.localeCompare(b.start))
         .forEach((event) => {
-          lines.push(`    ${event.title} :${event.id}, ${event.start}, ${event.end}`);
+          const keyword = STATUS_KEYWORD_MAP[event.status] ?? '';
+          const taskId = event.id.replace(/[^A-Za-z0-9_]/g, '_');
+          const taskParts = [taskId];
+          if (keyword) {
+            taskParts.unshift(keyword);
+          }
+          lines.push(`    ${event.title} :${taskParts.join(', ')}, ${event.start}, ${event.end}`);
+          if (taskId !== event.id) {
+            lines.push(`    %% original id: ${event.id}`);
+          }
         });
     });
 
@@ -85,7 +103,8 @@ export function buildMermaidDiagram(events: TimelineEvent[], statuses: StatusCon
     lines.push(`  classDef ${status} fill:${fill},stroke:${fill},color:${textColor};`);
   });
   events.forEach((event) => {
-    lines.push(`  class ${event.id} ${event.status}`);
+    const taskId = event.id.replace(/[^A-Za-z0-9_]/g, '_');
+    lines.push(`  class ${taskId} ${event.status}`);
   });
 
   return lines.join('\n');
