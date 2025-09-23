@@ -2,7 +2,7 @@
  * file: packages/documents/src/types.ts
  * owner: duksan
  * created: 2025-09-23 03:31 UTC / 2025-09-23 12:31 KST
- * updated: 2025-09-23 03:31 UTC / 2025-09-23 12:31 KST
+ * updated: 2025-09-23 04:15 UTC / 2025-09-23 13:15 KST
  * purpose: 문서 메타데이터와 검색 결과에 필요한 타입 정의를 제공
  * doc_refs: ["basesettings.md", "admin/plan/m1-kickoff.md"]
  */
@@ -54,4 +54,33 @@ export type DocumentSearchResponse = {
   limit: number;
   offset: number;
   results: DocumentSearchMatch[];
+};
+
+export type DocumentListParams = {
+  tags?: string[];
+  status?: string[];
+  limit?: number;
+  offset?: number;
+};
+
+export type DocumentSummary = {
+  path: string;
+  title: string;
+  description?: string;
+  tags: string[];
+  status?: string;
+  updated?: string;
+};
+
+export type DocumentListResponse = {
+  total: number;
+  limit: number;
+  offset: number;
+  results: DocumentSummary[];
+};
+
+export type DocumentStats = {
+  total: number;
+  byStatus: Record<string, number>;
+  byTag: Record<string, number>;
 };

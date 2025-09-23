@@ -3,7 +3,7 @@ file: apps/web/README.md
 title: apps/web 개발 안내
 owner: duksan
 created: 2025-09-22 19:10 UTC / 2025-09-23 04:10 KST
-updated: 2025-09-23 03:51 UTC / 2025-09-23 12:51 KST
+updated: 2025-09-23 05:32 UTC / 2025-09-23 14:32 KST
 status: active
 tags: [docs, setup]
 schemaVersion: 1
@@ -43,6 +43,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Next Steps
 
 - `/admin/dashboard`, `/admin/wiki`, `/admin/timeline`, `/admin/graph`, `/admin/tech-debt` 라우트에 샘플 데이터가 연결되어 있습니다.
+- 관리자 Wiki는 `/api/documents/search`·`/documents` API와 연동되어 검색·필터 기능을 점진적으로 확장합니다.
 - 문서나 데이터 구조가 바뀔 때마다 `pnpm run validate:docs`와 `pnpm run validate:refs`로 검증하세요.
 
 ## Scripts

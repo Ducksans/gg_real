@@ -3,7 +3,7 @@ file: apps/api/README.md
 title: apps/api 개발 안내
 owner: duksan
 created: 2025-09-22 19:25 UTC / 2025-09-23 04:25 KST
-updated: 2025-09-23 03:51 UTC / 2025-09-23 12:51 KST
+updated: 2025-09-23 05:32 UTC / 2025-09-23 14:32 KST
 status: active
 tags: [docs, api]
 schemaVersion: 1
@@ -20,6 +20,7 @@ code_refs:
     'apps/api/src/documents/documents.module.ts',
     'apps/api/src/documents/documents.controller.ts',
     'apps/api/src/documents/documents.service.ts',
+    'apps/api/test/run-smoke.js',
   ]
 doc_refs: ['admin/plan/m1-kickoff.md', 'basesettings.md']
 ---
@@ -39,6 +40,9 @@ pnpm --filter api start:prod # production 빌드
 - `GET /healthz` — Terminus를 이용한 기본 헬스 체크(`status: ok`)
 - `GET /ready` — 버전과 timestamp를 포함한 준비 상태 확인
 - `GET /metrics` — 프로세스 uptime, memory usage 등을 JSON으로 반환 (후속 단계에서 Prometheus 포맷으로 확장 예정)
+- `GET /documents` — 문서 목록을 페이지네이션해 반환(tag/status 필터 지원)
+- `GET /documents/search` — 키워드 기반 검색 및 백링크 정보를 포함해 반환
+- `GET /documents/stats` — 상태·태그별 문서 집계를 제공
 
 ## 관측 토글
 
@@ -55,4 +59,11 @@ pnpm --filter api start:prod # production 빌드
 
 - Prometheus 포맷 메트릭 변환
 - Sentry/OTel 실제 초기화 코드 추가
-- API e2e 테스트(Postman 컬렉션 또는 Pact) 구성
+- 문서 API 필터 UI와 자동화 시나리오(Playwright/Postman) 확장
+
+## 테스트
+
+```bash
+pnpm --filter api test:e2e
+# 내부적으로 nest build 후 dist 기반 스모크 테스트(run-smoke.mjs)를 실행합니다.
+```

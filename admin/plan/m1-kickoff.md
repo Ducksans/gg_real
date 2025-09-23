@@ -3,7 +3,7 @@ file: admin/plan/m1-kickoff.md
 title: 관리자 페이지 MVP 착수 계획(M0-0/M0-3/M1)
 owner: duksan
 created: 2025-09-22 15:05 UTC / 2025-09-23 00:05 KST
-updated: 2025-09-23 03:51 UTC / 2025-09-23 12:51 KST
+updated: 2025-09-23 05:32 UTC / 2025-09-23 14:32 KST
 status: ready
 tags: [plan, mvp, web, api, ci]
 schemaVersion: 1
@@ -44,9 +44,11 @@ code_refs:
     'apps/api/src/documents/documents.module.ts',
     'apps/api/src/documents/documents.controller.ts',
     'apps/api/src/documents/documents.service.ts',
+    'apps/api/test/run-smoke.js',
     'packages/documents/src/index.ts',
     'packages/documents/src/repository.ts',
     'packages/documents/src/search.ts',
+    'packages/documents/src/list.ts',
     'packages/documents/src/types.ts',
   ]
 ---
@@ -87,6 +89,8 @@ code_refs:
   - admin/wiki 또는 /admin/timeline에 연동 예정 데이터 포맷 문서화
 - 수용 기준
   - 샘플 데이터 파일이 레포에 존재하고, 로더가 읽을 수 있는 포맷
+- 진행 상황
+  - [완료] 2025-09-22 19:05 UTC / 2025-09-23 04:05 KST — admin/data/ 디렉터리에 timeline.gantt.md, graph.json, kpi.md를 추가하고 README로 사용 가이드를 문서화
 
 ## M1-0/1/2 — 프론트(Web) 골조
 

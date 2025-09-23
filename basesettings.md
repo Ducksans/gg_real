@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-23 03:51 UTC / 2025-09-23 12:51 KST
+updated: 2025-09-23 05:32 UTC / 2025-09-23 14:32 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -38,9 +38,11 @@ code_refs:
     'apps/api/src/documents/documents.module.ts',
     'apps/api/src/documents/documents.controller.ts',
     'apps/api/src/documents/documents.service.ts',
+    'apps/api/test/run-smoke.js',
     'packages/documents/src/index.ts',
     'packages/documents/src/repository.ts',
     'packages/documents/src/search.ts',
+    'packages/documents/src/list.ts',
     'packages/documents/src/types.ts',
   ]
 ---

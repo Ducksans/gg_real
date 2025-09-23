@@ -2,7 +2,7 @@
  * file: apps/web/src/lib/content.ts
  * owner: duksan
  * created: 2025-09-22 19:10 UTC / 2025-09-23 04:10 KST
- * updated: 2025-09-23 03:32 UTC / 2025-09-23 12:32 KST
+ * updated: 2025-09-23 04:16 UTC / 2025-09-23 13:16 KST
  * purpose: 관리자 페이지에서 문서/JSON 샘플 데이터를 읽어오는 헬퍼
  * doc_refs: ["basesettings.md"]
  */
@@ -12,10 +12,15 @@ import path from 'node:path';
 import {
   DocumentRepository,
   searchDocuments as runDocumentSearch,
+  listDocuments as runDocumentList,
+  calculateDocumentStats,
   type DocumentFrontmatter,
+  type DocumentListParams,
+  type DocumentListResponse,
   type DocumentRecord,
   type DocumentSearchParams,
   type DocumentSearchResponse,
+  type DocumentStats,
 } from '@gg-real/documents';
 
 const repoRoot = path.join(process.cwd(), '..', '..');
@@ -46,4 +51,16 @@ export async function searchDocuments(
 ): Promise<DocumentSearchResponse> {
   const docs = await repository.getAllDocuments();
   return runDocumentSearch(docs, params);
+}
+
+export async function listDocumentSummaries(
+  params: DocumentListParams,
+): Promise<DocumentListResponse> {
+  const docs = await repository.getAllDocuments();
+  return runDocumentList(docs, params);
+}
+
+export async function getDocumentStats(): Promise<DocumentStats> {
+  const docs = await repository.getAllDocuments();
+  return calculateDocumentStats(docs);
 }
