@@ -28,7 +28,9 @@ err=0
 
 while IFS= read -r -d '' f; do
   is_code_file "$f" || continue
-  is_exempt "$f" || continue
+  if is_exempt "$f"; then
+    continue
+  fi
 
   header=$(head -n 60 "$f" | tr -d '\r')
 
@@ -44,7 +46,7 @@ while IFS= read -r -d '' f; do
   if ! grep -qE 'doc_refs:\s*\[' <<< "$header"; then
     echo "[ERR] missing doc_refs in header: $f"; err=1
   fi
-done < <(find . \( -path './.git' -o -path './admin/templates' -o -path './.github' \) -prune -o -type f -print0)
+done < <(find . \( -path './.git' -o -path './admin/templates' -o -path './.github' -o -path './node_modules' \) -prune -o -type f -print0)
 
 if [ $err -ne 0 ]; then
   echo "[FAIL] validate_code_headers: 오류 발견" >&2
