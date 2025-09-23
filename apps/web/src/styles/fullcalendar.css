@@ -1,0 +1,164 @@
+/* FullCalendar base styles are imported in app/layout.tsx
+   to avoid CSS module resolution issues in dev/build. */
+
+.fc {
+  font-family: var(--font-geist-sans, system-ui);
+  color: #0f172a;
+}
+
+.fc .fc-toolbar {
+  gap: 0.5rem;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.fc .fc-button {
+  border-radius: 9999px;
+  border: 1px solid #cbd5f5;
+  background-color: #ffffff;
+  color: #334155;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.35rem 0.9rem;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.fc .fc-button-primary:hover,
+.fc .fc-button-primary:focus {
+  background-color: #1f2937;
+  border-color: #0f172a;
+  color: #f8fafc;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  background-color: #0f172a;
+  border-color: #0f172a;
+  color: #f8fafc;
+}
+
+.fc .fc-daygrid-day-number {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #eff6ff;
+}
+
+.fc .fc-daygrid-event {
+  border-radius: 0.375rem;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.fc .fc-more-link {
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.fc-theme-standard th,
+.fc-theme-standard td {
+  border-color: #e2e8f0;
+}
+
+.fc-theme-standard .fc-scrollgrid {
+  border-radius: 0.75rem;
+}
+
+/* Dark mode support via media */
+@media (prefers-color-scheme: dark) {
+  .fc {
+    color: #e5e7eb;
+  }
+  .fc .fc-toolbar-title {
+    color: #e2e8f0;
+  }
+  .fc .fc-button {
+    border-color: #475569;
+    background-color: #0b1220;
+    color: #e2e8f0;
+  }
+  .fc .fc-button-primary:hover,
+  .fc .fc-button-primary:focus {
+    background-color: #1f2937;
+    border-color: #334155;
+    color: #f8fafc;
+  }
+  .fc .fc-button-primary:not(:disabled).fc-button-active,
+  .fc .fc-button-primary:not(:disabled):active {
+    background-color: #111827;
+    border-color: #1f2937;
+    color: #f8fafc;
+  }
+  .fc .fc-daygrid-day-number {
+    color: #94a3b8;
+  }
+  .fc .fc-daygrid-day.fc-day-today {
+    background-color: #0b1220;
+  }
+  .fc .fc-daygrid-event {
+    color: #0b1220;
+  }
+  .fc-theme-standard th,
+  .fc-theme-standard td {
+    border-color: #334155;
+  }
+  .fc-theme-standard .fc-scrollgrid {
+    background-color: #0b1220;
+  }
+}
+
+/* Dark mode support via .dark class on root */
+:root.dark .fc, .dark .fc {
+  color: #e5e7eb;
+}
+:root.dark .fc .fc-toolbar-title, .dark .fc .fc-toolbar-title {
+  color: #e2e8f0;
+}
+:root.dark .fc .fc-button, .dark .fc .fc-button {
+  border-color: #475569;
+  background-color: #0b1220;
+  color: #e2e8f0;
+}
+:root.dark .fc .fc-button-primary:hover,
+:root.dark .fc .fc-button-primary:focus,
+.dark .fc .fc-button-primary:hover,
+.dark .fc .fc-button-primary:focus {
+  background-color: #1f2937;
+  border-color: #334155;
+  color: #f8fafc;
+}
+:root.dark .fc .fc-button-primary:not(:disabled).fc-button-active,
+:root.dark .fc .fc-button-primary:not(:disabled):active,
+.dark .fc .fc-button-primary:not(:disabled).fc-button-active,
+.dark .fc .fc-button-primary:not(:disabled):active {
+  background-color: #111827;
+  border-color: #1f2937;
+  color: #f8fafc;
+}
+:root.dark .fc .fc-daygrid-day-number, .dark .fc .fc-daygrid-day-number {
+  color: #94a3b8;
+}
+:root.dark .fc .fc-daygrid-day.fc-day-today, .dark .fc .fc-daygrid-day.fc-day-today {
+  background-color: #0b1220;
+}
+:root.dark .fc .fc-daygrid-event, .dark .fc .fc-daygrid-event {
+  color: #0b1220;
+}
+:root.dark .fc-theme-standard th,
+:root.dark .fc-theme-standard td,
+.dark .fc-theme-standard th,
+.dark .fc-theme-standard td {
+  border-color: #334155;
+}
+:root.dark .fc-theme-standard .fc-scrollgrid, .dark .fc-theme-standard .fc-scrollgrid {
+  background-color: #0b1220;
+}

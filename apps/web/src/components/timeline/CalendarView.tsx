@@ -15,7 +15,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { useMemo } from 'react';
 import type { TimelineDataset } from '@/lib/timeline';
 
-// CSS는 글로벌 번들 충돌을 피하기 위해 일단 제외(필요 시 전역에 개별 추가)
+// FullCalendar 전역 CSS는 apps/web/src/styles/fullcalendar.css에서 불러옵니다.
 
 interface CalendarViewProps {
   dataset: TimelineDataset;
@@ -34,7 +34,7 @@ export function CalendarView({ dataset }: CalendarViewProps) {
   );
 
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-2">
+    <div className="rounded-lg border border-border bg-card p-2">
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"

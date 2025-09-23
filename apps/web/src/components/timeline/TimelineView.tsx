@@ -51,6 +51,14 @@ export function TimelineView({ dataset }: TimelineViewProps) {
 
   const chart = useMemo(() => buildMermaidDiagram(filteredEvents), [filteredEvents]);
 
+  const palette = useMemo(() => {
+    return {
+      done: getStatusColor(statuses, 'completed', '#15803d'),
+      active: getStatusColor(statuses, 'in_progress', '#1d4ed8'),
+      crit: getStatusColor(statuses, 'failed', '#ef4444'),
+    } as const;
+  }, [statuses]);
+
   const resetFilters = () => {
     setSelectedStatuses(statusKeys);
     setSelectedMilestones(milestones);
@@ -72,14 +80,14 @@ export function TimelineView({ dataset }: TimelineViewProps) {
     <div className="space-y-6">
       <section className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-xs">
-          <span className="font-semibold text-slate-600">보기</span>
+          <span className="font-semibold text-muted-foreground">보기</span>
           <button
             type="button"
             onClick={() => setView('gantt')}
             className={`rounded-full border px-3 py-1 font-medium transition ${
               view === 'gantt'
-                ? 'border-slate-700 bg-slate-800 text-white'
-                : 'border-slate-200 bg-white text-slate-600'
+                ? 'border-border bg-foreground text-background'
+                : 'border-border bg-card text-muted-foreground'
             }`}
           >
             간트
@@ -89,8 +97,8 @@ export function TimelineView({ dataset }: TimelineViewProps) {
             onClick={() => setView('calendar')}
             className={`rounded-full border px-3 py-1 font-medium transition ${
               view === 'calendar'
-                ? 'border-slate-700 bg-slate-800 text-white'
-                : 'border-slate-200 bg-white text-slate-600'
+                ? 'border-border bg-foreground text-background'
+                : 'border-border bg-card text-muted-foreground'
             }`}
           >
             캘린더
@@ -109,7 +117,7 @@ export function TimelineView({ dataset }: TimelineViewProps) {
       />
       {view === 'gantt' ? (
         <div className="gg-timeline-wrap w-full overflow-x-auto">
-          <MermaidTimeline chart={chart} />
+          <MermaidTimeline chart={chart} palette={palette} />
         </div>
       ) : (
         <CalendarView dataset={dataset} />
@@ -141,18 +149,18 @@ function Filters({
   onReset,
 }: FiltersProps) {
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-4">
+    <section className="rounded-lg border border-border bg-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h3 className="text-sm font-semibold text-slate-700">필터</h3>
-          <p className="text-xs text-slate-500">
+          <h3 className="text-sm font-semibold text-foreground">필터</h3>
+          <p className="text-xs text-muted-foreground">
             상태와 마일스톤을 선택해 필요한 일정만 살펴볼 수 있습니다.
           </p>
         </div>
         <button
           type="button"
           onClick={onReset}
-          className="rounded border border-slate-300 px-3 py-1 text-xs font-medium text-slate-600 transition hover:bg-slate-100"
+          className="rounded border border-border px-3 py-1 text-xs font-medium text-muted-foreground transition hover:bg-muted"
         >
           필터 초기화
         </button>
@@ -160,7 +168,7 @@ function Filters({
 
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         <fieldset>
-          <legend className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <legend className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             상태
           </legend>
           <div className="flex flex-wrap gap-2">
@@ -173,8 +181,8 @@ function Filters({
                   key={status}
                   className={`flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium transition ${
                     active
-                      ? 'border-slate-700 bg-slate-800 text-white'
-                      : 'border-slate-200 bg-white text-slate-600'
+                      ? 'border-border bg-foreground text-background'
+                      : 'border-border bg-card text-muted-foreground'
                   }`}
                 >
                   <input
@@ -194,7 +202,7 @@ function Filters({
           </div>
         </fieldset>
         <fieldset>
-          <legend className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <legend className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             마일스톤
           </legend>
           <div className="flex flex-wrap gap-2">
@@ -205,8 +213,8 @@ function Filters({
                   key={milestone}
                   className={`flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium transition ${
                     active
-                      ? 'border-slate-700 bg-slate-800 text-white'
-                      : 'border-slate-200 bg-white text-slate-600'
+                      ? 'border-border bg-foreground text-background'
+                      : 'border-border bg-card text-muted-foreground'
                   }`}
                 >
                   <input
@@ -241,9 +249,9 @@ function EventList({ events, statuses }: EventListProps) {
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-slate-200">
-      <table className="min-w-full divide-y divide-slate-200 text-sm">
-        <thead className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+    <div className="overflow-hidden rounded-lg border border-border">
+      <table className="min-w-full divide-y divide-border text-sm">
+        <thead className="bg-muted text-xs uppercase tracking-wider text-muted-foreground">
           <tr>
             <th scope="col" className="px-4 py-2 text-left">
               작업
@@ -259,16 +267,16 @@ function EventList({ events, statuses }: EventListProps) {
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-200 bg-white">
+        <tbody className="divide-y divide-border bg-card">
           {events.map((event) => {
             const label = getStatusLabel(statuses, event.status);
             const color = getStatusColor(statuses, event.status);
             return (
               <tr key={event.id}>
-                <td className="px-4 py-3 font-medium text-slate-800">{event.title}</td>
-                <td className="px-4 py-3 text-slate-600">{event.milestone}</td>
+                <td className="px-4 py-3 font-medium text-foreground">{event.title}</td>
+                <td className="px-4 py-3 text-muted-foreground">{event.milestone}</td>
                 <td className="px-4 py-3">
-                  <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-600">
+                  <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     <span
                       className="inline-block h-2 w-2 rounded-full"
                       style={{ backgroundColor: color }}
@@ -276,7 +284,7 @@ function EventList({ events, statuses }: EventListProps) {
                     {label}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-slate-600">
+                <td className="px-4 py-3 text-muted-foreground">
                   {event.start} → {event.end}
                 </td>
               </tr>

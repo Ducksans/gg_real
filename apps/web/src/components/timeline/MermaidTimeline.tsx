@@ -13,13 +13,14 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 
 interface MermaidTimelineProps {
   chart: string;
+  palette?: { done: string; active: string; crit: string };
 }
 
 const MIN_ZOOM = 0.6;
 const MAX_ZOOM = 2.0;
 const ZOOM_STEP = 0.05;
 
-export function MermaidTimeline({ chart }: MermaidTimelineProps) {
+export function MermaidTimeline({ chart, palette }: MermaidTimelineProps) {
   const [error, setError] = useState<string>('');
   const [scale, setScale] = useState<number>(1);
   const [hasDiagram, setHasDiagram] = useState<boolean>(false);
@@ -72,6 +73,14 @@ export function MermaidTimeline({ chart }: MermaidTimelineProps) {
             ganttAxisTextSize: '14px',
             ganttTaskFontSize: '14px',
             ganttSectionFontSize: '14px',
+            ganttTaskTextLightColor: '#ffffff',
+            ganttTaskTextColor: '#ffffff',
+            ganttDoneTaskTextColor: '#ffffff',
+            ganttActiveTaskTextColor: '#ffffff',
+            ganttCriticalTaskTextColor: '#ffffff',
+            ganttDoneTaskColor: palette?.done ?? '#15803d',
+            ganttActiveTaskColor: palette?.active ?? '#1d4ed8',
+            ganttCriticalTaskColor: palette?.crit ?? '#ef4444',
           },
           gantt: {
             barHeight: 28,
@@ -103,7 +112,7 @@ export function MermaidTimeline({ chart }: MermaidTimelineProps) {
     return () => {
       cancelled = true;
     };
-  }, [chart, id, applyZoom]);
+  }, [chart, id, applyZoom, palette?.active, palette?.crit, palette?.done]);
 
   useEffect(() => {
     if (!hasDiagram) {
@@ -136,13 +145,15 @@ export function MermaidTimeline({ chart }: MermaidTimelineProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
-        <span className="font-semibold uppercase tracking-wide text-slate-500">확대/축소</span>
-        <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 shadow-sm">
+      <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+        <span className="font-semibold uppercase tracking-wide text-muted-foreground">
+          확대/축소
+        </span>
+        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 shadow-sm">
           <button
             type="button"
             onClick={zoomOut}
-            className="rounded-full border border-slate-200 px-2 py-1 font-semibold text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-full border border-border px-2 py-1 font-semibold text-muted-foreground transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="축소"
             disabled={!hasDiagram}
           >
@@ -155,25 +166,25 @@ export function MermaidTimeline({ chart }: MermaidTimelineProps) {
             step={ZOOM_STEP}
             value={scale}
             onChange={(event) => setScale(Number(event.target.value))}
-            className="h-1 w-36 cursor-pointer appearance-none rounded-full bg-slate-200 accent-slate-700 disabled:cursor-not-allowed"
+            className="h-1 w-36 cursor-pointer appearance-none rounded-full bg-border accent-slate-400 disabled:cursor-not-allowed"
             aria-label="타임라인 확대 비율"
             disabled={!hasDiagram}
           />
           <button
             type="button"
             onClick={zoomIn}
-            className="rounded-full border border-slate-200 px-2 py-1 font-semibold text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-full border border-border px-2 py-1 font-semibold text-muted-foreground transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="확대"
             disabled={!hasDiagram}
           >
             +
           </button>
         </div>
-        <span className="font-mono text-slate-500">x{formattedScale}</span>
+        <span className="font-mono text-muted-foreground">x{formattedScale}</span>
         <button
           type="button"
           onClick={resetZoom}
-          className="rounded-full border border-slate-200 px-2 py-1 font-medium text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-full border border-border px-2 py-1 font-medium text-muted-foreground transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
           disabled={!hasDiagram}
         >
           초기화
@@ -196,7 +207,7 @@ export function MermaidTimeline({ chart }: MermaidTimelineProps) {
             a.remove();
             URL.revokeObjectURL(url);
           }}
-          className="ml-2 rounded-full border border-slate-200 px-2 py-1 font-medium text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+          className="ml-2 rounded-full border border-border px-2 py-1 font-medium text-muted-foreground transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
           disabled={!hasDiagram}
         >
           SVG 저장

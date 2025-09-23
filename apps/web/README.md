@@ -3,7 +3,7 @@ file: apps/web/README.md
 title: apps/web 개발 안내
 owner: duksan
 created: 2025-09-22 19:10 UTC / 2025-09-23 04:10 KST
-updated: 2025-09-23 14:56 UTC / 2025-09-23 23:56 KST
+updated: 2025-09-23 16:43 UTC / 2025-09-24 01:43 KST
 status: active
 tags: [docs, setup]
 schemaVersion: 1
@@ -51,6 +51,19 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - 관리자 Wiki는 `/api/documents/search`·`/documents` API와 연동되어 검색·필터 기능을 점진적으로 확장합니다.
 - 브라우저 에러 트래킹이 필요하면 `NEXT_PUBLIC_ENABLE_SENTRY=true`와 `NEXT_PUBLIC_SENTRY_DSN`을 설정합니다.
 - 문서나 데이터 구조가 바뀔 때마다 `pnpm run validate:docs`와 `pnpm run validate:refs`로 검증하세요.
+
+## Timeline & Graph Tips
+
+- Timeline
+  - 간트 막대 색상이 `admin/config/status.yaml` 팔레트와 일치합니다(classDef 매핑).
+  - 확대/축소 슬라이더는 실제 텍스트/바 크기가 변하도록 SVG 폭을 직접 제어합니다.
+  - “SVG 저장” 버튼으로 현재 간트를 파일로 다운로드할 수 있습니다.
+- Calendar
+  - FullCalendar 전역 CSS가 `src/app/layout.tsx`에서 로드됩니다(`src/styles/fullcalendar.css`).
+  - 라이트/다크 모드 모두 가독성 있게 조정되어 있습니다.
+- Graph
+  - React Flow 캔버스 상단의 “PNG 내보내기” 버튼으로 이미지를 저장할 수 있습니다.
+  - 노드를 클릭하면 우측 패널에 상세 정보(ID/라벨/타입/상태)가 표시됩니다.
 
 ## Observability
 

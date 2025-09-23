@@ -9,9 +9,10 @@
  * doc_refs: ["apps/web/src/app/admin/graph/page.tsx", "apps/web/src/lib/graph.ts"]
  */
 
-import { useMemo } from 'react';
+import { type CSSProperties, useCallback, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Controls, MiniMap } from 'reactflow';
 import 'reactflow/dist/style.css';
+import { toPng } from 'html-to-image';
 
 import type { GraphDatasetWithMeta } from '@/lib/graph';
 import { createPositionedNodes, createStyledEdges, getEdgeLegend } from '@/lib/graph';
@@ -22,6 +23,12 @@ interface DependencyGraphProps {
 }
 
 export function DependencyGraph({ dataset }: DependencyGraphProps) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [selected, setSelected] = useState<null | {
+    id: string;
+    data: { label: string; status: string; statusLabel: string; type: string };
+    style: CSSProperties;
+  }>(null);
   const positionedNodes = useMemo(
     () => createPositionedNodes(dataset.nodes, dataset.statuses),
     [dataset.nodes, dataset.statuses],
@@ -54,26 +61,91 @@ export function DependencyGraph({ dataset }: DependencyGraphProps) {
     [styledEdges],
   );
 
+  const onExportPng = useCallback(async () => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const dataUrl = await toPng(el, {
+      cacheBust: true,
+      backgroundColor: '#ffffff',
+      pixelRatio: 2,
+      filter: (node) => {
+        // Exclude the right detail panel and control row
+        if (node instanceof HTMLElement && node.dataset?.excludeFromExport === 'true') {
+          return false;
+        }
+        return true;
+      },
+    });
+    const a = document.createElement('a');
+    const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '');
+    a.download = `graph-${ts}.png`;
+    a.href = dataUrl;
+    a.click();
+  }, []);
+
   return (
     <div className="space-y-4">
-      <div className="h-[480px] w-full overflow-hidden rounded-lg border border-slate-200 bg-white">
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          fitView
-          fitViewOptions={{ padding: 0.2 }}
-          proOptions={{ hideAttribution: true }}
-          nodesConnectable={false}
-          nodesDraggable={false}
-          elementsSelectable={false}
-          zoomOnScroll
-          minZoom={0.4}
-          maxZoom={1.5}
+      <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">
+          <span className="font-semibold uppercase tracking-wide text-muted-foreground">
+            그래프
+          </span>
+          <button
+            type="button"
+            onClick={onExportPng}
+            className="rounded-full border border-border px-2 py-1 font-medium hover:bg-muted"
+          >
+            PNG 내보내기
+          </button>
+        </div>
+        {selected && (
+          <div className="text-muted-foreground">
+            선택됨: <span className="font-mono">{selected.id}</span>
+          </div>
+        )}
+      </div>
+      <div className="flex w-full gap-4">
+        <div
+          ref={wrapperRef}
+          className="h=[480px] w-full overflow-hidden rounded-lg border border-border bg-card"
         >
-          <Background color="#e2e8f0" gap={24} />
-          <MiniMap pannable zoomable style={{ backgroundColor: '#f1f5f9' }} />
-          <Controls showInteractive={false} />
-        </ReactFlow>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            fitView
+            fitViewOptions={{ padding: 0.2 }}
+            proOptions={{ hideAttribution: true }}
+            nodesConnectable={false}
+            nodesDraggable={false}
+            elementsSelectable={false}
+            zoomOnScroll
+            minZoom={0.4}
+            maxZoom={1.5}
+            onNodeClick={(_, n) =>
+              setSelected({
+                id: n.id,
+                data: n.data as {
+                  label: string;
+                  status: string;
+                  statusLabel: string;
+                  type: string;
+                },
+                style: (n.style as CSSProperties) ?? {},
+              })
+            }
+            onPaneClick={() => setSelected(null)}
+          >
+            <Background color="#e2e8f0" gap={24} />
+            <MiniMap pannable zoomable style={{ backgroundColor: '#f1f5f9' }} />
+            <Controls showInteractive={false} />
+          </ReactFlow>
+        </div>
+        <aside
+          className="hidden w-[320px] shrink-0 rounded-lg border border-slate-200 bg-white p-4 lg:block"
+          data-exclude-from-export="true"
+        >
+          <DetailPanel selected={selected} />
+        </aside>
       </div>
       <StatusLegend statuses={dataset.statuses} />
       <EdgeLegend />
@@ -92,16 +164,16 @@ function StatusLegend({ statuses }: StatusLegendProps) {
   );
 
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-4">
-      <h3 className="text-sm font-semibold text-slate-700">상태 범례</h3>
-      <p className="mt-1 text-xs text-slate-500">
+    <section className="rounded-lg border border-border bg-card p-4">
+      <h3 className="text-sm font-semibold text-foreground">상태 범례</h3>
+      <p className="mt-1 text-xs text-muted-foreground">
         상태 색상은 `admin/config/status.yaml`에 정의된 팔레트를 그대로 사용합니다.
       </p>
       <div className="mt-3 flex flex-wrap gap-3 text-sm">
         {entries.map((key) => (
           <span
             key={key}
-            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700"
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-foreground"
           >
             <span
               className="inline-block h-2 w-2 rounded-full"
@@ -119,16 +191,16 @@ function EdgeLegend() {
   const entries = useMemo(() => getEdgeLegend(), []);
 
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-4">
-      <h3 className="text-sm font-semibold text-slate-700">엣지 타입</h3>
-      <p className="mt-1 text-xs text-slate-500">
+    <section className="rounded-lg border border-border bg-card p-4">
+      <h3 className="text-sm font-semibold text-foreground">엣지 타입</h3>
+      <p className="mt-1 text-xs text-muted-foreground">
         선 색상과 애니메이션으로 연결 의미를 구분합니다.
       </p>
       <div className="mt-3 flex flex-wrap gap-3 text-sm">
         {entries.map((entry) => (
           <span
             key={entry.type}
-            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700"
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-foreground"
           >
             <span
               className="inline-block h-2 w-6 rounded-full"
@@ -139,5 +211,53 @@ function EdgeLegend() {
         ))}
       </div>
     </section>
+  );
+}
+
+interface DetailPanelProps {
+  selected: null | {
+    id: string;
+    data: { label: string; status: string; statusLabel: string; type: string };
+    style: { backgroundColor?: string };
+  };
+}
+
+function DetailPanel({ selected }: DetailPanelProps) {
+  if (!selected) {
+    return (
+      <div className="text-sm text-muted-foreground">노드를 클릭하면 상세 정보가 표시됩니다.</div>
+    );
+  }
+
+  const { id, data, style } = selected;
+
+  return (
+    <div className="space-y-3">
+      <h3 className="text-sm font-semibold text-foreground">노드 상세</h3>
+      <div className="space-y-1 text-sm">
+        <div>
+          <span className="text-muted-foreground">ID: </span>
+          <span className="font-mono text-foreground">{id}</span>
+        </div>
+        <div>
+          <span className="text-muted-foreground">라벨: </span>
+          <span className="text-foreground">{data.label}</span>
+        </div>
+        <div>
+          <span className="text-muted-foreground">타입: </span>
+          <span className="text-foreground">{data.type}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-muted-foreground">상태: </span>
+          <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-foreground">
+            <span
+              className="inline-block h-2 w-2 rounded-full"
+              style={{ backgroundColor: style?.backgroundColor }}
+            />
+            {data.statusLabel}
+          </span>
+        </div>
+      </div>
+    </div>
   );
 }
