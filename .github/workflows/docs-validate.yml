@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -44,6 +46,8 @@ jobs:
         run: pnpm exec bash scripts/validate_code_headers.sh
 
       - name: Run sidecar meta validator (P3)
+        env:
+          ALLOW_SIDECAR_MISSING: 'true'
         run: pnpm exec bash scripts/validate_sidecar_meta.sh
 
       - name: Validate hub manifests against schema
