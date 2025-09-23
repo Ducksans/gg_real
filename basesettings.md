@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-23 05:32 UTC / 2025-09-23 14:32 KST
+updated: 2025-09-23 06:36 UTC / 2025-09-23 15:36 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -38,12 +38,17 @@ code_refs:
     'apps/api/src/documents/documents.module.ts',
     'apps/api/src/documents/documents.controller.ts',
     'apps/api/src/documents/documents.service.ts',
+    'apps/api/src/filters/sentry.filter.ts',
     'apps/api/test/run-smoke.js',
     'packages/documents/src/index.ts',
     'packages/documents/src/repository.ts',
     'packages/documents/src/search.ts',
     'packages/documents/src/list.ts',
     'packages/documents/src/types.ts',
+    'apps/web/sentry.client.config.ts',
+    'apps/web/sentry.config.ts',
+    'apps/web/instrumentation.ts',
+    'apps/web/next.config.ts',
   ]
 ---
 
@@ -90,7 +95,7 @@ code_refs:
 - [ ] /admin/timeline 간트/캘린더에서 마일스톤/태스크 표시
 - [ ] /admin/graph에서 의존 그래프 확인(읽기 전용)
 - [ ] API 스켈레톤의 /healthz 200, /metrics 노출, OpenAPI 스펙 생성
-- [ ] Sentry/OTel가 베타 환경에서 에러/트레이스 수집(토글 가능)
+- [x] Sentry/OTel가 베타 환경에서 에러/트레이스 수집(토글 가능) (2025-09-23 05:57 UTC / 2025-09-23 14:57 KST — Sentry DSN/프로파일링 및 OpenTelemetry NodeSDK 연동, Next.js Sentry 설정 추가)
 - [ ] 상태 필터(진행중/대기/보류/실패/설계변경중) UI 동작
 - [ ] “편집→브랜치→PR 생성” 플로우 정상, 문서 헤더 updated 자동 갱신
 - [x] 키워드 검색 동작, 벡터 검색 인터페이스 정의(후속 연결 가능) (2025-09-23 03:40 UTC / 2025-09-23 12:40 KST — 문서 검색 패키지/Next.js·NestJS 검색 API 신설, 백링크/태그 검색 지원)

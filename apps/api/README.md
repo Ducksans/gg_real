@@ -3,7 +3,7 @@ file: apps/api/README.md
 title: apps/api 개발 안내
 owner: duksan
 created: 2025-09-22 19:25 UTC / 2025-09-23 04:25 KST
-updated: 2025-09-23 05:32 UTC / 2025-09-23 14:32 KST
+updated: 2025-09-23 06:36 UTC / 2025-09-23 15:36 KST
 status: active
 tags: [docs, api]
 schemaVersion: 1
@@ -20,6 +20,7 @@ code_refs:
     'apps/api/src/documents/documents.module.ts',
     'apps/api/src/documents/documents.controller.ts',
     'apps/api/src/documents/documents.service.ts',
+    'apps/api/src/filters/sentry.filter.ts',
     'apps/api/test/run-smoke.js',
   ]
 doc_refs: ['admin/plan/m1-kickoff.md', 'basesettings.md']
@@ -46,7 +47,14 @@ pnpm --filter api start:prod # production 빌드
 
 ## 관측 토글
 
-`scripts/observability.ts`는 Sentry(`ENABLE_SENTRY=true`)와 OpenTelemetry(`ENABLE_OTEL=true`)를 플래그 기반으로 초기화할 수 있도록 자리잡아두었습니다. 실제 초기화 코드는 후속 스프린트에서 추가합니다.
+`scripts/observability.ts`는 Sentry(`ENABLE_SENTRY=true`)와 OpenTelemetry(`ENABLE_OTEL=true`)를 초기화합니다. Sentry DSN과 샘플링 비율(`SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE`, `SENTRY_PROFILES_SAMPLE_RATE`)을 환경 변수로 지정하고, OpenTelemetry는 OTLP 수집기가 없으면 콘솔로 스팬을 내보냅니다.
+
+### 주요 환경 변수
+
+- `ENABLE_SENTRY` / `SENTRY_DSN` / `SENTRY_ENVIRONMENT`
+- `SENTRY_TRACES_SAMPLE_RATE` / `SENTRY_PROFILES_SAMPLE_RATE`
+- `ENABLE_OTEL` / `OTEL_SERVICE_NAME`
+- `OTEL_EXPORTER_OTLP_ENDPOINT` / `OTEL_EXPORTER_OTLP_HEADERS`
 
 ## 폴더 구조
 
@@ -58,12 +66,11 @@ pnpm --filter api start:prod # production 빌드
 ## TODO
 
 - Prometheus 포맷 메트릭 변환
-- Sentry/OTel 실제 초기화 코드 추가
 - 문서 API 필터 UI와 자동화 시나리오(Playwright/Postman) 확장
 
 ## 테스트
 
 ```bash
 pnpm --filter api test:e2e
-# 내부적으로 nest build 후 dist 기반 스모크 테스트(run-smoke.mjs)를 실행합니다.
+# 내부적으로 nest build 후 dist 기반 스모크 테스트(run-smoke.js)를 실행합니다.
 ```

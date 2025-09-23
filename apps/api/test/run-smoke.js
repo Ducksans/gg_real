@@ -2,7 +2,7 @@
  * file: apps/api/test/run-smoke.js
  * owner: duksan
  * created: 2025-09-23 04:25 UTC / 2025-09-23 13:25 KST
- * updated: 2025-09-23 04:25 UTC / 2025-09-23 13:25 KST
+ * updated: 2025-09-23 05:57 UTC / 2025-09-23 14:57 KST
  * purpose: 빌드 결과물을 활용해 DocumentsService의 목록/검색/통계 로직을 스모크 테스트
  * doc_refs: ["apps/api/README.md", "basesettings.md", "admin/plan/m1-kickoff.md"]
  */

@@ -3,7 +3,7 @@ file: admin/plan/m1-kickoff.md
 title: 관리자 페이지 MVP 착수 계획(M0-0/M0-3/M1)
 owner: duksan
 created: 2025-09-22 15:05 UTC / 2025-09-23 00:05 KST
-updated: 2025-09-23 05:32 UTC / 2025-09-23 14:32 KST
+updated: 2025-09-23 06:36 UTC / 2025-09-23 15:36 KST
 status: ready
 tags: [plan, mvp, web, api, ci]
 schemaVersion: 1
@@ -44,12 +44,17 @@ code_refs:
     'apps/api/src/documents/documents.module.ts',
     'apps/api/src/documents/documents.controller.ts',
     'apps/api/src/documents/documents.service.ts',
+    'apps/api/src/filters/sentry.filter.ts',
     'apps/api/test/run-smoke.js',
     'packages/documents/src/index.ts',
     'packages/documents/src/repository.ts',
     'packages/documents/src/search.ts',
     'packages/documents/src/list.ts',
     'packages/documents/src/types.ts',
+    'apps/web/sentry.client.config.ts',
+    'apps/web/sentry.config.ts',
+    'apps/web/instrumentation.ts',
+    'apps/web/next.config.ts',
   ]
 ---
 

@@ -3,7 +3,7 @@ file: CHANGELOG.md
 title: 변경 로그
 owner: duksan
 created: 2025-09-22 14:22 UTC / 2025-09-22 23:22 KST
-updated: 2025-09-23 05:32 UTC / 2025-09-23 14:32 KST
+updated: 2025-09-23 06:36 UTC / 2025-09-23 15:36 KST
 status: active
 tags: [changelog, governance]
 schemaVersion: 1
@@ -66,3 +66,10 @@ code_refs: ['scripts/validate_migrations.sh', 'admin/migrations/README.md']
 - `@gg-real/documents` 패키지에 문서 목록/통계 유틸리티를 추가(listDocuments, calculateDocumentStats)하고 `list.ts`를 신설해 책임 분리
 - Next.js 콘텐츠 헬퍼에서 문서 요약·통계 함수를 노출해 향후 UI 연동을 준비하고, NestJS 문서 서비스가 신규 유틸리티를 활용하도록 리팩터링
 - dist 기반 스모크 테스트(`pnpm --filter api test:e2e`)를 구성해 목록/검색/통계 로직을 자동으로 검증
+
+# 2025-09-23 — Sprint 8 관측/알람 실연동
+
+- NestJS `configureObservability`에 Sentry/OTel 초기화를 구현하고 콘솔 또는 OTLP Exporter로 스팬을 전송하도록 구성
+- 전역 예외 필터(`SentryExceptionFilter`)로 서버 오류를 Sentry에 수집하고 종료 시 Sentry/OTel 리소스를 안전하게 정리
+- Next.js 앱에 `@sentry/nextjs` 설정을 추가하고 클라이언트/서버/Edge 런타임에서 토글 기반 Sentry 초기화를 제공
+- `.env.example`과 README들을 업데이트해 관측 관련 환경 변수와 사용법을 문서화
