@@ -3,7 +3,7 @@ file: apps/web/README.md
 title: apps/web 개발 안내
 owner: duksan
 created: 2025-09-22 19:10 UTC / 2025-09-23 04:10 KST
-updated: 2025-09-22 20:02 UTC / 2025-09-23 05:02 KST
+updated: 2025-09-23 03:51 UTC / 2025-09-23 12:51 KST
 status: active
 tags: [docs, setup]
 schemaVersion: 1
@@ -16,6 +16,8 @@ code_refs:
     'apps/web/src/app/admin/graph/page.tsx',
     'apps/web/src/app/admin/tech-debt/page.tsx',
     'apps/web/src/app/admin/layout.tsx',
+    'apps/web/src/app/admin/wiki/search-client.tsx',
+    'apps/web/src/app/api/documents/search/route.ts',
   ]
 doc_refs: ['admin/plan/m1-kickoff.md', 'basesettings.md']
 ---

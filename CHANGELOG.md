@@ -3,7 +3,7 @@ file: CHANGELOG.md
 title: 변경 로그
 owner: duksan
 created: 2025-09-22 14:22 UTC / 2025-09-22 23:22 KST
-updated: 2025-09-23 03:23 UTC / 2025-09-23 12:23 KST
+updated: 2025-09-23 03:51 UTC / 2025-09-23 12:51 KST
 status: active
 tags: [changelog, governance]
 schemaVersion: 1
@@ -53,3 +53,9 @@ code_refs: ['scripts/validate_migrations.sh', 'admin/migrations/README.md']
 - build.yml에 web/api lint·build 매트릭스를 추가하고, lint:web/lint:api 스크립트 작성
 - apps/api README를 프런트매터 포맷으로 정리하고 health.spec.ts를 통해 헬스 엔드포인트 호출 점검
 - lint-staged 설정을 조정해 각 앱의 lint 명령이 프리커밋에서 자동 실행되도록 구성
+
+# 2025-09-23 — Sprint 6 문서 검색 고도화
+
+- `@gg-real/documents` 워크스페이스 라이브러리를 추가해 관리자 문서 메타 로딩 및 검색 로직을 공용화
+- Next.js `/admin/wiki`에 검색 패널과 `/api/documents/search` 라우트를 도입해 실시간 키워드·태그 검색 및 백링크 표시 지원
+- NestJS API에 `/documents/search` 엔드포인트와 문서 서비스 모듈을 추가해 UI·백엔드가 동일한 검색 엔진을 공유하도록 구성

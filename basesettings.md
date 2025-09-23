@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-22 20:45 UTC / 2025-09-23 05:45 KST
+updated: 2025-09-23 03:51 UTC / 2025-09-23 12:51 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -27,12 +27,21 @@ code_refs:
     'scripts/gh_protect_main.sh',
     'apps/web/src/app/admin/layout.tsx',
     'apps/web/src/lib/content.ts',
+    'apps/web/src/app/api/documents/search/route.ts',
+    'apps/web/src/app/admin/wiki/search-client.tsx',
     'apps/api/src/main.ts',
     'apps/api/src/app.module.ts',
     'apps/api/src/app.controller.ts',
     'apps/api/src/app.service.ts',
     'apps/api/src/metrics.service.ts',
     'apps/api/src/observability.ts',
+    'apps/api/src/documents/documents.module.ts',
+    'apps/api/src/documents/documents.controller.ts',
+    'apps/api/src/documents/documents.service.ts',
+    'packages/documents/src/index.ts',
+    'packages/documents/src/repository.ts',
+    'packages/documents/src/search.ts',
+    'packages/documents/src/types.ts',
   ]
 ---
 
@@ -56,13 +65,13 @@ code_refs:
 - [x] M0-2 표준 주석/프런트매터 규칙 확정 및 템플릿 배포 (2025-09-22 18:45 UTC / 2025-09-23 03:45 KST — doc/code/checkpoint 템플릿 업데이트 및 검증 지침 추가)
 - [x] M0-3 CI 베이스: GitHub Actions(workflows)로 web/api lint/typecheck/build 설정 (2025-09-22 15:32 UTC / 2025-09-23 00:32 KST — build.yml 추가, pnpm lint/typecheck/build 파이프라인 연동)
 - [x] M0-4 샘플 데이터: 간트(Mermaid), 의존 그래프(JSON), KPI 목업 추가 (2025-09-22 19:05 UTC / 2025-09-23 04:05 KST — admin/data/ 디렉터리 생성)
-- [ ] M1-0 프론트 부트스트랩: Next.js + Vercel Preview 설정
-- [ ] M1-1 관리자 UI(읽기 전용) 라우팅: /admin/dashboard | /admin/wiki | /admin/timeline | /admin/graph | /admin/tech-debt
-- [ ] M1-2 문서 로더/렌더러(Markdown+Frontmatter, 백링크 패널) 구현
+- [x] M1-0 프론트 부트스트랩: Next.js + Vercel Preview 설정 (2025-09-22 19:20 UTC / 2025-09-23 04:20 KST — Next.js 14 기반 앱 생성 및 기본 라우트 구성)
+- [x] M1-1 관리자 UI(읽기 전용) 라우팅: /admin/dashboard | /admin/wiki | /admin/timeline | /admin/graph | /admin/tech-debt (2025-09-22 19:20 UTC / 2025-09-23 04:20 KST — App Router 라우팅 골격 완성)
+- [x] M1-2 문서 로더/렌더러(Markdown+Frontmatter, 백링크 패널) 구현 (2025-09-22 19:22 UTC / 2025-09-23 04:22 KST — Markdown 로더 및 렌더러 연동)
 - [ ] M1-3 Timeline: Mermaid 간트·FullCalendar 월/주 뷰 표시
 - [ ] M1-4 Graph: React Flow 뷰어(읽기 전용)
-- [ ] M1-5 API 스켈레톤(NestJS+Fastify): healthz/metrics, 공통 에러/로깅, CORS/레이트리밋, OpenAPI
-- [ ] M1-6 관측 베이스: Sentry DSN/OTel 훅(토글 가능)
+- [x] M1-5 API 스켈레톤(NestJS+Fastify): healthz/metrics, 공통 에러/로깅, CORS/레이트리밋, OpenAPI (2025-09-22 19:25 UTC / 2025-09-23 04:25 KST — NestJS Fastify 부팅 및 헬스/메트릭 엔드포인트 구현)
+- [x] M1-6 관측 베이스: Sentry DSN/OTel 훅(토글 가능) (2025-09-22 19:25 UTC / 2025-09-23 04:25 KST — 환경 토글 기반 관측 후크 골조 추가)
 - [ ] M2-1 안전한 쓰기: 편집→브랜치→PR 생성(헤더 메타 자동 갱신)
 - [ ] M2-2 인증/RBAC 골격: Auth.js(이메일/SMS/소셜), Redis 세션/레이트리밋
 - [ ] M2-3 실시간(초기): Ably/Pusher 알림/채팅 목업 연결
@@ -82,7 +91,7 @@ code_refs:
 - [ ] Sentry/OTel가 베타 환경에서 에러/트레이스 수집(토글 가능)
 - [ ] 상태 필터(진행중/대기/보류/실패/설계변경중) UI 동작
 - [ ] “편집→브랜치→PR 생성” 플로우 정상, 문서 헤더 updated 자동 갱신
-- [ ] 키워드 검색 동작, 벡터 검색 인터페이스 정의(후속 연결 가능)
+- [x] 키워드 검색 동작, 벡터 검색 인터페이스 정의(후속 연결 가능) (2025-09-23 03:40 UTC / 2025-09-23 12:40 KST — 문서 검색 패키지/Next.js·NestJS 검색 API 신설, 백링크/태그 검색 지원)
 - [ ] README에 운영/개발/롤백 절차 문서화
 
 # 데이터/검색 설계(베이스)
