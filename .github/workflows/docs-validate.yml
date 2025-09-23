@@ -52,6 +52,8 @@ jobs:
           set -e
           shopt -s nullglob
           for f in admin/manifests/*.yaml; do
+            # Skip sidecar files like *.meta.yaml — they are validated separately
+            case "$f" in *.meta.yaml) continue ;; esac
             echo "Validating $f"
             tmp="$(mktemp).json"
             pnpm exec js-yaml "$f" > "$tmp"
