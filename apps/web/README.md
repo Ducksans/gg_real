@@ -3,7 +3,7 @@ file: apps/web/README.md
 title: apps/web 개발 안내
 owner: duksan
 created: 2025-09-22 19:10 UTC / 2025-09-23 04:10 KST
-updated: 2025-09-23 16:43 UTC / 2025-09-24 01:43 KST
+updated: 2025-09-23 19:11 UTC / 2025-09-24 04:11 KST
 status: active
 tags: [docs, setup]
 schemaVersion: 1
@@ -15,7 +15,7 @@ code_refs:
     'apps/web/src/app/admin/timeline/page.tsx',
     'apps/web/src/app/admin/graph/page.tsx',
     'apps/web/src/app/admin/tech-debt/page.tsx',
-    'apps/web/src/app/admin/layout.tsx',
+    'apps/web/src/app/layout.tsx',
     'apps/web/src/app/admin/wiki/search-client.tsx',
     'apps/web/src/app/api/documents/search/route.ts',
     'apps/web/sentry.client.config.ts',

@@ -11,7 +11,8 @@ import type { NextConfig } from 'next';
 import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Allow using workspace package @gg-real/documents inside Next build
+  transpilePackages: ['@gg-real/documents'],
 };
 
 const enableSentryPlugins =

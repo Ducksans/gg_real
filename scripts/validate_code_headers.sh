@@ -20,6 +20,7 @@ is_exempt() {
   case "$1" in
     */admin/templates/*|*.tmpl) return 0 ;;
     */node_modules/*) return 0 ;;
+    */.husky/*) return 0 ;;
     *) return 1 ;;
   esac
 }
@@ -46,7 +47,9 @@ while IFS= read -r -d '' f; do
   if ! grep -qE 'doc_refs:\s*\[' <<< "$header"; then
     echo "[ERR] missing doc_refs in header: $f"; err=1
   fi
-done < <(find . \( -path './.git' -o -path './admin/templates' -o -path './.github' -o -path './node_modules' \) -prune -o -type f -print0)
+done < <(find . \
+  \( -path './.git' -o -path './admin/templates' -o -path './.github' -o -path './node_modules' -o -path './.husky' \) -prune \
+  -o -type f -print0)
 
 if [ $err -ne 0 ]; then
   echo "[FAIL] validate_code_headers: 오류 발견" >&2

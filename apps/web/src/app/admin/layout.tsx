@@ -4,7 +4,7 @@
  * created: 2025-09-22 19:10 UTC / 2025-09-23 04:10 KST
  * updated: 2025-09-22 19:10 UTC / 2025-09-23 04:10 KST
  * purpose: 관리자 뷰 공통 레이아웃과 내비게이션을 제공
- * doc_refs: ["admin/plan/m1-kickoff.md", "basesettings.md", "apps/web/README.md"]
+ * doc_refs: []
  */
 
 import Link from 'next/link';
