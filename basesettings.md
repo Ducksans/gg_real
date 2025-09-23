@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-23 06:36 UTC / 2025-09-23 15:36 KST
+updated: 2025-09-23 07:58 UTC / 2025-09-23 16:58 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -49,6 +49,7 @@ code_refs:
     'apps/web/sentry.config.ts',
     'apps/web/instrumentation.ts',
     'apps/web/next.config.ts',
+    'apps/web/src/lib/status.server.ts',
   ]
 ---
 
@@ -75,8 +76,8 @@ code_refs:
 - [x] M1-0 프론트 부트스트랩: Next.js + Vercel Preview 설정 (2025-09-22 19:20 UTC / 2025-09-23 04:20 KST — Next.js 14 기반 앱 생성 및 기본 라우트 구성)
 - [x] M1-1 관리자 UI(읽기 전용) 라우팅: /admin/dashboard | /admin/wiki | /admin/timeline | /admin/graph | /admin/tech-debt (2025-09-22 19:20 UTC / 2025-09-23 04:20 KST — App Router 라우팅 골격 완성)
 - [x] M1-2 문서 로더/렌더러(Markdown+Frontmatter, 백링크 패널) 구현 (2025-09-22 19:22 UTC / 2025-09-23 04:22 KST — Markdown 로더 및 렌더러 연동)
-- [ ] M1-3 Timeline: Mermaid 간트·FullCalendar 월/주 뷰 표시
-- [ ] M1-4 Graph: React Flow 뷰어(읽기 전용)
+- [x] M1-3 Timeline: Mermaid 간트·FullCalendar 월/주 뷰 표시 (2025-09-23 07:42 UTC / 2025-09-23 16:42 KST — Sprint 9 필터 UI 및 간트 렌더러 연동)
+- [x] M1-4 Graph: React Flow 뷰어(읽기 전용) (2025-09-23 07:43 UTC / 2025-09-23 16:43 KST — React Flow 기반 그래프/범례 구축)
 - [x] M1-5 API 스켈레톤(NestJS+Fastify): healthz/metrics, 공통 에러/로깅, CORS/레이트리밋, OpenAPI (2025-09-22 19:25 UTC / 2025-09-23 04:25 KST — NestJS Fastify 부팅 및 헬스/메트릭 엔드포인트 구현)
 - [x] M1-6 관측 베이스: Sentry DSN/OTel 훅(토글 가능) (2025-09-22 19:25 UTC / 2025-09-23 04:25 KST — 환경 토글 기반 관측 후크 골조 추가)
 - [ ] M2-1 안전한 쓰기: 편집→브랜치→PR 생성(헤더 메타 자동 갱신)

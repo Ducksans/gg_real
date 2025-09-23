@@ -1,11 +1,16 @@
 {
-  "doc_refs": ["basesettings.md", "admin/plan/m1-kickoff.md"],
+  "doc_refs": [
+    "basesettings.md",
+    "admin/plan/m1-kickoff.md",
+    "apps/web/src/app/admin/graph/page.tsx",
+    "apps/web/src/components/graph/DependencyGraph.tsx"
+  ],
   "description": "샘플 의존 그래프 – 라우팅/데이터/관측 모듈 관계",
   "nodes": [
-    { "id": "web", "type": "app", "label": "apps/web", "status": "planning" },
-    { "id": "api", "type": "app", "label": "apps/api", "status": "planning" },
-    { "id": "data", "type": "data", "label": "admin/data", "status": "ready" },
-    { "id": "ci", "type": "infra", "label": "GitHub Actions", "status": "ready" }
+    { "id": "web", "type": "app", "label": "apps/web", "status": "in_progress" },
+    { "id": "api", "type": "app", "label": "apps/api", "status": "in_progress" },
+    { "id": "data", "type": "data", "label": "admin/data", "status": "completed" },
+    { "id": "ci", "type": "infra", "label": "GitHub Actions", "status": "completed" }
   ],
   "edges": [
     { "from": "data", "to": "web", "type": "feeds" },

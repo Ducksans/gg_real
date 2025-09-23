@@ -3,13 +3,12 @@ file: admin/data/timeline.gantt.md
 title: 샘플 간트 타임라인
 owner: duksan
 created: 2025-09-22 19:00 UTC / 2025-09-23 04:00 KST
-updated: 2025-09-22 20:02 UTC / 2025-09-23 05:02 KST
+updated: 2025-09-23 07:59 UTC / 2025-09-23 16:59 KST
 status: sample
 tags: [data, timeline]
 schemaVersion: 1
 description: 관리자 페이지 타임라인 UI를 위한 샘플 Mermaid 간트 데이터
-code_refs:
-  ['admin/templates/README.md', 'admin/data/README.md', 'apps/web/src/app/admin/timeline/page.tsx']
+code_refs: ['admin/templates/README.md', 'admin/data/README.md']
 doc_refs: ['basesettings.md', 'admin/plan/m1-kickoff.md', 'apps/web/README.md']
 ---
 

@@ -1,0 +1,83 @@
+{
+  "doc_refs": [
+    "basesettings.md",
+    "admin/plan/m1-kickoff.md",
+    "admin/checkpoints/20250923-0633-UTC_1533-KST.md",
+    "apps/web/src/app/admin/timeline/page.tsx",
+    "apps/web/src/components/timeline/TimelineView.tsx"
+  ],
+  "events": [
+    {
+      "id": "m0-1",
+      "title": "문서 스캐폴딩 확정",
+      "milestone": "M0 — 베이스",
+      "status": "completed",
+      "start": "2025-09-22",
+      "end": "2025-09-22"
+    },
+    {
+      "id": "m0-2",
+      "title": "템플릿 배포 및 검증 정비",
+      "milestone": "M0 — 베이스",
+      "status": "completed",
+      "start": "2025-09-22",
+      "end": "2025-09-22"
+    },
+    {
+      "id": "m1-0",
+      "title": "Next.js 부트스트랩",
+      "milestone": "M1 — 프론트 골조",
+      "status": "completed",
+      "start": "2025-09-23",
+      "end": "2025-09-23"
+    },
+    {
+      "id": "m1-1",
+      "title": "관리자 라우트 골격",
+      "milestone": "M1 — 프론트 골조",
+      "status": "completed",
+      "start": "2025-09-23",
+      "end": "2025-09-24"
+    },
+    {
+      "id": "m1-2",
+      "title": "문서 로더/백링크",
+      "milestone": "M1 — 프론트 골조",
+      "status": "completed",
+      "start": "2025-09-24",
+      "end": "2025-09-25"
+    },
+    {
+      "id": "m1-3",
+      "title": "Mermaid 간트 및 필터 UI",
+      "milestone": "M1 — 타임라인",
+      "status": "in_progress",
+      "start": "2025-09-25",
+      "end": "2025-09-28"
+    },
+    {
+      "id": "m1-4",
+      "title": "React Flow 그래프 뷰어",
+      "milestone": "M1 — 그래프",
+      "status": "in_progress",
+      "start": "2025-09-25",
+      "end": "2025-09-29"
+    },
+    {
+      "id": "m1-5",
+      "title": "NestJS 스켈레톤(헬스/메트릭스)",
+      "milestone": "M1 — API/관측",
+      "status": "completed",
+      "start": "2025-09-27",
+      "end": "2025-09-28"
+    },
+    {
+      "id": "m1-6",
+      "title": "Sentry/OTel 토글",
+      "milestone": "M1 — API/관측",
+      "status": "completed",
+      "start": "2025-09-28",
+      "end": "2025-09-28"
+    }
+  ]
+}
