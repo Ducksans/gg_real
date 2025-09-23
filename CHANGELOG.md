@@ -3,7 +3,7 @@ file: CHANGELOG.md
 title: 변경 로그
 owner: duksan
 created: 2025-09-22 14:22 UTC / 2025-09-22 23:22 KST
-updated: 2025-09-22 20:50 UTC / 2025-09-23 05:50 KST
+updated: 2025-09-23 03:23 UTC / 2025-09-23 12:23 KST
 status: active
 tags: [changelog, governance]
 schemaVersion: 1
@@ -47,3 +47,9 @@ code_refs: ['scripts/validate_migrations.sh', 'admin/migrations/README.md']
 - apps/api NestJS Fastify 스켈레톤 추가 (/healthz, /ready, /metrics 구현)
 - 관측 토글 파일(observability.ts)과 metrics service 도입
 - admin 문서(basesettings.md, m1-kickoff.md) 체크박스 업데이트, README 전환
+
+# 2025-09-22 — Sprint 5 CI/거버넌스 강화
+
+- build.yml에 web/api lint·build 매트릭스를 추가하고, lint:web/lint:api 스크립트 작성
+- apps/api README를 프런트매터 포맷으로 정리하고 health.spec.ts를 통해 헬스 엔드포인트 호출 점검
+- lint-staged 설정을 조정해 각 앱의 lint 명령이 프리커밋에서 자동 실행되도록 구성
