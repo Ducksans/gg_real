@@ -3,7 +3,7 @@ file: apps/api/README.md
 title: apps/api 개발 안내
 owner: duksan
 created: 2025-09-22 19:25 UTC / 2025-09-23 04:25 KST
-updated: 2025-09-22 20:45 UTC / 2025-09-23 05:45 KST
+updated: 2025-09-23 02:57 UTC / 2025-09-23 11:57 KST
 status: active
 tags: [docs, api]
 schemaVersion: 1
@@ -16,6 +16,7 @@ code_refs:
     'apps/api/src/app.service.ts',
     'apps/api/src/metrics.service.ts',
     'apps/api/src/observability.ts',
+    'apps/api/test/health.spec.ts',
   ]
 doc_refs: ['admin/plan/m1-kickoff.md', 'basesettings.md']
 ---

@@ -9,10 +9,14 @@
   },
   "scripts": {
     "build": "turbo build",
+    "build:web": "pnpm --filter web build",
     "dev": "turbo dev",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
     "lint": "turbo lint",
+    "lint:root": "pnpm lint",
+    "lint:web": "pnpm --filter web lint",
+    "lint:api": "pnpm --filter api lint",
     "precommit:meta": "pnpm exec node scripts/update_frontmatter_time.js --staged && pnpm run validate:refs",
     "prepare": "husky install",
     "test": "turbo test",
@@ -35,12 +39,7 @@
     "prettier": "^3.3.3",
     "turbo": "^2.1.1",
     "typescript": "^5.5.4",
+    "undici": "^7.16.0",
     "yaml": "^2.5.0"
-  },
-  "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.44.1",
-    "@typescript-eslint/parser": "^8.44.1",
-    "gray-matter": "^4.0.3",
-    "react-markdown": "^10.1.0"
   }
 }
