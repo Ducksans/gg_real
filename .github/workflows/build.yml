@@ -47,8 +47,7 @@ jobs:
 
       - name: Build web (verbose)
         if: ${{ matrix.task == 'build:web' }}
-        working-directory: apps/web
-        run: next build --verbose
+        run: pnpm --filter web run build
 
       - name: Run task (default)
         if: ${{ matrix.task != 'build:web' }}
