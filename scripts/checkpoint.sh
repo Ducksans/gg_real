@@ -4,7 +4,7 @@
 # created: 2025-09-22 09:38 UTC / 2025-09-22 18:38 KST
 # updated: 2025-09-22 18:10 UTC / 2025-09-23 03:10 KST
 # purpose: 변경 파일 자동 수집→체크포인트 문서 생성(admin/checkpoints/*.md)
-# doc_refs: ["AGENTS.md", "admin/plan/improvement-rounds.md", "docs/style-guides/markdown.md", "basesettings.md"]
+# doc_refs: ["AGENTS.md", "admin/plan/improvement-rounds.md", "docs/style-guides/markdown.md", "basesettings.md", "admin/runbooks/editing.md"]
 set -euo pipefail
 
 ROOT_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)

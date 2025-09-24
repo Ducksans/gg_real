@@ -6,7 +6,7 @@
 // created: 2025-09-22 17:35 UTC / 2025-09-23 02:35 KST
 // updated: 2025-09-22 17:35 UTC / 2025-09-23 02:35 KST
 // purpose: 스테이징된 Markdown의 frontmatter updated 값을 현재 UTC/KST로 동기화
-// doc_refs: ["admin/plan/improvement-rounds.md", "docs/style-guides/markdown.md", "AGENTS.md", "admin/runbooks/release.md"]
+// doc_refs: ["admin/plan/improvement-rounds.md", "docs/style-guides/markdown.md", "AGENTS.md", "admin/runbooks/release.md", "admin/runbooks/editing.md"]
 
 const { spawnSync } = require('child_process');
 const fs = require('fs');
