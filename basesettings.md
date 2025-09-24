@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-23 19:11 UTC / 2025-09-24 04:11 KST
+updated: 2025-09-24 07:54 UTC / 2025-09-24 16:54 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -85,6 +85,59 @@ code_refs:
 - [ ] M2-2 인증/RBAC 골격: Auth.js(이메일/SMS/소셜), Redis 세션/레이트리밋
 - [ ] M2-3 실시간(초기): Ably/Pusher 알림/채팅 목업 연결
 - [ ] M2-4 하이브리드 검색 API 초안: 키워드 우선, 벡터 인터페이스 정의
+- [ ] M2-5 그래프 뷰 리디자인: 전체 화면 그래프 레이아웃 및 보조 패널(범례/세부 정보) 집약 UI 설계·구현
+
+## M2 상세 계획 (Sprint 2)
+
+### M2-1 안전한 쓰기 플로우
+
+- 목표: 문서를 수정하면 자동으로 작업 브랜치가 생성되고, `updated` 메타가 갱신된 PR을 쉽게 올릴 수 있게 한다.
+- 주요 작업
+  - `apps/web`에 편집 모드 토글과 저장 버튼 기본 UI 추가(편집 자체는 목업, 제출은 서버 액션).
+  - `scripts/update_frontmatter_time.js`를 확장해 특정 파일 편집 시 즉시 updated를 갱신하도록 API/CLI 인터페이스 제공.
+  - GitHub CLI 래퍼(`scripts/pr_create.sh`) 작성: 브랜치 생성 → 체크포인트 생성 → PR 템플릿 적용.
+- 산출물/문서화: `admin/runbooks/editing.md` 초안, 체크포인트 자동 템플릿.
+- 검증: 샘플 문서 편집 후 `pnpm run validate:docs`, `pnpm run validate:refs`, `pnpm --filter web lint`.
+
+### M2-2 인증/RBAC 골격
+
+- 목표: 최소한의 로그인/세션 구조와 역할 기반 권한 체계를 도입한다.
+- 주요 작업
+  - `Auth.js` + 이메일 Magic Link 기본 설정(`apps/web`, `apps/api` 연동).
+  - Redis 세션 스토어/레이트리밋 래퍼(`packages/session`) 작성.
+  - 역할 매핑(`admin/config/status.yaml` 참고)과 미들웨어로 권한 체크.
+- 산출물: `.env.example` 업데이트, `admin/docs/security/auth.md` 작성.
+- 검증: 통합 테스트(`apps/api/test/run-smoke.js` 확장), Playwright 목업 로그인 시나리오(선택).
+
+### M2-3 실시간 알림 목업
+
+- 목표: Ably 또는 Pusher를 연결해 관리자 알림/채팅 목업을 구축한다.
+- 주요 작업
+  - 공급자 선정 후 `.env`/설정 파일 추가.
+  - `apps/web`에 토스트/알림 패널 컴포넌트, `apps/api`에 이벤트 발행 API.
+  - `packages/realtime` 유틸리티 작성(공급자 추상화).
+- 산출물: `admin/docs/realtime.md`, 샘플 이벤트 데이터.
+- 검증: 로컬에서 두 브라우저로 접속해 이벤트 브로드캐스트 확인, `pnpm run lint:web`/`pnpm run test`.
+
+### M2-4 하이브리드 검색 API 확장
+
+- 목표: 기존 키워드 검색에 벡터 인터페이스를 추가하고 API를 통합한다.
+- 주요 작업
+  - `packages/documents`에 임베딩 인터페이스(스텁) 추가 및 키워드+벡터 스코어링 구조 설계.
+  - `apps/api/src/app.module.ts`에 검색 서비스 확장, `/api/documents/search`에서 쿼리 파라미터로 모드 선택 지원.
+  - `apps/web/src/app/admin/wiki` 검색 바 UX 개선(필터/정렬).
+- 산출물: `admin/docs/search.md`, 추가 샘플 데이터(`admin/data/search/*.json`).
+- 검증: 단위 테스트(`packages/documents/src/__tests__`), API e2e 스모크, Lighthouse/Web Vitals 체크.
+
+### M2-5 그래프 뷰 리디자인
+
+- 목표: 1920×1080 기준 전체 화면을 활용한 그래프 뷰와 보조 패널(범례/노드 상세) 통합 UI를 제공한다.
+- 주요 작업
+  - 레이아웃 와이어프레임 작성 후 `apps/web/src/components/graph` 리팩토링: 그래프/패널 영역 비율, 전체 화면 토글, 패널 접기 기능.
+  - 범례·엣지 설명을 탭/아코디언으로 재구성하고 반응형 대응.
+  - 그래프 내 검색/줌 컨트롤 UX 개선(키보드 단축키 문서화 포함).
+- 산출물: `admin/plan/ui-roadmap.md` 초안, 스토리북 또는 캡처 문서.
+- 검증: 다양한 해상도(1440p/1080p)에서 수동 점검, `pnpm --filter web lint/build`.
 - [ ] M3-1 DB 프로비저닝: Neon(Postgres+pgvector+PostGIS), Prisma 스키마/마이그/seed
 - [ ] M3-2 임베딩 워커: BullMQ(청크/임베딩/색인) 및 하이브리드 검색 연결
 - [ ] M3-3 그래프 편집 양방향: React Flow ↔ Mermaid/PNG, 캘린더 ICS 내보내기

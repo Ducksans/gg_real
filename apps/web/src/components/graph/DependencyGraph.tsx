@@ -107,7 +107,7 @@ export function DependencyGraph({ dataset }: DependencyGraphProps) {
       <div className="flex w-full gap-4">
         <div
           ref={wrapperRef}
-          className="h=[480px] w-full overflow-hidden rounded-lg border border-border bg-card"
+          className="h-[480px] w-full overflow-hidden rounded-lg border border-border bg-card"
         >
           <ReactFlow
             nodes={nodes}
