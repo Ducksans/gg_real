@@ -43,7 +43,7 @@ jobs:
 
       - name: Build documents (verbose)
         if: ${{ matrix.task == 'build:web' }}
-        run: pnpm -w --filter @gg-real/documents build --reporter=ndjson
+        run: pnpm --filter @gg-real/documents run build
 
       - name: Build web (verbose)
         if: ${{ matrix.task == 'build:web' }}
