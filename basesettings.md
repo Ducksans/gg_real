@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-24 09:01 UTC / 2025-09-24 18:01 KST
+updated: 2025-09-24 09:40 UTC / 2025-09-24 18:40 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -14,6 +14,7 @@ code_refs:
     'scripts/validate_docs.sh',
     'scripts/checkpoint.sh',
     'scripts/edit_flow.js',
+    'scripts/pr_create.sh',
     'package.json',
     'pnpm-workspace.yaml',
     'turbo.json',
@@ -30,6 +31,9 @@ code_refs:
     'apps/web/src/lib/content.ts',
     'apps/web/src/app/api/documents/search/route.ts',
     'apps/web/src/app/admin/wiki/search-client.tsx',
+    'apps/web/src/app/admin/wiki/editable-docs.ts',
+    'apps/web/src/app/admin/wiki/actions.ts',
+    'apps/web/src/app/admin/wiki/document-editor.tsx',
     'apps/api/src/main.ts',
     'apps/api/src/app.module.ts',
     'apps/api/src/app.controller.ts',
@@ -82,7 +86,7 @@ code_refs:
 - [x] M1-4 Graph: React Flow 뷰어(읽기 전용) (2025-09-23 07:43 UTC / 2025-09-23 16:43 KST — React Flow 기반 그래프/범례 구축)
 - [x] M1-5 API 스켈레톤(NestJS+Fastify): healthz/metrics, 공통 에러/로깅, CORS/레이트리밋, OpenAPI (2025-09-22 19:25 UTC / 2025-09-23 04:25 KST — NestJS Fastify 부팅 및 헬스/메트릭 엔드포인트 구현)
 - [x] M1-6 관측 베이스: Sentry DSN/OTel 훅(토글 가능) (2025-09-22 19:25 UTC / 2025-09-23 04:25 KST — 환경 토글 기반 관측 후크 골조 추가)
-- [ ] M2-1 안전한 쓰기: 편집→브랜치→PR 생성(헤더 메타 자동 갱신)
+- [x] M2-1 안전한 쓰기: 편집→브랜치→PR 생성(헤더 메타 자동 갱신)
 - [ ] M2-2 인증/RBAC 골격: Auth.js(이메일/SMS/소셜), Redis 세션/레이트리밋
 - [ ] M2-3 실시간(초기): Ably/Pusher 알림/채팅 목업 연결
 - [ ] M2-4 하이브리드 검색 API 초안: 키워드 우선, 벡터 인터페이스 정의

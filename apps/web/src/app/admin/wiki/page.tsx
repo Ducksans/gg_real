@@ -10,10 +10,20 @@
 import { loadMarkdown, searchDocuments } from '@/lib/content';
 import { SearchClient } from './search-client';
 import { DocumentEditor } from './document-editor';
+import { editableDocs } from './editable-docs';
 
 export default async function WikiPage() {
-  const docPath = 'admin/data/README.md';
-  const doc = await loadMarkdown(docPath);
+  const editableDocDetails = await Promise.all(
+    editableDocs.map(async (doc) => {
+      const loaded = await loadMarkdown(doc.path);
+      return {
+        path: doc.path,
+        label: doc.label,
+        content: loaded.content,
+        updated: loaded.data.updated ?? '',
+      };
+    }),
+  );
   const initialResults = await searchDocuments({ query: '', limit: 10 });
 
   return (
@@ -25,7 +35,7 @@ export default async function WikiPage() {
         </p>
       </header>
       <SearchClient initialQuery="" initialResults={initialResults} />
-      <DocumentEditor path={docPath} content={doc.content} updated={doc.data.updated ?? ''} />
+      <DocumentEditor documents={editableDocDetails} />
     </section>
   );
 }

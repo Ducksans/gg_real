@@ -6,7 +6,7 @@
  * created: 2025-09-24 08:12 UTC / 2025-09-24 17:12 KST
  * updated: 2025-09-24 08:12 UTC / 2025-09-24 17:12 KST
  * purpose: 서버 액션으로 관리자 문서 저장을 처리하고 frontmatter updated를 갱신
- * doc_refs: ["admin/runbooks/editing.md", "scripts/edit_flow.js", "apps/web/src/lib/content.ts"]
+ * doc_refs: ["admin/runbooks/editing.md", "scripts/edit_flow.js", "apps/web/src/lib/content.ts", "basesettings.md", "apps/web/src/app/admin/wiki/editable-docs.ts"]
  */
 
 import fs from 'node:fs/promises';
@@ -14,13 +14,14 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { revalidatePath } from 'next/cache';
 import { clearDocumentCache } from '@/lib/content';
+import { editableDocs } from './editable-docs';
 
 type SaveDocumentParams = {
   path: string;
   content: string;
 };
 
-const ALLOWED_DOCUMENTS = new Set<string>(['admin/data/README.md']);
+const ALLOWED_DOCUMENTS = new Set<string>(editableDocs.map((doc) => doc.path));
 const repoRoot = path.join(process.cwd(), '..', '..');
 
 export async function saveDocument(params: SaveDocumentParams) {

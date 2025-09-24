@@ -3,7 +3,7 @@ file: admin/runbooks/editing.md
 title: 문서 편집 및 PR 생성 런북
 owner: duksan
 created: 2025-09-24 07:56 UTC / 2025-09-24 16:56 KST
-updated: 2025-09-24 09:01 UTC / 2025-09-24 18:01 KST
+updated: 2025-09-24 09:40 UTC / 2025-09-24 18:40 KST
 status: draft
 tags: [runbook, editing, workflow]
 schemaVersion: 1
@@ -16,6 +16,7 @@ code_refs:
     'basesettings.md',
     'apps/web/src/app/admin/wiki/actions.ts',
     'apps/web/src/app/admin/wiki/document-editor.tsx',
+    'scripts/pr_create.sh',
   ]
 ---
 
@@ -68,8 +69,12 @@ scripts/checkpoint.sh
 
 ### 5. PR 생성
 
-- (후속) [`scripts/pr_create.sh`] 스크립트가 준비되면 이를 활용한다.
-- 현재는 `gh pr create --fill`을 사용하며, 설명에 체크포인트 및 관련 문서를 링크한다.
+```bash
+pnpm edit:pr --title "docs: update admin data readme"
+```
+
+- 스크립트는 현재 브랜치를 원격에 푸시하고 최신 체크포인트 경로를 본문에 포함한 PR을 자동 생성한다.
+- 추가 reviewer, draft 옵션이 필요하면 `--draft`, `--base`, `--body-file` 등을 전달한다.
 
 ## 참고
 
