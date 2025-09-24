@@ -3,7 +3,7 @@ file: admin/runbooks/editing.md
 title: 문서 편집 및 PR 생성 런북
 owner: duksan
 created: 2025-09-24 07:56 UTC / 2025-09-24 16:56 KST
-updated: 2025-09-24 09:40 UTC / 2025-09-24 18:40 KST
+updated: 2025-09-24 10:26 UTC / 2025-09-24 19:26 KST
 status: draft
 tags: [runbook, editing, workflow]
 schemaVersion: 1

@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-24 09:40 UTC / 2025-09-24 18:40 KST
+updated: 2025-09-24 10:26 UTC / 2025-09-24 19:26 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -111,6 +111,7 @@ code_refs:
   - `Auth.js` + 이메일 Magic Link 기본 설정(`apps/web`, `apps/api` 연동).
   - Redis 세션 스토어/레이트리밋 래퍼(`packages/session`) 작성.
   - 역할 매핑(`admin/config/status.yaml` 참고)과 미들웨어로 권한 체크.
+- 참고 문서: `admin/docs/auth-rbac.md`
 - 산출물: `.env.example` 업데이트, `admin/docs/security/auth.md` 작성.
 - 검증: 통합 테스트(`apps/api/test/run-smoke.js` 확장), Playwright 목업 로그인 시나리오(선택).
 
