@@ -7,12 +7,13 @@
  * doc_refs: ["admin/data/README.md", "admin/plan/m1-kickoff.md", "apps/web/README.md"]
  */
 
-import { MarkdownContent } from '@/components/MarkdownContent';
 import { loadMarkdown, searchDocuments } from '@/lib/content';
 import { SearchClient } from './search-client';
+import { DocumentEditor } from './document-editor';
 
 export default async function WikiPage() {
-  const doc = await loadMarkdown('admin/data/README.md');
+  const docPath = 'admin/data/README.md';
+  const doc = await loadMarkdown(docPath);
   const initialResults = await searchDocuments({ query: '', limit: 10 });
 
   return (
@@ -24,7 +25,7 @@ export default async function WikiPage() {
         </p>
       </header>
       <SearchClient initialQuery="" initialResults={initialResults} />
-      <MarkdownContent content={doc.content} />
+      <DocumentEditor path={docPath} content={doc.content} updated={doc.data.updated ?? ''} />
     </section>
   );
 }

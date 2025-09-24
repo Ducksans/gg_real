@@ -3,7 +3,7 @@ file: admin/runbooks/editing.md
 title: 문서 편집 및 PR 생성 런북
 owner: duksan
 created: 2025-09-24 07:56 UTC / 2025-09-24 16:56 KST
-updated: 2025-09-24 08:17 UTC / 2025-09-24 17:17 KST
+updated: 2025-09-24 09:01 UTC / 2025-09-24 18:01 KST
 status: draft
 tags: [runbook, editing, workflow]
 schemaVersion: 1
@@ -14,6 +14,8 @@ code_refs:
     'scripts/update_frontmatter_time.js',
     'scripts/checkpoint.sh',
     'basesettings.md',
+    'apps/web/src/app/admin/wiki/actions.ts',
+    'apps/web/src/app/admin/wiki/document-editor.tsx',
   ]
 ---
 
@@ -39,7 +41,8 @@ pnpm edit:start admin/data/README.md
 
 ### 2. 문서 편집
 
-- 에디터에서 필요한 수정을 진행한다.
+- 관리자 UI(`/admin/wiki`)에서 **편집 모드**를 켜고 본문을 수정하거나, 로컬 에디터에서 파일을 직접 수정한다.
+- 웹 UI에서 저장하면 frontmatter `updated` 값이 자동 갱신되고 미리보기에서 즉시 내용을 확인할 수 있다.
 - 변경 내역이 여러 파일에 걸칠 경우 각 파일별로 변경 사유를 기록한다.
 
 ### 3. 메타 갱신 및 검증

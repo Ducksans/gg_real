@@ -80,3 +80,7 @@ export async function getDocumentStats(): Promise<DocumentStats> {
   const docs = await repository.getAllDocuments();
   return calculateDocumentStats(docs);
 }
+
+export function clearDocumentCache(): void {
+  repository.clearCache();
+}

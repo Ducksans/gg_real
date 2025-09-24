@@ -22,7 +22,9 @@
     "test": "turbo test",
     "typecheck": "turbo typecheck",
     "validate:docs": "bash scripts/validate_docs.sh",
-    "validate:refs": "bash scripts/validate_refs.sh"
+    "validate:refs": "bash scripts/validate_refs.sh",
+    "edit:start": "node scripts/edit_flow.js start",
+    "edit:prepare": "node scripts/edit_flow.js prepare"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
