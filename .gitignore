@@ -1,0 +1,25 @@
+# Environment
+.env
+
+# Node.js
+node_modules/
+.pnpm-store/
+.pnp.*
+
+# Build outputs
+.next/
+dist/
+build/
+out/
+coverage/
+.turbo/
+
+# Logs and caches
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+.DS_Store
+.idea/
+.vscode/

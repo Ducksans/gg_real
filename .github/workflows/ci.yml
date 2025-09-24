@@ -13,6 +13,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install ripgrep (rg)
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+
       - name: Run secrets scan (strict)
         run: |
           chmod +x scripts/secrets_scan.sh || true
@@ -23,12 +26,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # gitleaks가 PR 범위를 계산할 수 있게 전체 히스토리 필요
 
       - name: Run gitleaks
         uses: zricethezav/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          config-path: .gitleaks.toml
-          fail: true
+          args: "--source . --no-banner"
 
   summary:
     runs-on: ubuntu-latest

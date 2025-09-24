@@ -1,0 +1,45 @@
+{
+  "name": "gg-real",
+  "version": "0.1.0",
+  "private": true,
+  "description": "금강부동산허브 관리자 베이스 - 모노레포 설정",
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "scripts": {
+    "build": "turbo build",
+    "build:web": "pnpm --filter web build",
+    "dev": "turbo dev",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "lint": "turbo lint",
+    "lint:root": "pnpm lint",
+    "lint:web": "pnpm --filter web lint",
+    "lint:api": "pnpm --filter api lint",
+    "precommit:meta": "pnpm exec node scripts/update_frontmatter_time.js --staged && pnpm run validate:refs",
+    "prepare": "husky install",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck",
+    "validate:docs": "bash scripts/validate_docs.sh",
+    "validate:refs": "bash scripts/validate_refs.sh"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "@types/node": "^20.14.9",
+    "ajv": "^8.17.1",
+    "ajv-cli": "^5.0.0",
+    "ajv-formats": "^3.0.1",
+    "eslint": "^9.9.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^9.1.4",
+    "js-yaml": "^4.1.0",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.3",
+    "turbo": "^2.1.1",
+    "typescript": "^5.5.4",
+    "undici": "^7.16.0",
+    "yaml": "^2.5.0"
+  }
+}

@@ -1,0 +1,8 @@
+# Auto-generated checkpoint snapshots
+admin/checkpoints/**
+
+# pnpm lockfile formatting은 pnpm이 담당
+pnpm-lock.yaml
+
+# Git hooks 템플릿 등 바이너리성 스크립트
+.githooks/**

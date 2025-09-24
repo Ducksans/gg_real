@@ -1,0 +1,93 @@
+@import 'tailwindcss';
+
+:root {
+  --background: #f8fafc; /* slate-50 */
+  --foreground: #0f172a; /* slate-900 */
+  --card: #ffffff; /* white */
+  --card-foreground: #0f172a;
+  --muted: #f1f5f9; /* slate-100 */
+  --muted-foreground: #475569; /* slate-600 */
+  --border: #e2e8f0; /* slate-200 */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0b1220; /* slate-950-ish */
+    --foreground: #e5e7eb; /* slate-200 */
+    --card: #0f172a; /* slate-900 */
+    --card-foreground: #e2e8f0; /* slate-200 */
+    --muted: #0f172a; /* slate-900 */
+    --muted-foreground: #94a3b8; /* slate-400 */
+    --border: #334155; /* slate-700 */
+  }
+}
+
+/* Dark mode via .dark class */
+:root.dark, .dark :root {
+  --background: #0b1220;
+  --foreground: #e5e7eb;
+  --card: #0f172a;
+  --card-foreground: #e2e8f0;
+  --muted: #0f172a;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.markdown-body {
+  @apply space-y-4 text-slate-900 dark:text-slate-100;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3 {
+  @apply font-semibold mt-8;
+}
+
+.markdown-body p {
+  @apply leading-relaxed;
+}
+
+.markdown-body pre {
+  @apply bg-slate-900 text-slate-100 p-4 rounded;
+}
+
+.markdown-body table {
+  @apply w-full border-collapse;
+}
+
+.markdown-body th,
+.markdown-body td {
+  @apply border border-slate-300 dark:border-slate-700 px-3 py-2;
+}
+
+.gg-timeline-wrap {
+  max-width: none !important;
+}
+
+.gg-timeline-wrap .mermaid,
+.gg-timeline-wrap .mermaid svg {
+  width: 100%;
+  height: auto;
+}
+
+.gg-timeline-wrap .mermaid > svg {
+  max-width: none !important;
+}

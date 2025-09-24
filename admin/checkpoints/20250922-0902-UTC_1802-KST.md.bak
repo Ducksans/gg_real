@@ -1,0 +1,14 @@
+---
+file: admin/checkpoints/20250922-0902-UTC_1802-KST.md
+title: 체크포인트 - 세션 부팅 규칙 추가 및 meeting 모드 설정
+owner: duksan
+created: 2025-09-22 09:02 UTC / 2025-09-22 18:02 KST
+updated: 2025-09-22 09:02 UTC / 2025-09-22 18:02 KST
+status: completed
+tags: [checkpoint, session, policy]
+description: AGENTS.md에 세션 부팅 체크리스트 추가, session.json을 meeting 모드로 갱신
+---
+
+## 변경/신규 파일
+- M AGENTS.md
+- M admin/state/session.json

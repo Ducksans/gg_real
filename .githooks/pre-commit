@@ -1,9 +1,47 @@
 #!/usr/bin/env bash
-# Git pre-commit hook: 문서 변경 포함 시 자동 체크포인트 생성 후 스테이징
+# Git pre-commit hook: 민감 파일 가드 + 문서 updated 자동 스탬프 + 문서 변경 시 체크포인트
 set -euo pipefail
 
 # 현재 스테이징된 파일 목록
 staged=$(git diff --cached --name-only --diff-filter=ACMR || true)
+
+# [Guard] 비밀/민감 파일 스테이징 차단(.env/키/자격증명 등)
+if [[ -n "$staged" ]]; then
+  # 차단 패턴 목록(확장 가능)
+  deny_patterns=(
+    '^\.env(\..*)?$'            # .env, .env.*
+    '(^|/)\.env(\..*)?$'        # any path/.env*
+    '\.pem$'                     # private keys
+    '\b(id_rsa|id_ecdsa|id_ed25519)(\.pub)?$'
+    '\.p8$'                      # Apple keys
+    '\bservice-account.*\.json$'
+  )
+  for f in $staged; do
+    for pat in "${deny_patterns[@]}"; do
+      if [[ $f =~ $pat ]]; then
+        echo "[pre-commit][BLOCK] 민감 파일 스테이징 감지: $f" >&2
+        echo "[pre-commit] 해당 파일은 .gitignore에 추가하고 커밋에서 제외하세요." >&2
+        exit 1
+      fi
+    done
+  done
+fi
+
+# 문서 updated: 자동 스탬프(UTC/KST)
+if [ -n "$staged" ]; then
+  if [ -x scripts/update_frontmatter_time.sh ]; then
+    bash scripts/update_frontmatter_time.sh >/dev/null 2>&1 || true
+  fi
+fi
+
+# 핵심 검사: 문서/참조/마이그/코드헤더/사이드카
+if [ -n "$staged" ]; then
+  bash scripts/validate_docs.sh
+  bash scripts/validate_refs.sh
+  bash scripts/validate_migrations.sh
+  bash scripts/validate_code_headers.sh
+  bash scripts/validate_sidecar_meta.sh
+fi
 
 # 문서 변경이 있는지 검사(.md 또는 admin/docs 디렉토리 등)
 if echo "$staged" | grep -Eq '\.(md)$|^AGENTS\.md$|^admin/|^docs/'; then

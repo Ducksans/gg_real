@@ -2,13 +2,40 @@
 # file: scripts/checkpoint.sh
 # owner: duksan
 # created: 2025-09-22 09:38 UTC / 2025-09-22 18:38 KST
-# updated: 2025-09-22 09:38 UTC / 2025-09-22 18:38 KST
+# updated: 2025-09-22 18:10 UTC / 2025-09-23 03:10 KST
 # purpose: 변경 파일 자동 수집→체크포인트 문서 생성(admin/checkpoints/*.md)
-# doc_refs: ["AGENTS.md", "admin/plan/improvement-rounds.md", "docs/style-guides/markdown.md"]
+# doc_refs: ["AGENTS.md", "admin/plan/improvement-rounds.md", "docs/style-guides/markdown.md", "basesettings.md"]
 set -euo pipefail
 
 ROOT_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 cd "$ROOT_DIR"
+
+
+validate_frontmatter() {
+  local file="$1"
+  [ -f "$file" ] || return 0
+  if ! head -n1 "$file" | grep -qx -- '---'; then
+    echo "[ERR] $file: frontmatter 시작 구분자(---) 누락" >&2
+    return 1
+  fi
+  local required=(file title owner created updated status schemaVersion)
+  local missing=0
+  for key in "${required[@]}"; do
+    if ! grep -qE -- "^${key}:" "$file"; then
+      echo "[ERR] $file: frontmatter ${key} 키 누락" >&2
+      missing=1
+    fi
+  done
+  if ! grep -qE -- '^created: [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2} UTC / [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2} KST$' "$file"; then
+    echo "[ERR] $file: created 형식(UTC / KST) 불일치" >&2
+    missing=1
+  fi
+  if ! grep -qE -- '^updated: [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2} UTC / [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2} KST$' "$file"; then
+    echo "[ERR] $file: updated 형식(UTC / KST) 불일치" >&2
+    missing=1
+  fi
+  return $missing
+}
 
 branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
 sha_short=$(git rev-parse --short HEAD 2>/dev/null || echo "0000000")
@@ -44,6 +71,26 @@ while IFS= read -r line; do
 done <<< "$status"
 
 total_changes=$(( ${#added[@]} + ${#modified[@]} + ${#deleted[@]} + ${#renamed[@]} ))
+
+meta_fail=0
+for file in "${added[@]}" "${modified[@]}"; do
+  [[ -z "$file" ]] && continue
+  case "$file" in
+    admin/templates/*)
+      ;;
+    *.md)
+      if ! validate_frontmatter "$file"; then
+        meta_fail=1
+      fi
+      ;;
+  esac
+done
+
+if [ $meta_fail -ne 0 ]; then
+  echo "[FAIL] checkpoint: 필수 메타 검증 실패" >&2
+  exit 1
+fi
+
 
 mkdir -p admin/checkpoints
 
