@@ -93,7 +93,9 @@ BODY
   PR_BODY_CONTENT+="${CHECKPOINT_SECTION}## Testing\n- [ ] pnpm run validate:docs\n- [ ] pnpm run validate:refs\n- [ ] pnpm --filter web lint\n- [ ] pnpm --filter web run build\n"
 fi
 
-TEMP_BODY=$(mktemp)
+TEMP_BODY_DIR=".git/pr-bodies"
+mkdir -p "$TEMP_BODY_DIR"
+TEMP_BODY=$(mktemp "$TEMP_BODY_DIR/body-XXXXXX.md")
 printf '%s\n' "$PR_BODY_CONTENT" > "$TEMP_BODY"
 
 if [[ "$PUSH" == true ]]; then
