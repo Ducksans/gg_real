@@ -82,7 +82,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           </label>
         </div>
       </header>
-      <main className="flex-1 bg-white">
+      <main className="flex-1 bg-white pt-0">
         <div className="mx-auto w-full max-w-[1920px] px-10 py-10">{children}</div>
       </main>
     </div>

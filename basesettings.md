@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-25 13:31 UTC / 2025-09-25 22:31 KST
+updated: 2025-09-25 14:00 UTC / 2025-09-25 23:00 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -84,7 +84,7 @@ code_refs:
 - [x] M0-3 CI 베이스: GitHub Actions(workflows)로 web/api lint/typecheck/build 설정 (2025-09-22 15:32 UTC / 2025-09-23 00:32 KST — build.yml 추가, pnpm lint/typecheck/build 파이프라인 연동)
 - [x] M0-4 샘플 데이터: 간트(Mermaid), 의존 그래프(JSON), KPI 목업 추가 (2025-09-22 19:05 UTC / 2025-09-23 04:05 KST — admin/data/ 디렉터리 생성)
 - [x] M1-0 프론트 부트스트랩: Next.js + Vercel Preview 설정 (2025-09-22 19:20 UTC / 2025-09-23 04:20 KST — Next.js 14 기반 앱 생성 및 기본 라우트 구성)
-- [x] M1-1 관리자 UI(읽기 전용) 라우팅: /admin/dashboard | /admin/wiki | /admin/timeline | /admin/graph | /admin/tech-debt (2025-09-22 19:20 UTC / 2025-09-23 04:20 KST — App Router 라우팅 골격 완성. 2025-09-25 12:45 UTC / 2025-09-25 21:45 KST — 상단 내비게이션을 Figma 36-176 순서(Dashboard → Graph → Wiki → Timeline → Tech Debt)와 스타일로 재정렬)
+- [x] M1-1 관리자 UI(읽기 전용) 라우팅: /admin/dashboard | /admin/wiki | /admin/timeline | /admin/graph | /admin/tech-debt (2025-09-22 19:20 UTC / 2025-09-23 04:20 KST — App Router 라우팅 골격 완성. 2025-09-25 12:45 UTC / 2025-09-25 21:45 KST — 상단 내비게이션을 Figma 36-176 순서(Dashboard → Graph → Wiki → Timeline → Tech Debt)와 스타일로 재정렬. 2025-09-25 13:05 UTC / 2025-09-25 22:05 KST — 8개 섹션(관리자 대시보드~컨텐츠 자동화) 헤더/검색 UI를 Figma 비율·컬러와 동일하게 정렬하고 자리표시자 라우트 생성)
 - [x] M1-2 문서 로더/렌더러(Markdown+Frontmatter, 백링크 패널) 구현 (2025-09-22 19:22 UTC / 2025-09-23 04:22 KST — Markdown 로더 및 렌더러 연동)
 - [x] M1-3 Timeline: Mermaid 간트·FullCalendar 월/주 뷰 표시 (2025-09-23 07:42 UTC / 2025-09-23 16:42 KST — Sprint 9 필터 UI 및 간트 렌더러 연동)
 - [x] M1-4 Graph: React Flow 뷰어(읽기 전용) (2025-09-23 07:43 UTC / 2025-09-23 16:43 KST — React Flow 기반 그래프/범례 구축)
