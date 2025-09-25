@@ -3,7 +3,7 @@ file: admin/docs/auth-rbac.md
 title: 인증 및 RBAC 설계 초안
 owner: duksan
 created: 2025-09-24 08:36 UTC / 2025-09-24 17:36 KST
-updated: 2025-09-24 10:26 UTC / 2025-09-24 19:26 KST
+updated: 2025-09-25 01:36 UTC / 2025-09-25 10:36 KST
 status: draft
 tags: [docs, auth, security, rbac]
 schemaVersion: 1

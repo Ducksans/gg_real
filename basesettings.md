@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-24 10:26 UTC / 2025-09-24 19:26 KST
+updated: 2025-09-25 01:36 UTC / 2025-09-25 10:36 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -34,6 +34,8 @@ code_refs:
     'apps/web/src/app/admin/wiki/editable-docs.ts',
     'apps/web/src/app/admin/wiki/actions.ts',
     'apps/web/src/app/admin/wiki/document-editor.tsx',
+    'admin/docs/auth-rbac.md',
+    'admin/docs/ui-graph-redesign.md',
     'apps/api/src/main.ts',
     'apps/api/src/app.module.ts',
     'apps/api/src/app.controller.ts',
@@ -142,6 +144,7 @@ code_refs:
   - 레이아웃 와이어프레임 작성 후 `apps/web/src/components/graph` 리팩토링: 그래프/패널 영역 비율, 전체 화면 토글, 패널 접기 기능.
   - 범례·엣지 설명을 탭/아코디언으로 재구성하고 반응형 대응.
   - 그래프 내 검색/줌 컨트롤 UX 개선(키보드 단축키 문서화 포함).
+- 참고 문서: `admin/docs/ui-graph-redesign.md`
 - 산출물: `admin/plan/ui-roadmap.md` 초안, 스토리북 또는 캡처 문서.
 - 검증: 다양한 해상도(1440p/1080p)에서 수동 점검, `pnpm --filter web lint/build`.
 - [ ] M3-1 DB 프로비저닝: Neon(Postgres+pgvector+PostGIS), Prisma 스키마/마이그/seed

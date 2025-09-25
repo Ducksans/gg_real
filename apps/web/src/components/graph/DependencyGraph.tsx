@@ -6,7 +6,7 @@
  * created: 2025-09-23 07:38 UTC / 2025-09-23 16:38 KST
  * updated: 2025-09-23 07:56 UTC / 2025-09-23 16:56 KST
  * purpose: React Flow를 이용해 의존 그래프를 시각화하고 상태·엣지 범례를 함께 제공한다
- * doc_refs: ["apps/web/src/app/admin/graph/page.tsx", "apps/web/src/lib/graph.ts"]
+ * doc_refs: ["apps/web/src/app/admin/graph/page.tsx", "apps/web/src/lib/graph.ts", "admin/docs/ui-graph-redesign.md"]
  */
 
 import { type CSSProperties, useCallback, useMemo, useRef, useState } from 'react';

@@ -4,7 +4,7 @@
  * created: 2025-09-22 19:10 UTC / 2025-09-23 04:10 KST
  * updated: 2025-09-23 07:50 UTC / 2025-09-23 16:50 KST
  * purpose: 의존 그래프 JSON과 상태 구성을 React Flow 시각화에 연결
- * doc_refs: ["admin/data/graph.json", "admin/data/README.md", "admin/plan/m1-kickoff.md", "apps/web/README.md"]
+ * doc_refs: ["admin/data/graph.json", "admin/data/README.md", "admin/plan/m1-kickoff.md", "apps/web/README.md", "admin/docs/ui-graph-redesign.md"]
  */
 
 import { DependencyGraph } from '@/components/graph/DependencyGraph';
