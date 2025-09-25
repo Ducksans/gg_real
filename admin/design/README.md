@@ -3,7 +3,7 @@ file: admin/design/README.md
 title: 디자인 산출물 모음
 owner: duksan
 created: 2025-09-25 01:50 UTC / 2025-09-25 10:50 KST
-updated: 2025-09-25 03:00 UTC / 2025-09-25 12:00 KST
+updated: 2025-09-25 04:04 UTC / 2025-09-25 13:04 KST
 status: draft
 tags: [design, ui, auth]
 schemaVersion: 1
@@ -13,7 +13,7 @@ code_refs: ['admin/docs/auth-rbac.md', 'admin/docs/ui-graph-redesign.md']
 
 ## Figma
 
-- 인증/그래프 통합 보드: https://www.figma.com/design/LEVwW25Z2pNWLacMF3s1iG/%EC%A0%9C%EB%AA%A9-%EC%97%86%EC%9D%8C?node-id=0-1&p=f&m=draw
+- 인증/그래프 통합 보드: https://www.figma.com/design/LEVwW25Z2pNWLacMF3s1iG/gg-real?node-id=0-1&t=ci1hFjAuFeiqHsXr-1
 
 ## Excalidraw
 

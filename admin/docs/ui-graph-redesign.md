@@ -3,7 +3,7 @@ file: admin/docs/ui-graph-redesign.md
 title: 그래프 뷰 리디자인 메모
 owner: duksan
 created: 2025-09-24 08:50 UTC / 2025-09-24 17:50 KST
-updated: 2025-09-25 03:00 UTC / 2025-09-25 12:00 KST
+updated: 2025-09-25 04:04 UTC / 2025-09-25 13:04 KST
 status: draft
 tags: [docs, ui, graph]
 schemaVersion: 1
@@ -59,7 +59,7 @@ code_refs:
 
 ## 디자인 자료
 
-- Figma 와이어프레임: https://www.figma.com/design/LEVwW25Z2pNWLacMF3s1iG/%EC%A0%9C%EB%AA%A9-%EC%97%86%EC%9D%8C?node-id=0-1&p=f&m=draw
+- Figma 와이어프레임: https://www.figma.com/design/LEVwW25Z2pNWLacMF3s1iG/gg-real?node-id=0-1&t=ci1hFjAuFeiqHsXr-1
 - Excalidraw 와이어프레임: https://excalidraw.com/#json=CUgRejPhjQP8Y9RMhGpt4,LR80Bdn6JUqyLGd8mY6p1g
 
 ## TODO

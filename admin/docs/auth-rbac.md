@@ -3,7 +3,7 @@ file: admin/docs/auth-rbac.md
 title: 인증 및 RBAC 설계 초안
 owner: duksan
 created: 2025-09-24 08:36 UTC / 2025-09-24 17:36 KST
-updated: 2025-09-25 03:00 UTC / 2025-09-25 12:00 KST
+updated: 2025-09-25 04:04 UTC / 2025-09-25 13:04 KST
 status: draft
 tags: [docs, auth, security, rbac]
 schemaVersion: 1
@@ -87,7 +87,7 @@ sequenceDiagram
 
 ## 디자인 자료
 
-- Figma 보드: https://www.figma.com/design/LEVwW25Z2pNWLacMF3s1iG/%EC%A0%9C%EB%AA%A9-%EC%97%86%EC%9D%8C?node-id=0-1&p=f&m=draw (관리자 인증/그래프 통합 와이어프레임)
+- Figma 보드: https://www.figma.com/design/LEVwW25Z2pNWLacMF3s1iG/gg-real?node-id=0-1&t=ci1hFjAuFeiqHsXr-1 (관리자 인증/그래프 통합 와이어프레임)
 - Excalidraw 스케치: https://excalidraw.com/#json=KNXbmAqFeeAqap1mdu7Xn,ap_EtuHMtytHD7j4Y-FBsQ
 
 ## TODO
