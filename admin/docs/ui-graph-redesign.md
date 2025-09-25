@@ -3,7 +3,7 @@ file: admin/docs/ui-graph-redesign.md
 title: 그래프 뷰 리디자인 메모
 owner: duksan
 created: 2025-09-24 08:50 UTC / 2025-09-24 17:50 KST
-updated: 2025-09-25 01:54 UTC / 2025-09-25 10:54 KST
+updated: 2025-09-25 02:14 UTC / 2025-09-25 11:14 KST
 status: draft
 tags: [docs, ui, graph]
 schemaVersion: 1

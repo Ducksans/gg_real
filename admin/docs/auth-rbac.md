@@ -3,7 +3,7 @@ file: admin/docs/auth-rbac.md
 title: 인증 및 RBAC 설계 초안
 owner: duksan
 created: 2025-09-24 08:36 UTC / 2025-09-24 17:36 KST
-updated: 2025-09-25 01:54 UTC / 2025-09-25 10:54 KST
+updated: 2025-09-25 02:14 UTC / 2025-09-25 11:14 KST
 status: draft
 tags: [docs, auth, security, rbac]
 schemaVersion: 1
@@ -84,6 +84,11 @@ sequenceDiagram
   Redis-->>Web: 세션 + 역할
   Web-->>User: 권한에 맞는 UI 렌더링
 ```
+
+## 디자인 자료
+
+- Figma 보드: https://www.figma.com/file/TBD/auth-flow?node-id=0%3A1 (관리자 인증 흐름 와이어프레임)
+- Excalidraw 초안: `admin/design/auth-flow.excalidraw.md` (작성 예정)
 
 ## TODO
 
