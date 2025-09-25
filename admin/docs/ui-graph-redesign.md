@@ -3,7 +3,7 @@ file: admin/docs/ui-graph-redesign.md
 title: 그래프 뷰 리디자인 메모
 owner: duksan
 created: 2025-09-24 08:50 UTC / 2025-09-24 17:50 KST
-updated: 2025-09-25 02:14 UTC / 2025-09-25 11:14 KST
+updated: 2025-09-25 03:00 UTC / 2025-09-25 12:00 KST
 status: draft
 tags: [docs, ui, graph]
 schemaVersion: 1
@@ -57,9 +57,15 @@ code_refs:
 2. `전체 화면`을 누르면 패널이 자동으로 숨겨지고, ESC 키로 복귀한다.
 3. `Fit View` 버튼은 현재 확대 비율을 초기화하고, `Reset`은 위치/줌/필터를 모두 초기 상태로 되돌린다.
 
+## 디자인 자료
+
+- Figma 와이어프레임: https://www.figma.com/design/LEVwW25Z2pNWLacMF3s1iG/%EC%A0%9C%EB%AA%A9-%EC%97%86%EC%9D%8C?node-id=0-1&p=f&m=draw
+- Excalidraw 와이어프레임: https://excalidraw.com/#json=CUgRejPhjQP8Y9RMhGpt4,LR80Bdn6JUqyLGd8mY6p1g
+
 ## TODO
 
-- [ ] Figma 와이어프레임 링크 추가.
+- [x] Figma 와이어프레임 링크 추가.
+- [x] Excalidraw 와이어프레임 링크 추가.
 - [ ] 패널 가시성 상태를 URL 파라미터나 localStorage로 동기화 여부 결정.
 - [ ] 단축키(`f`, `?`, `esc`) 문서화 및 툴팁 처리.
 - [ ] 모바일/태블릿 레이아웃 mock 작성.

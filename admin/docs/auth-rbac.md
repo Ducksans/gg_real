@@ -3,7 +3,7 @@ file: admin/docs/auth-rbac.md
 title: 인증 및 RBAC 설계 초안
 owner: duksan
 created: 2025-09-24 08:36 UTC / 2025-09-24 17:36 KST
-updated: 2025-09-25 02:14 UTC / 2025-09-25 11:14 KST
+updated: 2025-09-25 03:00 UTC / 2025-09-25 12:00 KST
 status: draft
 tags: [docs, auth, security, rbac]
 schemaVersion: 1
@@ -87,8 +87,8 @@ sequenceDiagram
 
 ## 디자인 자료
 
-- Figma 보드: https://www.figma.com/file/TBD/auth-flow?node-id=0%3A1 (관리자 인증 흐름 와이어프레임)
-- Excalidraw 초안: `admin/design/auth-flow.excalidraw.md` (작성 예정)
+- Figma 보드: https://www.figma.com/design/LEVwW25Z2pNWLacMF3s1iG/%EC%A0%9C%EB%AA%A9-%EC%97%86%EC%9D%8C?node-id=0-1&p=f&m=draw (관리자 인증/그래프 통합 와이어프레임)
+- Excalidraw 스케치: https://excalidraw.com/#json=KNXbmAqFeeAqap1mdu7Xn,ap_EtuHMtytHD7j4Y-FBsQ
 
 ## TODO
 
@@ -97,4 +97,4 @@ sequenceDiagram
 - [ ] 다중 역할(복합 권한) 여부 결정.
 - [ ] 관리자 UI에서 역할에 따른 메뉴/액션 노출 제어.
 - [ ] CI에서 인증 관련 e2e 시나리오 정의.
-- [ ] Figma 또는 Excalidraw에 인증 플로우 다이어그램을 정식으로 추가.
+- [x] Figma 또는 Excalidraw에 인증 플로우 다이어그램을 정식으로 추가.
