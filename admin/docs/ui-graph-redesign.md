@@ -3,7 +3,7 @@ file: admin/docs/ui-graph-redesign.md
 title: 그래프 뷰 리디자인 메모
 owner: duksan
 created: 2025-09-24 08:50 UTC / 2025-09-24 17:50 KST
-updated: 2025-09-25 01:36 UTC / 2025-09-25 10:36 KST
+updated: 2025-09-25 01:54 UTC / 2025-09-25 10:54 KST
 status: draft
 tags: [docs, ui, graph]
 schemaVersion: 1
@@ -42,6 +42,15 @@ code_refs:
 - `GraphFullScreenProvider`: 전체 화면 상태를 context로 관리.
 - `GraphLegendAccordion`: 범례/엣지 설명을 accordion 형태로 보여주는 컴포넌트.
 
+### 작업 분해
+
+- [ ] `GraphLayoutShell` 초안 작성 (`apps/web/src/components/graph/LayoutShell.tsx` 예정).
+- [ ] `GraphToolbar`에 전체 화면 토글 + 단축키 헬퍼(`useKeyboardShortcut`) 추가.
+- [ ] `GraphDetailsPanel`을 탭 컴포넌트로 구현하고, 노드 상세/범례/엣지/도움말 탭 분리.
+- [ ] `GraphFullScreenProvider`로 `DependencyGraph`와 레이아웃 간 상태 공유.
+- [ ] React Flow `Controls` 커스터마이징 → 확대/축소/리셋 버튼 툴바로 이동.
+- [ ] 반응형 대응: `lg` 이상은 패널 고정, 그 이하에서는 drawer 토글 버튼 제공.
+
 ## 인터랙션 시나리오
 
 1. 사용자가 노드를 클릭하면 보조 패널 `세부 정보` 탭이 자동 활성화된다.
@@ -55,3 +64,4 @@ code_refs:
 - [ ] 단축키(`f`, `?`, `esc`) 문서화 및 툴팁 처리.
 - [ ] 모바일/태블릿 레이아웃 mock 작성.
 - [ ] `GraphLegendAccordion` API 스펙 정의.
+- [ ] React Flow `fitViewOptions` 및 `onMoveEnd`를 사용한 상태 동기화 전략 문서화.

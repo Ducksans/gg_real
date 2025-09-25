@@ -3,7 +3,7 @@ file: admin/docs/auth-rbac.md
 title: 인증 및 RBAC 설계 초안
 owner: duksan
 created: 2025-09-24 08:36 UTC / 2025-09-24 17:36 KST
-updated: 2025-09-25 01:36 UTC / 2025-09-25 10:36 KST
+updated: 2025-09-25 01:54 UTC / 2025-09-25 10:54 KST
 status: draft
 tags: [docs, auth, security, rbac]
 schemaVersion: 1
@@ -51,6 +51,40 @@ code_refs: ['basesettings.md']
 5. **감사 로그 & 모니터링**
    - 로그인/역할 변경 이벤트를 `admin/data/audit.log.json`(초기) 또는 Redis stream에 기록.
 
+### 세부 작업 체크리스트
+
+- [ ] `packages/session`에 Redis 연결 및 `getSession`, `setSession`, `clearSession` 함수 작성.
+- [ ] `apps/web/src/app/api/auth/[...nextauth]/route.ts` 생성 및 이메일 Magic Link provider 설정.
+- [ ] `apps/web/src/middleware.ts`에서 보호된 경로(`/admin/**`)에 세션 검사 추가.
+- [ ] `apps/api/src/common/guards/roles.guard.ts`와 `roles.decorator.ts` 작성.
+- [ ] 역할/권한 매핑을 위한 `admin/config/roles.yaml` 초안 작성.
+- [ ] `admin/runbooks/auth.md` 작성하여 운영자 credential 발급/회수 절차 정리.
+
+### 인증 흐름 다이어그램
+
+```mermaid
+sequenceDiagram
+  participant User
+  participant Web as Next.js Web
+  participant Auth as Auth.js
+  participant Mail as Email Provider
+  participant Redis as Redis Session
+
+  User->>Web: 로그인 요청(이메일)
+  Web->>Auth: signIn(email)
+  Auth->>Mail: Magic Link 발송
+  Mail-->>User: Magic Link 이메일
+  User->>Web: Magic Link 클릭
+  Web->>Auth: callback + token
+  Auth->>Redis: 세션 저장(role, expires)
+  Web-->>User: 관리자 대시보드 리다이렉트
+
+  User->>Web: 보호된 페이지 접근
+  Web->>Redis: 세션 조회
+  Redis-->>Web: 세션 + 역할
+  Web-->>User: 권한에 맞는 UI 렌더링
+```
+
 ## TODO
 
 - [ ] 이메일 템플릿 및 SMTP 환경 변수 정의.
@@ -58,3 +92,4 @@ code_refs: ['basesettings.md']
 - [ ] 다중 역할(복합 권한) 여부 결정.
 - [ ] 관리자 UI에서 역할에 따른 메뉴/액션 노출 제어.
 - [ ] CI에서 인증 관련 e2e 시나리오 정의.
+- [ ] Figma 또는 Excalidraw에 인증 플로우 다이어그램을 정식으로 추가.
