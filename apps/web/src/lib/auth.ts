@@ -21,8 +21,16 @@ import { createRedisAdapter } from './redis-adapter';
 import type { UserRole } from '@gg-real/session';
 
 const SESSION_TTL_SECONDS = Number.parseInt(process.env.REDIS_SESSION_TTL ?? '86400', 10);
-const DEFAULT_FROM = process.env.AUTH_EMAIL_FROM ?? 'no-reply@gg-real.local';
-const EMAIL_SERVER = process.env.AUTH_EMAIL_SERVER;
+const DEFAULT_FROM = process.env.AUTH_EMAIL_FROM?.trim() || 'no-reply@gg-real.local';
+const EMAIL_SERVER = process.env.AUTH_EMAIL_SERVER?.trim() || undefined;
+const AUTH_SECRET =
+  process.env.AUTH_SECRET?.trim() ||
+  process.env.NEXTAUTH_SECRET?.trim() ||
+  (process.env.NODE_ENV === 'production' ? undefined : 'dev-secret');
+
+if (!AUTH_SECRET) {
+  console.warn('[auth] Missing AUTH_SECRET in production environment.');
+}
 
 function createTransport() {
   if (EMAIL_SERVER) {
@@ -85,13 +93,14 @@ console.info(
 
 export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
   trustHost: true,
-  secret: process.env.AUTH_SECRET,
+  secret: AUTH_SECRET,
   adapter: createRedisAdapter(),
   session: {
     strategy: 'jwt',
     maxAge: SESSION_TTL_SECONDS,
   },
   providers: [emailProvider],
+  debug: process.env.NODE_ENV !== 'production',
   callbacks: {
     async jwt({ token, user }) {
       if (user?.email) {
@@ -134,6 +143,9 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
       if (token?.sub) {
         await clearSession(token.sub);
       }
+    },
+    async error(error) {
+      console.error('[auth] error', error, error instanceof Error ? error.stack : undefined);
     },
   },
 });

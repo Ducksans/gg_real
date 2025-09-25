@@ -3,7 +3,7 @@ file: admin/runbooks/auth.md
 title: 인증 및 RBAC 운영 절차
 owner: duksan
 created: 2025-09-25 05:45 UTC / 2025-09-25 14:45 KST
-updated: 2025-09-25 08:29 UTC / 2025-09-25 17:29 KST
+updated: 2025-09-25 12:37 UTC / 2025-09-25 21:37 KST
 status: draft
 tags: [runbook, auth, rbac]
 schemaVersion: 1
@@ -20,21 +20,21 @@ code_refs:
 
 ## 사전 조건
 
-- `REDIS_URL`, `AUTH_SECRET`, `AUTH_EMAIL_SERVER`, `AUTH_EMAIL_FROM` 환경 변수가 설정되어 있어야 합니다.
-- `admin/config/roles.yaml`에서 역할 계층과 이메일 할당을 최신 상태로 유지합니다.
+- `REDIS_URL`, `AUTH_SECRET`, `AUTH_EMAIL_SERVER`, `AUTH_EMAIL_FROM` 환경 변수가 설정되어 있어야 합니다. 로컬 개발은 `apps/web/.env.local`에 기입하고, 배포 환경은 플랫폼 비밀 변수로 주입합니다.
+- `admin/config/roles.yaml`에서 역할 계층과 이메일 할당을 최신 상태로 유지합니다. 다중 워크스페이스에서 실행할 때는 `ROLE_CONFIG_PATH` 환경 변수로 명시적으로 경로를 지정할 수 있습니다.
 
 ## 신규 관리자 계정 발급
 
 1. `admin/config/roles.yaml`의 `assignments` 목록에 이메일과 역할을 추가합니다.
-2. 변경 사항을 커밋/배포하여 Next.js 서버가 새 구성을 읽도록 합니다.
+2. 변경 사항을 커밋/배포하여 Next.js 서버가 새 구성을 읽도록 합니다. (로컬 개발에서는 `pnpm --filter @gg-real/session build` 후 `pnpm --filter web dev` 재시작)
 3. 사용자가 `/api/auth/signin`에서 Magic Link를 요청하면 이메일로 로그인 링크가 발송됩니다.
 4. 최초 로그인 후 Redis 세션이 생성되며, `packages/session` 모듈에서 TTL(기본 24h)을 관리합니다.
 
 ## 권한 회수
 
 1. `admin/config/roles.yaml`에서 대상 이메일을 제거하거나 역할을 낮춥니다.
-2. `pnpm --filter @gg-real/session run build` 후 배포하여 구성을 반영합니다.
-3. Redis에서 해당 세션 키를 제거하려면 `packages/session`의 `clearSession` 함수를 사용하거나 `redis-cli DEL session:<sub>`을 실행합니다.
+2. `pnpm --filter @gg-real/session build` 후 배포하여 구성을 반영합니다.
+3. Redis에서 해당 세션 키를 제거하려면 `packages/session`의 `clearSession` 함수를 사용하거나 `pnpm exec redis-cli --scan --pattern "session:*" | xargs -r pnpm exec redis-cli DEL`로 전체 세션을 정리합니다.
 
 ## 이상 징후 대응
 

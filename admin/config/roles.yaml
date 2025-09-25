@@ -23,6 +23,8 @@ assignments:
     role: admin
   - email: editor@example.com
     role: editor
+  - email: bikeshow9818@gmail.com
+    role: editor
 
 defaults:
   role: viewer

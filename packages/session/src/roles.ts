@@ -22,6 +22,34 @@ export interface RoleConfig {
 }
 
 let cachedConfig: RoleConfig | null = null;
+let cachedConfigPath: string | null = null;
+
+function resolveRoleConfigPath(): string | null {
+  if (process.env.ROLE_CONFIG_PATH) {
+    const directPath = path.resolve(process.env.ROLE_CONFIG_PATH);
+    if (fs.existsSync(directPath)) {
+      return directPath;
+    }
+  }
+
+  // search upwards from current working directory for admin/config/roles.yaml
+  let currentDir = process.cwd();
+  const visited = new Set<string>();
+  while (!visited.has(currentDir)) {
+    visited.add(currentDir);
+    const candidate = path.join(currentDir, 'admin/config/roles.yaml');
+    if (fs.existsSync(candidate)) {
+      return candidate;
+    }
+    const parentDir = path.dirname(currentDir);
+    if (parentDir === currentDir) {
+      break;
+    }
+    currentDir = parentDir;
+  }
+
+  return null;
+}
 
 const DEFAULT_CONFIG: RoleConfig = {
   hierarchy: ['viewer', 'editor', 'admin'],
@@ -41,13 +69,16 @@ export function loadRoleConfig(): RoleConfig {
     return cachedConfig;
   }
 
-  const filePath = path.resolve(process.cwd(), 'admin/config/roles.yaml');
-  if (!fs.existsSync(filePath)) {
+  if (!cachedConfigPath) {
+    cachedConfigPath = resolveRoleConfigPath();
+  }
+
+  if (!cachedConfigPath) {
     cachedConfig = DEFAULT_CONFIG;
     return cachedConfig;
   }
 
-  const fileContent = fs.readFileSync(filePath, 'utf8');
+  const fileContent = fs.readFileSync(cachedConfigPath, 'utf8');
   const parsed = yaml.parse(fileContent) as Partial<RoleConfig> | null;
   const hierarchy = parsed?.hierarchy ?? DEFAULT_CONFIG.hierarchy;
   cachedConfig = {

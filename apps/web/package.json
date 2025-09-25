@@ -15,6 +15,7 @@
     "@fullcalendar/react": "^6.1.15",
     "@gg-real/documents": "workspace:*",
     "@gg-real/session": "workspace:^",
+    "@redis/client": "^5.8.2",
     "@sentry/nextjs": "^8.20.0",
     "gray-matter": "^4.0.3",
     "html-to-image": "^1.11.11",

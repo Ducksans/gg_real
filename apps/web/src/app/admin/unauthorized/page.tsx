@@ -1,13 +1,12 @@
 import Link from 'next/link';
 
-export default function UnauthorizedPage({
+export default async function UnauthorizedPage({
   searchParams,
 }: {
-  searchParams?: Record<string, string | string[] | undefined>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const requiredRole = Array.isArray(searchParams?.require)
-    ? searchParams?.require[0]
-    : searchParams?.require;
+  const params = searchParams ? await searchParams : undefined;
+  const requiredRole = Array.isArray(params?.require) ? params.require[0] : params?.require;
 
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center gap-6 px-6 text-center">

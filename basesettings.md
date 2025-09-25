@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-25 04:50 UTC / 2025-09-25 13:50 KST
+updated: 2025-09-25 12:37 UTC / 2025-09-25 21:37 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -90,7 +90,7 @@ code_refs:
 - [x] M1-5 API 스켈레톤(NestJS+Fastify): healthz/metrics, 공통 에러/로깅, CORS/레이트리밋, OpenAPI (2025-09-22 19:25 UTC / 2025-09-23 04:25 KST — NestJS Fastify 부팅 및 헬스/메트릭 엔드포인트 구현)
 - [x] M1-6 관측 베이스: Sentry DSN/OTel 훅(토글 가능) (2025-09-22 19:25 UTC / 2025-09-23 04:25 KST — 환경 토글 기반 관측 후크 골조 추가)
 - [x] M2-1 안전한 쓰기: 편집→브랜치→PR 생성(헤더 메타 자동 갱신)
-- [x] M2-2 인증/RBAC 골격: Auth.js(이메일/SMS/소셜), Redis 세션/레이트리밋 (2025-09-25 05:55 UTC / 2025-09-25 14:55 KST — Auth.js 이메일 로그인, Redis 세션, 역할 가드 및 운영 런북 추가)
+- [x] M2-2 인증/RBAC 골격: Auth.js(이메일/SMS/소셜), Redis 세션/레이트리밋 (2025-09-25 05:55 UTC / 2025-09-25 14:55 KST — Auth.js 이메일 로그인, Redis 세션, 역할 가드 및 운영 런북 추가. 2025-09-25 12:25 UTC / 2025-09-25 21:25 KST — `admin/config/roles.yaml` ↔ `packages/session` 자동 검색, `.env.local` SMTP 구성, Wiki 접근 제어 정상화)
 - [ ] M2-3 실시간(초기): Ably/Pusher 알림/채팅 목업 연결
 - [ ] M2-4 하이브리드 검색 API 초안: 키워드 우선, 벡터 인터페이스 정의
 - [ ] M2-5 그래프 뷰 리디자인: 전체 화면 그래프 레이아웃 및 보조 패널(범례/세부 정보) 집약 UI 설계·구현
@@ -113,7 +113,9 @@ code_refs:
 - 주요 작업
   - `Auth.js` + 이메일 Magic Link 기본 설정(`apps/web`, `apps/api` 연동).
   - Redis 세션 스토어/레이트리밋 래퍼(`packages/session`) 작성.
-  - 역할 매핑(`admin/config/status.yaml` 참고)과 미들웨어로 권한 체크.
+  - 역할 매핑(`admin/config/roles.yaml`)과 미들웨어로 권한 체크.
+  - `packages/session`에서 다중 워크스페이스를 고려해 `admin/config/roles.yaml` 경로를 자동 탐색(`ROLE_CONFIG_PATH` 지원)하도록 개선.
+  - `.env.local`에 SMTP 자격 증명과 발신 주소를 정의해 Resend 기반 Magic Link 전송을 운영 환경과 동일하게 테스트.
 - 산출물: `.env.example` 환경 변수 확장, `admin/config/roles.yaml`, `admin/runbooks/auth.md`.
 - 검증: `/admin` 경로 접속 시 세션/역할 헤더 확인, API `X-User-Role` 헤더 기반 가드 동작 수동 확인.
 

@@ -23,8 +23,8 @@
         "type": 2
       },
       "seed": 745029056,
-      "version": 32,
-      "versionNonce": 1536392768,
+      "version": 51,
+      "versionNonce": 1817577159,
       "isDeleted": false,
       "boundElements": [
         {
@@ -32,7 +32,7 @@
           "id": "userText"
         }
       ],
-      "updated": 1758768773215,
+      "updated": 1758784105121,
       "link": null,
       "locked": false,
       "index": "a0",
@@ -41,10 +41,10 @@
     {
       "id": "userText",
       "type": "text",
-      "x": -500,
-      "y": -98,
-      "width": 120,
-      "height": 26,
+      "x": -467.59996795654297,
+      "y": -97.5,
+      "width": 55.19993591308594,
+      "height": 25,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -55,11 +55,11 @@
       "opacity": 100,
       "groupIds": [],
       "seed": 2129872343,
-      "version": 23,
-      "versionNonce": 308051520,
+      "version": 42,
+      "versionNonce": 822603049,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1758768759920,
+      "updated": 1758784105121,
       "link": null,
       "locked": false,
       "text": "사용자",

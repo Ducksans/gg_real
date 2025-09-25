@@ -3,7 +3,7 @@ file: admin/docs/auth-rbac.md
 title: 인증 및 RBAC 설계 초안
 owner: duksan
 created: 2025-09-24 08:36 UTC / 2025-09-24 17:36 KST
-updated: 2025-09-25 08:29 UTC / 2025-09-25 17:29 KST
+updated: 2025-09-25 12:37 UTC / 2025-09-25 21:37 KST
 status: draft
 tags: [docs, auth, security, rbac]
 schemaVersion: 1
@@ -32,13 +32,14 @@ code_refs:
 1. **Auth.js + 이메일 Magic Link**
    - 공급자: 이메일(Magic Link) → 이후 SMS/소셜 확장 가능.
    - 세션 저장소: Redis (Upstash/Managed/Local Redis).
-   - 환경 변수: `AUTH_SECRET`, `AUTH_EMAIL_SERVER`, `AUTH_EMAIL_FROM`.
+   - 환경 변수: `AUTH_SECRET`, `AUTH_EMAIL_SERVER`, `AUTH_EMAIL_FROM`(로컬 개발은 `apps/web/.env.local`에 정의, 배포 환경은 비밀 변수로 주입).
 2. **세션/레이트리밋 레이어**
    - `packages/session` 모듈에서 Redis 클라이언트를 생성.
    - 로그인, 비밀번호 재설정, API 요청 레이트리밋을 동일 모듈에서 관리.
 3. **역할 정의**
-   - `admin/config/status.yaml` 참고 → 역할 enum 추가 (예: `viewer`, `editor`, `admin`).
+   - `admin/config/roles.yaml`에서 역할 계층과 이메일 매핑을 유지.
    - 기본 정책: `viewer`는 읽기만, `editor`는 문서 편집 가능, `admin`은 시스템 설정.
+   - `packages/session/src/roles.ts`는 상위 디렉터리를 탐색하거나 `ROLE_CONFIG_PATH` 환경 변수를 참조해 `roles.yaml`을 찾는다.
 4. **미들웨어 적용**
    - Next.js: `middleware.ts`에 세션 검증 + 역할 확인.
    - NestJS: custom decorator + guard (`@Roles('admin')`).
@@ -47,13 +48,15 @@ code_refs:
 
 1. **인프라 준비**
    - `packages/session` 모듈 생성: Redis 커넥션, 세션 직렬화/역직렬화, 레이트리밋 util.
+   - `roles.ts` 경로 탐색 로직 보강: 루트/앱 어디에서 실행해도 `admin/config/roles.yaml`을 자동으로 로드하거나 `ROLE_CONFIG_PATH`로 강제 지정.
    - `pnpm install auth.js redis` (또는 upstash/redis SDK).
 2. **Auth.js 설정 (Next.js)**
    - `apps/web/src/app/api/auth/[...nextauth]/route.ts` 작성.
-   - 이메일 송신(개발: console, 운영: SMTP/Resend) 설정.
-   - 세션 객체에 역할 필드 포함.
+   - 이메일 송신: 개발 환경은 JSON transport, 실제 테스트/운영은 Resend SMTP(`AUTH_EMAIL_SERVER`, `AUTH_EMAIL_FROM`).
+   - 세션 객체에 역할 필드 포함, 로그인 시 Redis 세션과 JWT 양쪽에 역할 저장.
 3. **RBAC 미들웨어**
-   - Next.js 서버 컴포넌트 & 라우트: `withAuth` HOC, `useSessionRole` 훅.
+   - Next.js: `middleware.ts`에서 `/admin/**` 경로를 보호하고, 각 페이지는 `role` 쿼리 파라미터를 통해 필요한 권한을 명시(`/admin/wiki?role=editor`).
+   - 서버 컴포넌트/UI는 `useSession`/`useSessionRole`로 역할을 확인.
    - NestJS guard: `RolesGuard` + `@Roles()` decorator.
 4. **관리자 UI 반영**
    - 로그인 페이지/오류 처리.
@@ -69,6 +72,7 @@ code_refs:
 - [x] `apps/api/src/common/guards/roles.guard.ts`와 `roles.decorator.ts` 작성.
 - [x] 역할/권한 매핑을 위한 `admin/config/roles.yaml` 초안 작성.
 - [x] `admin/runbooks/auth.md` 작성하여 운영자 credential 발급/회수 절차 정리.
+- [x] `packages/session/src/roles.ts`에 `ROLE_CONFIG_PATH` 지원 및 상향식 경로 탐색 로직을 추가해 다중 워크스페이스 실행에도 대응.
 
 ### 인증 흐름 다이어그램
 

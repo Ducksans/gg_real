@@ -106,6 +106,7 @@ async function removeVerificationToken(token: string): Promise<void> {
 export function createRedisAdapter(): Adapter {
   const adapter: Adapter = {
     createUser: async (user) => {
+      console.info('[adapter] createUser', { email: user.email });
       const id = user.id ?? crypto.randomUUID();
       const record: AdapterUser = { ...user, id };
       await writeUser(record);
@@ -113,22 +114,26 @@ export function createRedisAdapter(): Adapter {
     },
 
     getUser: async (id) => {
+      console.info('[adapter] getUser', { id });
       return readUser(id);
     },
 
     getUserByEmail: async (email) => {
+      console.info('[adapter] getUserByEmail', { email });
       const userId = await (await client()).get(EMAIL_KEY(email));
       if (!userId) return null;
       return readUser(userId);
     },
 
     getUserByAccount: async ({ provider, providerAccountId }) => {
+      console.info('[adapter] getUserByAccount', { provider, providerAccountId });
       const userId = await (await client()).get(ACCOUNT_KEY(provider, providerAccountId));
       if (!userId) return null;
       return readUser(userId);
     },
 
     updateUser: async (user) => {
+      console.info('[adapter] updateUser', { id: user.id, email: user.email });
       if (!user.id) throw new Error('User id is required to update user');
       const existing = await readUser(user.id);
       if (!existing) throw new Error('User not found');
@@ -138,20 +143,31 @@ export function createRedisAdapter(): Adapter {
     },
 
     deleteUser: async (id) => {
+      console.info('[adapter] deleteUser', { id });
       const existing = await readUser(id);
       await removeUser(existing);
     },
 
     linkAccount: async (account) => {
+      console.info('[adapter] linkAccount', {
+        provider: account.provider,
+        providerAccountId: account.providerAccountId,
+        userId: account.userId,
+      });
       await writeAccount(account as AdapterAccount);
       return account as AdapterAccount;
     },
 
     unlinkAccount: async ({ provider, providerAccountId }) => {
+      console.info('[adapter] unlinkAccount', { provider, providerAccountId });
       await removeAccount(provider, providerAccountId);
     },
 
     createSession: async (session) => {
+      console.info('[adapter] createSession', {
+        sessionToken: session.sessionToken,
+        userId: session.userId,
+      });
       const record: AdapterSession = {
         ...session,
         sessionToken: session.sessionToken ?? crypto.randomUUID(),
@@ -162,6 +178,7 @@ export function createRedisAdapter(): Adapter {
     },
 
     getSessionAndUser: async (sessionToken) => {
+      console.info('[adapter] getSessionAndUser', { sessionToken });
       const session = await readSession(sessionToken);
       if (!session) return null;
       const user = await readUser(session.userId);
@@ -170,6 +187,10 @@ export function createRedisAdapter(): Adapter {
     },
 
     updateSession: async (session) => {
+      console.info('[adapter] updateSession', {
+        sessionToken: session.sessionToken,
+        userId: session.userId,
+      });
       const existing = await readSession(session.sessionToken);
       if (!existing) return null;
       const merged: AdapterSession = {
@@ -182,19 +203,27 @@ export function createRedisAdapter(): Adapter {
     },
 
     deleteSession: async (sessionToken) => {
+      console.info('[adapter] deleteSession', { sessionToken });
       await removeSession(sessionToken);
     },
 
     createVerificationToken: async (token) => {
+      console.info('[adapter] createVerificationToken', token);
       await writeVerificationToken(token);
       return token;
     },
 
     useVerificationToken: async ({ identifier, token }) => {
+      console.info('[adapter] useVerificationToken:start', { identifier, token });
       const stored = await readVerificationToken(token);
+      console.info('[adapter] useVerificationToken:stored', stored);
       if (!stored) return null;
       await removeVerificationToken(token);
       if (identifier && stored.identifier !== identifier) {
+        console.warn('[adapter] useVerificationToken:identifier-mismatch', {
+          identifier,
+          storedIdentifier: stored.identifier,
+        });
         return null;
       }
       return stored;
