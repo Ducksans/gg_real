@@ -3,7 +3,7 @@ file: admin/docs/ui-graph-redesign.md
 title: 그래프 뷰 리디자인 메모
 owner: duksan
 created: 2025-09-24 08:50 UTC / 2025-09-24 17:50 KST
-updated: 2025-09-25 12:42 UTC / 2025-09-25 21:42 KST
+updated: 2025-09-25 12:54 UTC / 2025-09-25 21:54 KST
 status: draft
 tags: [docs, ui, graph]
 schemaVersion: 1
@@ -44,12 +44,12 @@ code_refs:
 
 ### 작업 분해
 
-- [ ] `GraphLayoutShell` 초안 작성 (`apps/web/src/components/graph/LayoutShell.tsx` 예정).
-- [ ] `GraphToolbar`에 전체 화면 토글 + 단축키 헬퍼(`useKeyboardShortcut`) 추가.
-- [ ] `GraphDetailsPanel`을 탭 컴포넌트로 구현하고, 노드 상세/범례/엣지/도움말 탭 분리.
-- [ ] `GraphFullScreenProvider`로 `DependencyGraph`와 레이아웃 간 상태 공유.
-- [ ] React Flow `Controls` 커스터마이징 → 확대/축소/리셋 버튼 툴바로 이동.
-- [ ] 반응형 대응: `lg` 이상은 패널 고정, 그 이하에서는 drawer 토글 버튼 제공.
+- [x] `GraphLayoutShell` 초안 작성 (`apps/web/src/components/graph/DependencyGraph.tsx` 내 레이아웃 리팩터링으로 대체).
+- [x] `GraphToolbar`에 전체 화면 토글 + 단축키 헬퍼(`F`, `Shift+F`, `R`) 추가.
+- [x] `GraphDetailsPanel`을 탭 컴포넌트로 구현하고, 노드 상세/범례/엣지/도움말 탭 분리.
+- [x] `GraphFullScreenProvider`로 `DependencyGraph`와 레이아웃 간 상태 공유. (브라우저 `fullscreenchange` 이벤트를 활용한 내장 상태로 대체)
+- [x] React Flow `Controls` 커스터마이징 → 확대/축소/리셋 버튼을 툴바로 이동하고 기본 Controls 제거.
+- [x] 반응형 대응: `lg` 이상은 패널 고정, 이하에서는 패널 토글 버튼을 제공해 drawer처럼 동작.
 
 ## 인터랙션 시나리오
 
@@ -67,7 +67,7 @@ code_refs:
 - [x] Figma 와이어프레임 링크 추가.
 - [x] Excalidraw 와이어프레임 링크 추가.
 - [ ] 패널 가시성 상태를 URL 파라미터나 localStorage로 동기화 여부 결정.
-- [ ] 단축키(`f`, `?`, `esc`) 문서화 및 툴팁 처리.
+- [x] 단축키(`F`, `Shift+F`, `R`) 문서화 및 툴바/하단 바에 안내 문구 추가.
 - [ ] 모바일/태블릿 레이아웃 mock 작성.
 - [ ] `GraphLegendAccordion` API 스펙 정의.
 - [ ] React Flow `fitViewOptions` 및 `onMoveEnd`를 사용한 상태 동기화 전략 문서화.
