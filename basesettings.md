@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-25 12:37 UTC / 2025-09-25 21:37 KST
+updated: 2025-09-25 12:42 UTC / 2025-09-25 21:42 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -143,7 +143,7 @@ code_refs:
 
 - 목표: 1920×1080 기준 전체 화면을 활용한 그래프 뷰와 보조 패널(범례/노드 상세) 통합 UI를 제공한다.
 - 주요 작업
-  - 레이아웃 와이어프레임 작성 후 `apps/web/src/components/graph` 리팩토링: 그래프/패널 영역 비율, 전체 화면 토글, 패널 접기 기능.
+  - 레이아웃 와이어프레임 작성 후 `apps/web/src/components/graph` 리팩토링: 그래프/패널 영역 비율, 전체 화면 토글, 패널 접기 기능. (2025-09-25 Figma 보드 갱신 — 상단 툴바 재배치/탭 아이콘 추가 반영)
   - 범례·엣지 설명을 탭/아코디언으로 재구성하고 반응형 대응.
   - 그래프 내 검색/줌 컨트롤 UX 개선(키보드 단축키 문서화 포함).
 - 참고 문서: `admin/docs/ui-graph-redesign.md`

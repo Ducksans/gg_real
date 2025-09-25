@@ -3,7 +3,7 @@ file: admin/design/README.md
 title: 디자인 산출물 모음
 owner: duksan
 created: 2025-09-25 01:50 UTC / 2025-09-25 10:50 KST
-updated: 2025-09-25 04:04 UTC / 2025-09-25 13:04 KST
+updated: 2025-09-25 12:42 UTC / 2025-09-25 21:42 KST
 status: draft
 tags: [design, ui, auth]
 schemaVersion: 1
@@ -13,7 +13,9 @@ code_refs: ['admin/docs/auth-rbac.md', 'admin/docs/ui-graph-redesign.md']
 
 ## Figma
 
-- 인증/그래프 통합 보드: https://www.figma.com/design/LEVwW25Z2pNWLacMF3s1iG/gg-real?node-id=0-1&t=ci1hFjAuFeiqHsXr-1
+- 인증/그래프 통합 보드: https://www.figma.com/design/LEVwW25Z2pNWLacMF3s1iG/gg-real?node-id=0-1&t=nI0jKjQLRdWr4aDA-1
+  - 2025-09-25 12:30 UTC / 2025-09-25 21:30 KST 업데이트: 그래프 전체화면 토글 위치, Fit View/Reset 버튼 정렬, 우측 패널 탭 아이콘 정비.
+  - 인증 카드에 토글 가능한 상태 배지와 오류 메시지 레이어 추가.
 
 ## Excalidraw
 
