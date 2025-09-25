@@ -35,7 +35,8 @@
 }
 
 /* Dark mode via .dark class */
-:root.dark, .dark :root {
+:root.dark,
+.dark :root {
   --background: #0b1220;
   --foreground: #e5e7eb;
   --card: #0f172a;
@@ -45,11 +46,21 @@
   --border: #334155;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
+}
+
+#__next {
+  min-height: 100%;
 }
 
 .markdown-body {
