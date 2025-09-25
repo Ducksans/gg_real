@@ -8,6 +8,7 @@
  */
 
 import { Controller, Get, Query } from '@nestjs/common';
+import { Roles } from '../common/guards/roles.decorator.js';
 import type {
   DocumentListResponse,
   DocumentSearchResponse,
@@ -15,6 +16,7 @@ import type {
 } from '@gg-real/documents';
 import { DocumentsService } from './documents.service.js';
 
+@Roles('viewer')
 @Controller('documents')
 export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}

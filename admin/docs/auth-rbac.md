@@ -3,12 +3,22 @@ file: admin/docs/auth-rbac.md
 title: 인증 및 RBAC 설계 초안
 owner: duksan
 created: 2025-09-24 08:36 UTC / 2025-09-24 17:36 KST
-updated: 2025-09-25 04:04 UTC / 2025-09-25 13:04 KST
+updated: 2025-09-25 08:29 UTC / 2025-09-25 17:29 KST
 status: draft
 tags: [docs, auth, security, rbac]
 schemaVersion: 1
 description: Auth.js 기반 인증과 Redis 세션, 역할 기반 접근 제어(RBAC) 설계 초안
-code_refs: ['basesettings.md']
+code_refs:
+  [
+    'basesettings.md',
+    'apps/web/src/lib/auth.ts',
+    'apps/web/src/lib/redis-adapter.ts',
+    'apps/web/src/middleware.ts',
+    'apps/api/src/common/guards/roles.decorator.ts',
+    'apps/api/src/common/guards/roles.guard.ts',
+    'packages/session/src/session.ts',
+    'packages/session/src/roles.ts',
+  ]
 ---
 
 ## 목표
@@ -53,12 +63,12 @@ code_refs: ['basesettings.md']
 
 ### 세부 작업 체크리스트
 
-- [ ] `packages/session`에 Redis 연결 및 `getSession`, `setSession`, `clearSession` 함수 작성.
-- [ ] `apps/web/src/app/api/auth/[...nextauth]/route.ts` 생성 및 이메일 Magic Link provider 설정.
-- [ ] `apps/web/src/middleware.ts`에서 보호된 경로(`/admin/**`)에 세션 검사 추가.
-- [ ] `apps/api/src/common/guards/roles.guard.ts`와 `roles.decorator.ts` 작성.
-- [ ] 역할/권한 매핑을 위한 `admin/config/roles.yaml` 초안 작성.
-- [ ] `admin/runbooks/auth.md` 작성하여 운영자 credential 발급/회수 절차 정리.
+- [x] `packages/session`에 Redis 연결 및 `getSession`, `setSession`, `clearSession` 함수 작성.
+- [x] `apps/web/src/app/api/auth/[...nextauth]/route.ts` 생성 및 이메일 Magic Link provider 설정.
+- [x] `apps/web/src/middleware.ts`에서 보호된 경로(`/admin/**`)에 세션 검사 추가.
+- [x] `apps/api/src/common/guards/roles.guard.ts`와 `roles.decorator.ts` 작성.
+- [x] 역할/권한 매핑을 위한 `admin/config/roles.yaml` 초안 작성.
+- [x] `admin/runbooks/auth.md` 작성하여 운영자 credential 발급/회수 절차 정리.
 
 ### 인증 흐름 다이어그램
 

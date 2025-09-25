@@ -1,0 +1,28 @@
+# file: admin/config/roles.yaml
+# owner: duksan
+# created: 2025-09-25 05:40 UTC / 2025-09-25 14:40 KST
+# status: draft
+# description: 관리자 역할 정의 및 기본 할당표
+# doc_refs: ['admin/docs/auth-rbac.md', 'basesettings.md']
+
+hierarchy:
+  - viewer
+  - editor
+  - admin
+
+roles:
+  viewer:
+    description: 읽기 전용으로 관리자 대시보드와 문서를 열람할 수 있습니다.
+  editor:
+    description: 문서와 그래프 데이터를 수정할 수 있으나 시스템 설정은 변경할 수 없습니다.
+  admin:
+    description: 시스템 전반(역할 부여, 설정 변경)에 대한 모든 권한을 가집니다.
+
+assignments:
+  - email: admin@example.com
+    role: admin
+  - email: editor@example.com
+    role: editor
+
+defaults:
+  role: viewer

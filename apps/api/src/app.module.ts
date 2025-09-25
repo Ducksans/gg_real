@@ -8,15 +8,24 @@
  */
 
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { TerminusModule } from '@nestjs/terminus';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MetricsService } from './metrics.service';
 import { DocumentsModule } from './documents/documents.module';
+import { RolesGuard } from './common/guards/roles.guard.js';
 
 @Module({
   imports: [TerminusModule, DocumentsModule],
   controllers: [AppController],
-  providers: [AppService, MetricsService],
+  providers: [
+    AppService,
+    MetricsService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}
