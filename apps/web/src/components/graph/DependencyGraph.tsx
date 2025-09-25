@@ -192,35 +192,60 @@ function DependencyGraphInner({ dataset }: DependencyGraphProps) {
     };
   }, [handleFitView, handleReset, toggleFullscreen]);
 
+  interface ToolbarAction {
+    id: string;
+    label: string;
+    onClick: () => void;
+    accelerator?: string;
+    variant?: ToolbarButtonProps['variant'];
+  }
+
+  const toolbarItems: ToolbarAction[] = [
+    {
+      id: 'fullscreen',
+      label: isFullscreen ? '전체 화면 종료' : '전체 화면',
+      onClick: toggleFullscreen,
+      accelerator: 'Shift+F',
+    },
+    { id: 'fit', label: 'Fit View', onClick: handleFitView, accelerator: 'F' },
+    { id: 'reset', label: 'Reset', onClick: handleReset, accelerator: 'R' },
+    { id: 'export', label: 'PNG 내보내기', onClick: handleExportPng },
+    {
+      id: 'panel',
+      label: isPanelOpen ? '패널 숨기기' : '패널 표시',
+      onClick: handleTogglePanel,
+      variant: 'ghost',
+    },
+  ];
+
   return (
     <div
       ref={containerRef}
       className={`relative flex flex-col gap-4 ${
-        isFullscreen ? 'fixed inset-0 z-50 bg-slate-950/80 p-6 backdrop-blur-sm' : ''
+        isFullscreen ? 'fixed inset-0 z-50 bg-slate-950/85 p-5 backdrop-blur-sm' : ''
       }`}
     >
-      <div
-        className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card px-4 py-2 text-xs text-muted-foreground"
+      <header
+        className="flex flex-wrap items-start justify-between gap-3 rounded-lg border border-border bg-card px-4 py-3"
         data-exclude-from-export="true"
       >
-        <div className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          <span className="rounded-full border border-border px-3 py-1">의존 그래프</span>
-          <span className="hidden text-xs font-normal text-muted-foreground sm:inline">
-            {dataset.description}
-          </span>
+        <div className="flex flex-col gap-1 text-muted-foreground">
+          <div className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide">
+            <span className="rounded-full border border-border px-3 py-1 text-foreground">
+              의존 그래프
+            </span>
+            <span className="hidden text-xs font-normal sm:inline">샘플 의존 흐름</span>
+          </div>
+          <span className="text-xs">{dataset.description}</span>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <ToolbarButton onClick={handleExportPng}>PNG 내보내기</ToolbarButton>
-          <ToolbarButton onClick={handleFitView}>Fit View</ToolbarButton>
-          <ToolbarButton onClick={handleReset}>Reset</ToolbarButton>
-          <ToolbarButton onClick={toggleFullscreen}>
-            {isFullscreen ? '전체 화면 종료' : '전체 화면'}
-          </ToolbarButton>
-          <ToolbarButton onClick={handleTogglePanel} variant="ghost">
-            {isPanelOpen ? '패널 숨기기' : '패널 표시'}
-          </ToolbarButton>
+          {toolbarItems.map((item) => (
+            <ToolbarButton key={item.id} variant={item.variant} onClick={item.onClick}>
+              {item.label}
+            </ToolbarButton>
+          ))}
         </div>
-      </div>
+      </header>
 
       <div
         className={`flex w-full flex-1 flex-col gap-4 lg:flex-row ${isFullscreen ? 'lg:gap-6' : ''}`}

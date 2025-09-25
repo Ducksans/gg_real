@@ -3,7 +3,7 @@ file: admin/docs/ui-graph-redesign.md
 title: 그래프 뷰 리디자인 메모
 owner: duksan
 created: 2025-09-24 08:50 UTC / 2025-09-24 17:50 KST
-updated: 2025-09-25 12:59 UTC / 2025-09-25 21:59 KST
+updated: 2025-09-25 13:09 UTC / 2025-09-25 22:09 KST
 status: draft
 tags: [docs, ui, graph]
 schemaVersion: 1
@@ -26,7 +26,9 @@ code_refs:
 
 1. **상단 툴바**
    - 왼쪽: 제목/설명, `그래프`, `PNG 내보내기` 버튼.
-   - 오른쪽: `전체 화면`, `Fit View`, `Reset` 버튼.
+
+- 오른쪽: `전체 화면`, `Fit View`, `Reset`, `PNG 내보내기`, `패널 표시/숨김` 순서의 버튼 그룹.
+
 2. **콘텐츠 영역**
    - 좌측(그래프 캔버스): React Flow 캔버스, 최소 높이 620px.
    - 우측(보조 패널): 탭 구성 → `세부 정보`, `상태 범례`, `엣지 타입`, `도움말`. 각 탭 헤더에 아이콘을 부여해 가독성을 높인다.
