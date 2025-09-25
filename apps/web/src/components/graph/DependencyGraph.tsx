@@ -12,7 +12,6 @@
 import { type CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, {
   Background,
-  Controls,
   MiniMap,
   ReactFlowProvider,
   type ReactFlowInstance,
@@ -149,6 +148,50 @@ function DependencyGraphInner({ dataset }: DependencyGraphProps) {
 
   const canvasHeight = isFullscreen ? 'calc(100vh - 12rem)' : '620px';
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const activeElement = document.activeElement as HTMLElement | null;
+      if (activeElement) {
+        const tagName = activeElement.tagName;
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(tagName)) {
+          return;
+        }
+        if (activeElement.isContentEditable) {
+          return;
+        }
+      }
+
+      const key = event.key.toLowerCase();
+      if (event.shiftKey && key === 'f') {
+        event.preventDefault();
+        toggleFullscreen();
+        return;
+      }
+
+      if (event.metaKey || event.ctrlKey || event.altKey) {
+        return;
+      }
+
+      switch (key) {
+        case 'f':
+          event.preventDefault();
+          handleFitView();
+          break;
+        case 'r':
+          event.preventDefault();
+          handleReset();
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleFitView, handleReset, toggleFullscreen]);
+
   return (
     <div
       ref={containerRef}
@@ -217,7 +260,6 @@ function DependencyGraphInner({ dataset }: DependencyGraphProps) {
           >
             <Background color="#e2e8f0" gap={24} />
             <MiniMap pannable zoomable style={{ backgroundColor: '#f1f5f9' }} />
-            <Controls showInteractive={false} />
           </ReactFlow>
         </div>
 

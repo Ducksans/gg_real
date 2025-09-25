@@ -3,7 +3,7 @@ file: admin/docs/ui-graph-redesign.md
 title: 그래프 뷰 리디자인 메모
 owner: duksan
 created: 2025-09-24 08:50 UTC / 2025-09-24 17:50 KST
-updated: 2025-09-25 12:54 UTC / 2025-09-25 21:54 KST
+updated: 2025-09-25 12:59 UTC / 2025-09-25 21:59 KST
 status: draft
 tags: [docs, ui, graph]
 schemaVersion: 1
@@ -67,7 +67,7 @@ code_refs:
 - [x] Figma 와이어프레임 링크 추가.
 - [x] Excalidraw 와이어프레임 링크 추가.
 - [ ] 패널 가시성 상태를 URL 파라미터나 localStorage로 동기화 여부 결정.
-- [x] 단축키(`F`, `Shift+F`, `R`) 문서화 및 툴바/하단 바에 안내 문구 추가.
+- [x] 단축키(`F`, `Shift+F`, `R`) 문서화 및 툴바/하단 바에 안내 문구 추가. 키보드 이벤트를 감지하여 툴바와 동일한 액션과 연동.
 - [ ] 모바일/태블릿 레이아웃 mock 작성.
 - [ ] `GraphLegendAccordion` API 스펙 정의.
 - [ ] React Flow `fitViewOptions` 및 `onMoveEnd`를 사용한 상태 동기화 전략 문서화.
