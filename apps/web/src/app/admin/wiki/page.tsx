@@ -17,12 +17,13 @@ import { GlossaryTab } from './glossary-tab';
 import { LearningTab } from './learning-tab';
 
 type WikiPageProps = {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<Record<string, string | string[]>>;
 };
 
 export default async function WikiPage({ searchParams }: WikiPageProps) {
-  const tabParam = searchParams?.tab;
-  const activeTabParam = Array.isArray(tabParam) ? tabParam[0] : tabParam;
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const tabParamRaw = resolvedSearchParams?.tab;
+  const activeTabParam = Array.isArray(tabParamRaw) ? tabParamRaw[0] : tabParamRaw;
   const activeTab =
     activeTabParam === 'glossary' || activeTabParam === 'learning' ? activeTabParam : 'documents';
 
