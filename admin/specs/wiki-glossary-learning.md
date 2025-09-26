@@ -3,7 +3,7 @@ file: admin/specs/wiki-glossary-learning.md
 title: 관리자 위키 Glossary 학습 UX 확장 계획
 owner: duksan
 created: 2025-09-26 05:35 UTC / 2025-09-26 23:35 KST
-updated: 2025-09-26 07:27 UTC / 2025-09-26 16:27 KST
+updated: 2025-09-26 08:10 UTC / 2025-09-26 17:10 KST
 status: draft
 tags: [wiki, glossary, learning, ux]
 schemaVersion: 1
@@ -87,6 +87,40 @@ flowchart TD
      - 외부 사용자 플랜(구독/광고 제어), 결제 연동, 서비스 지표 설계.
    - 산출물: 추천/그래프 모듈, 개인 학습장 기능, 비즈니스 플랜 초안.
 
+## M1 UI/UX 세부
+
+### 1) 분할 보기(Split View)
+
+- 상단 토글 버튼 또는 단축키 `S`로 좌/우 분할. 좌측은 본문, 우측은 보조 패널(용어/미리보기/관련 문서/파일 트리).
+- URL 쿼리 `?split=1`로 상태 유지, 리사이저로 너비 조절(react-resizable 등).
+
+### 2) Hover 미리보기
+
+- 본문 링크(`[[용어]]`, 문서 링크, 파일 링크)에 150ms hover → 카드: `제목 · 요약 · 업데이트 · 빠른 액션(보조 패널로 열기 / 백링크 추가)`.
+- ESC 닫힘, Tab/Shift+Tab으로 포커스 가능(접근성 준수).
+
+### 3) 책갈피 & 읽던 위치 자동 복원
+
+- 우측 레일 “여기까지 읽음” 버튼 + IntersectionObserver로 마지막 통과 헤딩 id 자동 저장.
+- 재방문 시 해당 헤딩으로 스크롤, TOC에 읽음 점 표시.
+
+### 4) 형광펜 하이라이트 + 여백 메모
+
+- 드래그 → 퀵메뉴: `[하이라이트(노랑/연두/하늘)] [메모] [백링크 추가] [보조 패널로]`.
+- 하이라이트는 `<mark data-ann-id>`로 주입, 메모는 사이드 패널에 타임스탬프와 함께 Append.
+- 저장: M1은 localStorage + `admin/state/learning-log.json`에 읽기 전용 반영, M2에서 PR 승격.
+
+### 5) 드래그 퀵메뉴(지식 성장)
+
+- **백링크 추가**: 현재 문서 frontmatter의 `glossary_refs`/`doc_refs` 후보에 추가(초기엔 개인 저장).
+- **용어 생성**: 키 자동 제안(영문-snake), 카테고리/난이도 선택 → draft 생성.
+- **내용 보강 요청**: 선택 텍스트·문맥·관련 코드 경로를 프롬프트로 구성 → 정의/비유/예시 초안(draft 저장).
+
+### 6) 프로젝트 파일 트리 & Mermaid 렌더링
+
+- 좌측 카테고리 트리 옆에 실제 프로젝트 파일 트리(읽기 전용) 추가, 클릭 시 보조 패널에서 미리보기/검색 가능.
+- 본문에 포함된 Mermaid 코드 블록은 바로 SVG로 렌더링(보안 설정 `mermaidAPI.initialize({ securityLevel: 'strict' })`).
+
 ## 단계별 구현 로드맵(의존성 시각화)
 
 ```mermaid
@@ -103,9 +137,11 @@ flowchart TD
         direction TB
         m1a["Figma 레이아웃 동기화"]
         m1b["하이라이트 · 팝오버 UX"]
-        m1c["Draft 저장소 · 학습 로그"]
-        m1d["체크포인트 점검"]
-        m1a --> m1b --> m1c --> m1d
+        m1c["Split/Preview/Bookmark/Annotations"]
+        m1d["파일 트리 · Mermaid 렌더"]
+        m1e["Draft 저장소 · 학습 로그 연동"]
+        m1f["체크포인트 점검"]
+        m1a --> m1b --> m1c --> m1d --> m1e --> m1f
     end
 
     subgraph M2["M2 · 쓰기/PR 연동"]
@@ -127,7 +163,7 @@ flowchart TD
     end
 
     p3 --> m1a
-    m1d --> m2a
+    m1f --> m2a
     m2d --> m3a
 ```
 
@@ -160,6 +196,8 @@ flowchart TD
   - Glossary: `aliases`, `difficulty`, `status`, `requires[]`, `see_also[]`, `suggested_paths[]`.
   - Learning log: `masteryLevel`(attempted/familiar/proficient/mastered), `lastQuizScore`, `notes[]`(태그 필수).
   - Draft/Queue: `admin/drafts/glossary/<term>.json`, `admin/state/augment-queue.json`(term, promptContext, status).
+  - Annotation: `doc`, `id`, `color`, `quote`, `prefix`, `suffix`, `position`, `note`, `tags`, `createdAt`.
+  - Reading Progress: `doc`, `lastHeadingId`, `updatedAt`.
 - **거버넌스/품질**
   - 체크포인트 템플릿에 "Glossary 학습 UX" 섹션 추가.
   - QA: M1(UX 캡처) → M2(서버 액션/LLM 응답 로그) → M3(추천 정확도, 그래프 성능) 체크리스트 마련.
@@ -185,4 +223,22 @@ flowchart TD
 
 # code_refs
 
-- code_refs: ["apps/web/src/app/admin/wiki/glossary-tab.tsx", "admin/data/wiki-glossary.json", "admin/state/learning-log.json", "apps/web/src/lib/glossary.server.ts", "apps/web/src/lib/learning-log.server.ts"]
+- code_refs: [
+  "apps/web/src/app/admin/wiki/glossary-tab.tsx",
+  "admin/data/wiki-glossary.json",
+  "admin/state/learning-log.json",
+  "apps/web/src/lib/glossary.server.ts",
+  "apps/web/src/lib/learning-log.server.ts",
+  "apps/web/src/components/wiki/SplitLayout.tsx",
+  "apps/web/src/components/wiki/SidePane.tsx",
+  "apps/web/src/components/wiki/HoverPreview.tsx",
+  "apps/web/src/components/wiki/BookmarkButton.tsx",
+  "apps/web/src/components/wiki/AnnotationLayer.tsx",
+  "apps/web/src/components/wiki/SelectionQuickMenu.tsx",
+  "apps/web/src/components/wiki/FileTreePanel.tsx",
+  "apps/web/src/components/wiki/MermaidRenderer.tsx",
+  "apps/web/src/hooks/useReadingProgress.ts",
+  "apps/web/src/hooks/useHoverPreview.ts",
+  "apps/web/src/hooks/useAnnotations.ts",
+  "apps/web/src/hooks/useSelectionQuickMenu.ts"
+  ]
