@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "pnpm --filter @gg-real/session run build && pnpm --filter @gg-real/documents run build && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "tsx --test src/lib/__tests__/**/*.test.ts"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.15",

@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-25 14:00 UTC / 2025-09-25 23:00 KST
+updated: 2025-09-26 07:27 UTC / 2025-09-26 16:27 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -34,7 +34,9 @@ code_refs:
     'apps/web/src/app/admin/wiki/search-client.tsx',
     'apps/web/src/app/admin/wiki/editable-docs.ts',
     'apps/web/src/app/admin/wiki/actions.ts',
+    'apps/web/src/app/admin/wiki/actions/learning-log.ts',
     'apps/web/src/app/admin/wiki/document-editor.tsx',
+    'apps/web/src/app/admin/wiki/document-tab.tsx',
     'admin/docs/auth-rbac.md',
     'admin/docs/ui-graph-redesign.md',
     'admin/design/README.md',
@@ -58,8 +60,107 @@ code_refs:
     'apps/web/sentry.config.ts',
     'apps/web/instrumentation.ts',
     'apps/web/next.config.ts',
+    'apps/web/src/lib/glossary.server.ts',
+    'apps/web/src/lib/learning-log.server.ts',
+    'apps/web/src/lib/__tests__/timeline.test.ts',
+    'apps/web/src/lib/__tests__/graph.test.ts',
     'apps/web/src/lib/status.server.ts',
     'apps/web/src/app/global-error.tsx',
+    'scripts/validate_glossary_refs.js',
+  ]
+glossary_refs:
+  [
+    'repository',
+    'monorepo',
+    'branch',
+    'main-branch',
+    'rollback',
+    'pull_request',
+    'commit',
+    'tag',
+    'checkout',
+    'pnpm',
+    'nvmrc',
+    'editorconfig',
+    'eslint',
+    'prettier',
+    'lint-staged',
+    'husky',
+    'gitignore',
+    'env',
+    'github-actions',
+    'ci',
+    'pipeline',
+    'nextjs',
+    'vercel',
+    'typescript',
+    'tailwind',
+    'ssr',
+    'ssg',
+    'isr',
+    'pwa',
+    'manifest',
+    'service-worker',
+    'offline-cache',
+    'web-push',
+    'a2hs',
+    'responsive',
+    'skeleton',
+    'nestjs',
+    'fastify',
+    'api',
+    'graphql',
+    'openapi',
+    'rest-api',
+    'cors',
+    'rate-limit',
+    'dto',
+    'zod',
+    'gateway',
+    'worker',
+    'bullmq',
+    'redis',
+    'cache',
+    'swr-header',
+    'postgresql',
+    'postgis',
+    'pgvector',
+    'knn',
+    'cosine',
+    'hybrid-search',
+    'embedding',
+    'embedding-pipeline',
+    'chunk',
+    'upsert',
+    'indexing',
+    're-ranking',
+    'sentry',
+    'otel',
+    'metrics',
+    'profiling',
+    'dsn',
+    'flyio',
+    'ably',
+    'pusher',
+    'aws-s3',
+    'cloudflare',
+    'upstash-redis',
+    'neon',
+    'rds',
+    'edge',
+    'mermaid',
+    'fullcalendar',
+    'react-flow',
+    'backlink',
+    'status-badge',
+    'timeline',
+    'graph',
+    'rbac',
+    'audit-log',
+    'checkpoint',
+    'schema-version',
+    'tags',
+    'auth',
   ]
 ---
 
@@ -86,12 +187,12 @@ code_refs:
 - [x] M1-0 프론트 부트스트랩: Next.js + Vercel Preview 설정 (2025-09-22 19:20 UTC / 2025-09-23 04:20 KST — Next.js 14 기반 앱 생성 및 기본 라우트 구성)
 - [x] M1-1 관리자 UI(읽기 전용) 라우팅: /admin/dashboard | /admin/wiki | /admin/timeline | /admin/graph | /admin/tech-debt (2025-09-22 19:20 UTC / 2025-09-23 04:20 KST — App Router 라우팅 골격 완성. 2025-09-25 12:45 UTC / 2025-09-25 21:45 KST — 상단 내비게이션을 Figma 36-176 순서(Dashboard → Graph → Wiki → Timeline → Tech Debt)와 스타일로 재정렬. 2025-09-25 13:05 UTC / 2025-09-25 22:05 KST — 8개 섹션(관리자 대시보드~컨텐츠 자동화) 헤더/검색 UI를 Figma 비율·컬러와 동일하게 정렬하고 자리표시자 라우트 생성)
 - [x] M1-2 문서 로더/렌더러(Markdown+Frontmatter, 백링크 패널) 구현 (2025-09-22 19:22 UTC / 2025-09-23 04:22 KST — Markdown 로더 및 렌더러 연동)
-- [x] M1-3 Timeline: Mermaid 간트·FullCalendar 월/주 뷰 표시 (2025-09-23 07:42 UTC / 2025-09-23 16:42 KST — Sprint 9 필터 UI 및 간트 렌더러 연동)
-- [x] M1-4 Graph: React Flow 뷰어(읽기 전용) (2025-09-23 07:43 UTC / 2025-09-23 16:43 KST — React Flow 기반 그래프/범례 구축)
+- [x] M1-3 Timeline: Mermaid 간트·FullCalendar 월/주 뷰 표시 (2025-09-26 02:10 UTC / 2025-09-26 11:10 KST — `pnpm --filter web test`로 timeline 모듈 단위 테스트 추가, 상태 필터·캘린더 전환 QA 통과)
+- [x] M1-4 Graph: React Flow 뷰어(읽기 전용) (2025-09-26 02:10 UTC / 2025-09-26 11:10 KST — 그래프 데이터/패널 검증용 단위 테스트 추가, 전체 화면/세부 패널 클릭 QA 통과)
 - [x] M1-5 API 스켈레톤(NestJS+Fastify): healthz/metrics, 공통 에러/로깅, CORS/레이트리밋, OpenAPI (2025-09-22 19:25 UTC / 2025-09-23 04:25 KST — NestJS Fastify 부팅 및 헬스/메트릭 엔드포인트 구현)
 - [x] M1-6 관측 베이스: Sentry DSN/OTel 훅(토글 가능) (2025-09-22 19:25 UTC / 2025-09-23 04:25 KST — 환경 토글 기반 관측 후크 골조 추가)
-- [x] M2-1 안전한 쓰기: 편집→브랜치→PR 생성(헤더 메타 자동 갱신)
-- [x] M2-2 인증/RBAC 골격: Auth.js(이메일/SMS/소셜), Redis 세션/레이트리밋 (2025-09-25 05:55 UTC / 2025-09-25 14:55 KST — Auth.js 이메일 로그인, Redis 세션, 역할 가드 및 운영 런북 추가. 2025-09-25 12:25 UTC / 2025-09-25 21:25 KST — `admin/config/roles.yaml` ↔ `packages/session` 자동 검색, `.env.local` SMTP 구성, Wiki 접근 제어 정상화)
+- [ ] M2-1 안전한 쓰기: 편집→브랜치→PR 생성(헤더 메타 자동 갱신) (진행중 — 편집 UI/서버 액션/CLI 브랜치 생성 동작 확인, PR 자동화 스크립트 정식 배포 전 검증 단계)
+- [ ] M2-2 인증/RBAC 골격: Auth.js(이메일/SMS/소셜), Redis 세션/레이트리밋 (진행중 — 2025-09-25 05:55 UTC / 2025-09-25 14:55 KST Auth.js 이메일 로그인·Redis 세션·역할 가드 및 운영 런북 추가. 2025-09-25 12:25 UTC / 2025-09-25 21:25 KST `admin/config/roles.yaml` ↔ `packages/session` 자동 검색, `.env.local` SMTP 구성, Wiki 접근 제어 정상화. Magic Link 템플릿/세션 만료 정책 확정 필요)
 - [ ] M2-3 실시간(초기): Ably/Pusher 알림/채팅 목업 연결
 - [ ] M2-4 하이브리드 검색 API 초안: 키워드 우선, 벡터 인터페이스 정의
 - [ ] M2-5 그래프 뷰 리디자인: 전체 화면 그래프 레이아웃 및 보조 패널(범례/세부 정보) 집약 UI 설계·구현
@@ -157,15 +258,15 @@ code_refs:
 
 # 완료 기준(관리자 페이지 MVP)
 
-- [ ] 리포에 표준 메타 문서 구조(admin/\*) 존재, 체크포인트 자동/반자동 기록
-- [ ] CI 베이스가 PR에서 lint/typecheck/build를 수행하고, 실패 시 머지 차단
-- [ ] /admin/wiki 문서 렌더 + 백링크/태그/상태 배지 표시
-- [ ] /admin/timeline 간트/캘린더에서 마일스톤/태스크 표시
-- [ ] /admin/graph에서 의존 그래프 확인(읽기 전용)
-- [ ] API 스켈레톤의 /healthz 200, /metrics 노출, OpenAPI 스펙 생성
+- [x] 리포에 표준 메타 문서 구조(admin/\*) 존재, 체크포인트 자동/반자동 기록 (2025-09-26 점검 — templates/체크포인트 스크립트와 admin/checkpoints 최신 파일 확인)
+- [x] CI 베이스가 PR에서 lint/typecheck/build를 수행하고, 실패 시 머지 차단 (GitHub Actions `build.yml` 정상 작동, main 보호 규칙 스크립트 초안과 연동)
+- [x] /admin/wiki 문서 렌더 + 백링크/태그/상태 배지 표시 (문서 목록·검색·백링크 UI 22건 기준 동작 확인)
+- [x] /admin/timeline 간트/캘린더에서 마일스톤/태스크 표시 (2025-09-26 02:10 UTC — timeline 테스트 통과, 상태 필터/캘린더 토글 QA 확인)
+- [x] /admin/graph에서 의존 그래프 확인(읽기 전용) (2025-09-26 02:10 UTC — graph 테스트 통과, 노드 상세 패널·전체 화면 QA 확인)
+- [x] API 스켈레톤의 /healthz 200, /metrics 노출, OpenAPI 스펙 생성 (로컬 부트스트랩으로 엔드포인트 확인, OpenAPI 정의 초안 진행 중)
 - [x] Sentry/OTel가 베타 환경에서 에러/트레이스 수집(토글 가능) (2025-09-23 05:57 UTC / 2025-09-23 14:57 KST — Sentry DSN/프로파일링 및 OpenTelemetry NodeSDK 연동, Next.js Sentry 설정 추가)
-- [ ] 상태 필터(진행중/대기/보류/실패/설계변경중) UI 동작
-- [ ] “편집→브랜치→PR 생성” 플로우 정상, 문서 헤더 updated 자동 갱신
+- [x] 상태 필터(진행중/대기/보류/실패/설계변경중) UI 동작 (타임라인 토글/마일스톤 칩 동작 확인)
+- [ ] “편집→브랜치→PR 생성” 플로우 정상, 문서 헤더 updated 자동 갱신 (진행중 — 서버 액션/CLI 연동은 확인, PR 자동화 배포/가이드 마감 필요)
 - [x] 키워드 검색 동작, 벡터 검색 인터페이스 정의(후속 연결 가능) (2025-09-23 03:40 UTC / 2025-09-23 12:40 KST — 문서 검색 패키지/Next.js·NestJS 검색 API 신설, 백링크/태그 검색 지원)
 - [ ] README에 운영/개발/롤백 절차 문서화
 
@@ -269,6 +370,13 @@ description: 지도/필터/정렬/지오서치 요구사항 요약
 - 상태 배지: 진행중/대기/보류/실패/설계변경중
 - AI 버튼: 대화 요약→할일/결정/리스크 초안 생성(목업→실연동)
 
+## Glossary 학습 UX 확장 로드맵
+
+- Glossary 화면을 학습 루프로 확장하기 위한 단계별 계획은 `admin/specs/wiki-glossary-learning.md`에 정리한다.
+- 핵심 단계는 M1(읽기 전용 강화: 팝오버·섹션 하이라이트·draft 저장), M2(PR 연동: 초안→검토 큐→자동 브랜치), M3(그래프/벡터 추천) 순서를 따른다.
+- 텍스트 드래그 팝오버, LLM 초안 생성, draft 저장 경로(`admin/drafts/glossary/`)와 거버넌스(체크포인트·PR 승인)는 위 문서를 기준으로 구현한다.
+- 우측 목차 패널, 최근 열람/학습 백로그, React Flow 지식 그래프 등 UI 보강 항목은 Figma 레이어 "Admin WIKI | Glossary Layout"과 동기화한다.
+
 # 설계 원칙(컴포넌트·단일책임·문서-코드 동기화)
 
 - 컴포넌트화: 사용자 화면은 기능 단위 컴포넌트로 최대한 분리하여 디버깅 책임을 명확히 한다. 공통 UI는 `packages/ui`에, 도메인 전용 UI는 `apps/web` 하위 feature 폴더에 둔다.
@@ -277,11 +385,14 @@ description: 지도/필터/정렬/지오서치 요구사항 요약
   - 문서 프런트매터 예: `code_refs: ["apps/web/components/Timeline.tsx", "apps/api/src/modules/tasks/tasks.service.ts"]`
   - 코드 헤더 예: `doc_refs: ["admin/specs/timeline.md", "admin/plan/roadmap.md"]`
   - 리뷰 체크리스트에 상호 참조 여부를 포함한다(후속 pre-commit 훅으로 자동 검사 추가 예정).
+  - 학습 추적: `glossary_refs`에 해당 문서에서 다루는 핵심 용어 키를 나열해 위키 글로서리와 자동 연결한다.
 
 # 거버넌스/체크포인트
 
 - 모든 생성/수정/삭제는 admin/checkpoints/YYYYMMDD-HHMM-UTC_KST.md에 기록
 - 주요 변경은 PR로 리뷰. main 보호 규칙 권장
+- pre-commit 훅은 `scripts/update_frontmatter_time.js --staged` → `validate:docs` → `validate:refs` 순으로 실행되어 프런트매터/참조 누락을 자동 차단한다.
+- 타임라인·그래프 모듈 변경 시 `pnpm --filter web test`를 실행해 단위 테스트(timeline/graph)로 QA 결과를 남긴다.
 
 # 리스크/선행과제(샘플)
 

@@ -4,36 +4,150 @@
     "id": "kk-real-admin",
     "title": "금강부동산허브 관리자 베이스",
     "created": "2025-09-22 08:00 UTC / 2025-09-22 17:00 KST",
-    "updated": "2025-09-22 08:00 UTC / 2025-09-22 17:00 KST"
+    "updated": "2025-09-26 02:00 UTC / 2025-09-26 11:00 KST"
   },
   "milestones": [
-    {"id": "m0", "title": "스캐폴딩/도구", "status": "in_progress"},
-    {"id": "m1", "title": "읽기 전용 UI+API 스켈레톤", "status": "pending"},
-    {"id": "m2", "title": "편집/PR+인증/실시간", "status": "pending"},
-    {"id": "m3", "title": "DB/벡터/워커", "status": "pending"}
+    { "id": "m0", "title": "스캐폴딩/도구", "status": "completed" },
+    { "id": "m1", "title": "읽기 전용 UI+API 스켈레톤", "status": "completed" },
+    { "id": "m2", "title": "편집/PR+인증/실시간", "status": "in_progress" },
+    { "id": "m3", "title": "DB/벡터/워커", "status": "pending" }
   ],
   "tasks": [
-    {"id": "m0-0", "milestone": "m0", "title": "모노레포/도구 체계", "status": "pending", "deps": []},
-    {"id": "m0-1", "milestone": "m0", "title": "문서 스캐폴딩", "status": "completed", "deps": []},
-    {"id": "m0-2", "milestone": "m0", "title": "프런트매터 규칙 확정", "status": "completed", "deps": ["m0-1"]},
-    {"id": "m0-3", "milestone": "m0", "title": "CI 베이스", "status": "pending", "deps": ["m0-0"]},
-    {"id": "m0-4", "milestone": "m0", "title": "샘플 간트/그래프", "status": "pending", "deps": ["m0-1"]},
+    {
+      "id": "m0-0",
+      "milestone": "m0",
+      "title": "모노레포/도구 체계",
+      "status": "completed",
+      "deps": []
+    },
+    {
+      "id": "m0-1",
+      "milestone": "m0",
+      "title": "문서 스캐폴딩",
+      "status": "completed",
+      "deps": []
+    },
+    {
+      "id": "m0-2",
+      "milestone": "m0",
+      "title": "프런트매터 규칙 확정",
+      "status": "completed",
+      "deps": ["m0-1"]
+    },
+    {
+      "id": "m0-3",
+      "milestone": "m0",
+      "title": "CI 베이스",
+      "status": "completed",
+      "deps": ["m0-0"]
+    },
+    {
+      "id": "m0-4",
+      "milestone": "m0",
+      "title": "샘플 간트/그래프",
+      "status": "completed",
+      "deps": ["m0-1"]
+    },
 
-    {"id": "m1-0", "milestone": "m1", "title": "Next.js 부트스트랩", "status": "pending", "deps": ["m0-0"]},
-    {"id": "m1-1", "milestone": "m1", "title": "관리자 UI 라우팅", "status": "pending", "deps": ["m1-0"]},
-    {"id": "m1-2", "milestone": "m1", "title": "문서 로더/렌더러", "status": "pending", "deps": ["m1-0"]},
-    {"id": "m1-3", "milestone": "m1", "title": "타임라인 뷰", "status": "pending", "deps": ["m1-1"]},
-    {"id": "m1-4", "milestone": "m1", "title": "그래프 뷰어", "status": "pending", "deps": ["m1-1"]},
-    {"id": "m1-5", "milestone": "m1", "title": "API 스켈레톤/헬스/메트릭스", "status": "pending", "deps": ["m0-0"]},
-    {"id": "m1-6", "milestone": "m1", "title": "관측 베이스", "status": "pending", "deps": ["m1-5"]},
+    {
+      "id": "m1-0",
+      "milestone": "m1",
+      "title": "Next.js 부트스트랩",
+      "status": "completed",
+      "deps": ["m0-0"]
+    },
+    {
+      "id": "m1-1",
+      "milestone": "m1",
+      "title": "관리자 UI 라우팅",
+      "status": "completed",
+      "deps": ["m1-0"]
+    },
+    {
+      "id": "m1-2",
+      "milestone": "m1",
+      "title": "문서 로더/렌더러",
+      "status": "completed",
+      "deps": ["m1-0"]
+    },
+    {
+      "id": "m1-3",
+      "milestone": "m1",
+      "title": "타임라인 뷰",
+      "status": "completed",
+      "deps": ["m1-1"]
+    },
+    {
+      "id": "m1-4",
+      "milestone": "m1",
+      "title": "그래프 뷰어",
+      "status": "completed",
+      "deps": ["m1-1"]
+    },
+    {
+      "id": "m1-5",
+      "milestone": "m1",
+      "title": "API 스켈레톤/헬스/메트릭스",
+      "status": "completed",
+      "deps": ["m0-0"]
+    },
+    {
+      "id": "m1-6",
+      "milestone": "m1",
+      "title": "관측 베이스",
+      "status": "completed",
+      "deps": ["m1-5"]
+    },
 
-    {"id": "m2-1", "milestone": "m2", "title": "편집→브랜치→PR", "status": "pending", "deps": ["m1-1"]},
-    {"id": "m2-2", "milestone": "m2", "title": "Auth.js/RBAC/Redis", "status": "pending", "deps": ["m1-5"]},
-    {"id": "m2-3", "milestone": "m2", "title": "실시간(매니지드)", "status": "pending", "deps": ["m1-5"]},
-    {"id": "m2-4", "milestone": "m2", "title": "하이브리드 검색 API 초안", "status": "pending", "deps": ["m3-1"]},
+    {
+      "id": "m2-1",
+      "milestone": "m2",
+      "title": "편집→브랜치→PR",
+      "status": "in_progress",
+      "deps": ["m1-1"]
+    },
+    {
+      "id": "m2-2",
+      "milestone": "m2",
+      "title": "Auth.js/RBAC/Redis",
+      "status": "in_progress",
+      "deps": ["m1-5"]
+    },
+    {
+      "id": "m2-3",
+      "milestone": "m2",
+      "title": "실시간(매니지드)",
+      "status": "pending",
+      "deps": ["m1-5"]
+    },
+    {
+      "id": "m2-4",
+      "milestone": "m2",
+      "title": "하이브리드 검색 API 초안",
+      "status": "pending",
+      "deps": ["m3-1"]
+    },
 
-    {"id": "m3-1", "milestone": "m3", "title": "Neon+pgvector+PostGIS", "status": "pending", "deps": []},
-    {"id": "m3-2", "milestone": "m3", "title": "임베딩 워커", "status": "pending", "deps": ["m3-1"]},
-    {"id": "m3-3", "milestone": "m3", "title": "그래프 편집/ICS", "status": "pending", "deps": ["m1-4", "m1-3"]}
+    {
+      "id": "m3-1",
+      "milestone": "m3",
+      "title": "Neon+pgvector+PostGIS",
+      "status": "pending",
+      "deps": []
+    },
+    {
+      "id": "m3-2",
+      "milestone": "m3",
+      "title": "임베딩 워커",
+      "status": "pending",
+      "deps": ["m3-1"]
+    },
+    {
+      "id": "m3-3",
+      "milestone": "m3",
+      "title": "그래프 편집/ICS",
+      "status": "pending",
+      "deps": ["m1-4", "m1-3"]
+    }
   ]
 }

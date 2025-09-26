@@ -3,7 +3,7 @@ file: AGENTS.md
 title: 에이전트 운영 규칙
 owner: duksan
 created: 2025-09-22 07:45 UTC / 2025-09-22 16:45 KST
-updated: 2025-09-22 17:53 UTC / 2025-09-23 02:53 KST
+updated: 2025-09-26 07:27 UTC / 2025-09-26 16:27 KST
 status: active
 tags: [policy, language, workflow]
 schemaVersion: 1
@@ -23,6 +23,7 @@ code_refs:
     'scripts/gh_protect_main.sh',
     'scripts/gh_enable_automerge.sh',
   ]
+glossary_refs: ['repository', 'checkpoint', 'rbac', 'tags', 'glossary', 'learning_log']
 ---
 
 # 1. 언어 정책
@@ -51,6 +52,7 @@ code_refs:
 
 - 파일 생성/수정/삭제/이동이 발생하면 반드시 기록한다.
 - 모든 변경 사항은 `admin/checkpoints/`에 저장하여 추후 복구 가능하게 한다.
+- 커밋 전에는 pre-commit 훅이 자동으로 `scripts/update_frontmatter_time.js --staged` → `pnpm run validate:docs` → `pnpm run validate:refs`를 실행하므로, 훅 오류가 나면 문서 메타/참조를 먼저 점검한다.
 
 # 6. 시간 기록
 
@@ -116,3 +118,8 @@ code_refs:
 - 모든 GitHub 관련 작업(브랜치 생성, PR 개설/업데이트, 리뷰 준비, 브랜치 보호 규칙 설정, 머지/동기화 등)은 에이전트가 전담한다.
 - 사용자는 승인/지침만 제공하며, 에이전트는 실행 전 승인 절차(섹션 4, 8)를 준수한다.
 - GitHub 설정 변경이나 자동화 스크립트 실행 후에는 결과를 요약 보고하고 필요 시 롤백 계획을 함께 제시한다.
+
+# 13. QA 및 테스트 실행 규칙
+
+- 타임라인/그래프 로직을 수정하거나 관련 문서를 업데이트하면 반드시 `pnpm --filter web test`로 단위 테스트(timeline/graph)를 실행하고 결과를 요약에 포함한다.
+- 테스트 추가/수정 후에는 `basesettings.md`와 최신 체크포인트에 실행한 명령(예: `pnpm --filter web test`)을 기록한다.

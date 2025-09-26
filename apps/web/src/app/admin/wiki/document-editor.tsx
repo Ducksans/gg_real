@@ -19,6 +19,7 @@ export type EditableDocument = {
   label: string;
   content: string;
   updated: string;
+  glossaryRefs?: string[];
 };
 
 type DocumentEditorProps = {

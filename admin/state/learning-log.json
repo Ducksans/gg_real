@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "owner": "duksan",
+  "description": "학습한 용어와 복습해야 할 항목을 추적하는 개인 로그",
+  "entries": [
+    {
+      "term": "repository",
+      "lastViewed": "2025-09-26 03:52 UTC / 2025-09-26 12:52 KST",
+      "viewHistory": ["2025-09-26 03:52 UTC / 2025-09-26 12:52 KST"],
+      "notes": [
+        {
+          "timestamp": "2025-09-26 05:01 UTC / 2025-09-26 14:01 KST",
+          "content": "테스트 메모 입니다."
+        }
+      ],
+      "needsFollowup": true
+    },
+    {
+      "term": "eslint",
+      "lastViewed": "2025-09-26 05:34 UTC / 2025-09-26 14:34 KST",
+      "viewHistory": [
+        "2025-09-26 05:34 UTC / 2025-09-26 14:34 KST",
+        "2025-09-26 05:14 UTC / 2025-09-26 14:14 KST",
+        "2025-09-26 05:10 UTC / 2025-09-26 14:10 KST",
+        "2025-09-26 05:09 UTC / 2025-09-26 14:09 KST",
+        "2025-09-26 04:24 UTC / 2025-09-26 13:24 KST",
+        "2025-09-26 04:22 UTC / 2025-09-26 13:22 KST"
+      ],
+      "notes": [
+        {
+          "timestamp": "2025-09-26 04:23 UTC / 2025-09-26 13:23 KST",
+          "content": "hello world!!"
+        }
+      ],
+      "needsFollowup": false
+    },
+    {
+      "term": "backlink",
+      "lastViewed": "2025-09-26 04:24 UTC / 2025-09-26 13:24 KST",
+      "viewHistory": ["2025-09-26 04:24 UTC / 2025-09-26 13:24 KST"],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "postgis",
+      "lastViewed": "2025-09-26 05:01 UTC / 2025-09-26 14:01 KST",
+      "viewHistory": ["2025-09-26 05:01 UTC / 2025-09-26 14:01 KST"],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "cosine",
+      "lastViewed": "2025-09-26 05:01 UTC / 2025-09-26 14:01 KST",
+      "viewHistory": ["2025-09-26 05:01 UTC / 2025-09-26 14:01 KST"],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "chunk",
+      "lastViewed": "2025-09-26 05:01 UTC / 2025-09-26 14:01 KST",
+      "viewHistory": ["2025-09-26 05:01 UTC / 2025-09-26 14:01 KST"],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "embedding",
+      "lastViewed": "2025-09-26 05:01 UTC / 2025-09-26 14:01 KST",
+      "viewHistory": ["2025-09-26 05:01 UTC / 2025-09-26 14:01 KST"],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "hybrid-search",
+      "lastViewed": "2025-09-26 05:01 UTC / 2025-09-26 14:01 KST",
+      "viewHistory": ["2025-09-26 05:01 UTC / 2025-09-26 14:01 KST"],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "husky",
+      "lastViewed": "2025-09-26 05:02 UTC / 2025-09-26 14:02 KST",
+      "viewHistory": ["2025-09-26 05:02 UTC / 2025-09-26 14:02 KST"],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "pgvector",
+      "lastViewed": "2025-09-26 05:02 UTC / 2025-09-26 14:02 KST",
+      "viewHistory": ["2025-09-26 05:02 UTC / 2025-09-26 14:02 KST"],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "prettier",
+      "lastViewed": "2025-09-26 05:34 UTC / 2025-09-26 14:34 KST",
+      "viewHistory": [
+        "2025-09-26 05:34 UTC / 2025-09-26 14:34 KST",
+        "2025-09-26 05:10 UTC / 2025-09-26 14:10 KST",
+        "2025-09-26 05:09 UTC / 2025-09-26 14:09 KST"
+      ],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "lint-staged",
+      "lastViewed": "2025-09-26 05:10 UTC / 2025-09-26 14:10 KST",
+      "viewHistory": ["2025-09-26 05:10 UTC / 2025-09-26 14:10 KST"],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "editorconfig",
+      "lastViewed": "2025-09-26 05:35 UTC / 2025-09-26 14:35 KST",
+      "viewHistory": ["2025-09-26 05:35 UTC / 2025-09-26 14:35 KST"],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "env",
+      "lastViewed": "2025-09-26 05:35 UTC / 2025-09-26 14:35 KST",
+      "viewHistory": ["2025-09-26 05:35 UTC / 2025-09-26 14:35 KST"],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "nvmrc",
+      "lastViewed": "2025-09-26 06:46 UTC / 2025-09-26 15:46 KST",
+      "viewHistory": ["2025-09-26 06:46 UTC / 2025-09-26 15:46 KST"],
+      "notes": [],
+      "needsFollowup": false
+    },
+    {
+      "term": "flyio",
+      "viewHistory": ["2025-09-26 07:20 UTC / 2025-09-26 16:20 KST"],
+      "notes": [],
+      "needsFollowup": false,
+      "lastViewed": "2025-09-26 07:20 UTC / 2025-09-26 16:20 KST"
+    }
+  ]
+}
