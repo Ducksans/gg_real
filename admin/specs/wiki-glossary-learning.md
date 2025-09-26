@@ -3,11 +3,17 @@ file: admin/specs/wiki-glossary-learning.md
 title: 관리자 위키 Glossary 학습 UX 확장 계획
 owner: duksan
 created: 2025-09-26 05:35 UTC / 2025-09-26 23:35 KST
-updated: 2025-09-26 08:28 UTC / 2025-09-26 17:28 KST
+updated: 2025-09-26 10:29 UTC / 2025-09-26 19:29 KST
 status: draft
 tags: [wiki, glossary, learning, ux]
 schemaVersion: 1
 description: Glossary 화면을 학습 중심 UX로 확장하기 위한 단계별 설계 및 거버넌스 계획
+code_refs:
+  [
+    'apps/web/src/app/admin/wiki/glossary-tab.tsx',
+    'apps/web/src/app/admin/wiki/actions/resources.ts',
+    'apps/web/src/lib/file-tree.server.ts',
+  ]
 ---
 
 # 개요

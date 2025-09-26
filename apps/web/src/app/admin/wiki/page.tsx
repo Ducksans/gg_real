@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { loadMarkdown, searchDocuments } from '@/lib/content';
 import { loadGlossary, createGlossaryIndex } from '@/lib/glossary.server';
 import { loadLearningLog } from '@/lib/learning-log.server';
+import { loadProjectFileTree } from '@/lib/file-tree.server';
 import { editableDocs } from './editable-docs';
 import { DocumentTab } from './document-tab';
 import { GlossaryTab } from './glossary-tab';
@@ -23,11 +24,21 @@ type WikiPageProps = {
 export default async function WikiPage({ searchParams }: WikiPageProps) {
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const tabParamRaw = resolvedSearchParams?.tab;
+  const splitParamRaw = resolvedSearchParams?.split;
+  const docParamRaw = resolvedSearchParams?.doc;
   const activeTabParam = Array.isArray(tabParamRaw) ? tabParamRaw[0] : tabParamRaw;
+  const initialSplit = Array.isArray(splitParamRaw)
+    ? splitParamRaw[0] === '1'
+    : splitParamRaw === '1';
+  const requestedDoc = Array.isArray(docParamRaw) ? docParamRaw[0] : docParamRaw;
   const activeTab =
     activeTabParam === 'glossary' || activeTabParam === 'learning' ? activeTabParam : 'documents';
 
-  const [glossary, learningLog] = await Promise.all([loadGlossary(), loadLearningLog()]);
+  const [glossary, learningLog, fileTree] = await Promise.all([
+    loadGlossary(),
+    loadLearningLog(),
+    loadProjectFileTree(),
+  ]);
   const glossaryIndex = createGlossaryIndex(glossary.terms);
 
   const editableDocDetails = await Promise.all(
@@ -63,7 +74,12 @@ export default async function WikiPage({ searchParams }: WikiPageProps) {
       </header>
       <TabNavigation activeTab={activeTab} />
       {activeTab === 'glossary' ? (
-        <GlossaryTab terms={glossary.terms} learningEntries={learningEntryMap} />
+        <GlossaryTab
+          terms={glossary.terms}
+          learningEntries={learningEntryMap}
+          initialSplit={initialSplit}
+          fileTree={fileTree}
+        />
       ) : activeTab === 'learning' ? (
         <LearningTab terms={glossary.terms} entries={learningLog.entries} />
       ) : (
@@ -71,6 +87,7 @@ export default async function WikiPage({ searchParams }: WikiPageProps) {
           documents={editableDocDetails}
           searchResults={initialResults}
           glossaryById={glossaryIndex}
+          initialDocPath={requestedDoc}
         />
       )}
     </section>

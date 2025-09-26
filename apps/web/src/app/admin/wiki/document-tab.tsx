@@ -18,15 +18,17 @@ export function DocumentTab({
   searchResults,
   documents,
   glossaryById,
+  initialDocPath,
 }: {
   searchResults: DocumentSearchResponse;
   documents: EditableDocument[];
   glossaryById: Map<string, GlossaryTerm>;
+  initialDocPath?: string;
 }) {
   return (
     <div className="space-y-6">
       <SearchClient initialQuery="" initialResults={searchResults} />
-      <DocumentEditor documents={documents} />
+      <DocumentEditor documents={documents} initialPath={initialDocPath} />
       <section className={CARD_CLASS}>
         <header className="flex items-center justify-between">
           <h3 className="text-base font-semibold text-slate-800">문서별 연결 용어</h3>

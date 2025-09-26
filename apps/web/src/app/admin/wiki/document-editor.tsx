@@ -9,7 +9,7 @@
 
 'use client';
 
-import { useMemo, useState, useTransition } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { MarkdownContent } from '@/components/MarkdownContent';
 import { saveDocument } from './actions';
@@ -24,11 +24,14 @@ export type EditableDocument = {
 
 type DocumentEditorProps = {
   documents: EditableDocument[];
+  initialPath?: string;
 };
 
-export function DocumentEditor({ documents }: DocumentEditorProps) {
+export function DocumentEditor({ documents, initialPath }: DocumentEditorProps) {
   const router = useRouter();
-  const initialPath = documents[0]?.path ?? '';
+  const fallbackPath = documents[0]?.path ?? '';
+  const resolvedInitialPath =
+    initialPath && documents.some((doc) => doc.path === initialPath) ? initialPath : fallbackPath;
 
   const docMap = useMemo(
     () =>
@@ -41,7 +44,7 @@ export function DocumentEditor({ documents }: DocumentEditorProps) {
     [documents],
   );
 
-  const [selectedPath, setSelectedPath] = useState(initialPath);
+  const [selectedPath, setSelectedPath] = useState(resolvedInitialPath);
   const [drafts, setDrafts] = useState<Record<string, string>>(() =>
     Object.fromEntries(documents.map((doc) => [doc.path, doc.content])),
   );
@@ -62,6 +65,16 @@ export function DocumentEditor({ documents }: DocumentEditorProps) {
     () => selectedDraft.split(/\s+/).filter(Boolean).length,
     [selectedDraft],
   );
+
+  useEffect(() => {
+    if (!initialPath) {
+      return;
+    }
+    if (!docMap.has(initialPath)) {
+      return;
+    }
+    setSelectedPath(initialPath);
+  }, [initialPath, docMap]);
 
   const onSelectDoc = (path: string) => {
     setSelectedPath(path);
