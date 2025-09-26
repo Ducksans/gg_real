@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "updated": "2025-09-26 08:05 UTC / 2025-09-27 02:05 KST",
+  "owner": "duksan",
+  "description": "Glossary 학습 에이전트가 사용자 선호/레벨을 저장하는 프로필 데이터",
+  "profiles": [
+    {
+      "id": "sample",
+      "displayName": "샘플 사용자",
+      "level": "P1",
+      "preferredExamples": "analogy",
+      "timeBudget": 30,
+      "goal": "understand-terms",
+      "lastTestedAt": "2025-09-26T08:05:00Z",
+      "notes": "샘플 데이터입니다. 실제 사용자와 테스트 세션이 생성되면 최신 값으로 갱신하십시오."
+    }
+  ]
+}

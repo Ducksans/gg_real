@@ -3,7 +3,7 @@ file: admin/specs/wiki-glossary-learning.md
 title: 관리자 위키 Glossary 학습 UX 확장 계획
 owner: duksan
 created: 2025-09-26 05:35 UTC / 2025-09-26 23:35 KST
-updated: 2025-09-26 08:10 UTC / 2025-09-26 17:10 KST
+updated: 2025-09-26 08:28 UTC / 2025-09-26 17:28 KST
 status: draft
 tags: [wiki, glossary, learning, ux]
 schemaVersion: 1
@@ -177,9 +177,9 @@ flowchart TD
 ## 사전 설계 체크리스트
 
 - **페르소나 & 레벨 테스트**
-  - 유형: 완전 초보(개념 설명 위주), 타 도메인 전문가(유사 비유 활용), 중고등학생(교과 연계), 현업 실무자(실전 사례 중심).
+  - 유형: 완전 초보(개념 설명 위주), 타 도메인 전문가(유사 비유 활용), 중고등학생(교과 연계), 현업 실무자(실전 사례 중심). → 상세 설명: `admin/specs/wiki-learning-personas.md`
   - 레벨 테스트 질문: 기본 용어 인식, 도메인 비유 선호도, 학습 속도/시간 가용성, 텍스트 vs 시각 자료 선호.
-  - 결과 저장: `admin/state/learning-profiles.json` (예정) → `level`, `preferred_examples`, `time_budget`, `goal` 필드 포함.
+  - 결과 저장: `admin/state/learning-profiles.json` → `level`, `preferred_examples`, `time_budget`, `goal` 필드 포함. 질문/옵션 데이터는 `admin/data/learning-level-test.json` 유지.
 - **콘텐츠 분류**
   - 기본 커리큘럼 트리: 공인중개사 기초 / 경매 / 법령 / 실전 사례 / 도구 & 계산기.
   - 난이도 태그: beginner/intermediate/advanced + `status`(draft/in-review/published).
@@ -240,5 +240,8 @@ flowchart TD
   "apps/web/src/hooks/useReadingProgress.ts",
   "apps/web/src/hooks/useHoverPreview.ts",
   "apps/web/src/hooks/useAnnotations.ts",
-  "apps/web/src/hooks/useSelectionQuickMenu.ts"
+  "apps/web/src/hooks/useSelectionQuickMenu.ts",
+  "admin/specs/wiki-learning-personas.md",
+  "admin/data/learning-level-test.json",
+  "admin/state/learning-profiles.json"
   ]
