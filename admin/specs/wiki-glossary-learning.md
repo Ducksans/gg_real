@@ -3,7 +3,7 @@ file: admin/specs/wiki-glossary-learning.md
 title: 관리자 위키 Glossary 학습 UX 확장 계획
 owner: duksan
 created: 2025-09-26 05:35 UTC / 2025-09-26 23:35 KST
-updated: 2025-09-26 10:29 UTC / 2025-09-26 19:29 KST
+updated: 2025-09-27 03:23 UTC / 2025-09-27 12:23 KST
 status: draft
 tags: [wiki, glossary, learning, ux]
 schemaVersion: 1
@@ -13,6 +13,11 @@ code_refs:
     'apps/web/src/app/admin/wiki/glossary-tab.tsx',
     'apps/web/src/app/admin/wiki/actions/resources.ts',
     'apps/web/src/lib/file-tree.server.ts',
+    'apps/web/src/app/admin/wiki/components/glossary/MainPaneContent.tsx',
+    'apps/web/src/app/admin/wiki/components/glossary/PreviewPane.tsx',
+    'apps/web/src/app/admin/wiki/components/glossary/ResourceViewer.tsx',
+    'apps/web/src/app/admin/wiki/components/glossary/constants.ts',
+    'apps/web/src/app/admin/wiki/components/glossary/types.ts',
   ]
 ---
 
@@ -92,6 +97,33 @@ flowchart TD
      - 벡터 검색·유사도 추천, React Flow 지식 그래프, 학습 대시보드.
      - 외부 사용자 플랜(구독/광고 제어), 결제 연동, 서비스 지표 설계.
    - 산출물: 추천/그래프 모듈, 개인 학습장 기능, 비즈니스 플랜 초안.
+
+## 라운드 기반 작업 프로세스 (M1)
+
+> **원칙**: 각 라운드는 “명세 → 브랜치 → 구현 → PR → 문서 갱신” 중 한 단계를 책임지고, 완료되면 다음 라운드로 넘어간다. 모든 라운드는 `chore/branch-protection-warmup` 최신 상태를 기준으로 한다.
+
+1. **Round 0 – 명세 잠금(현재 단계)**
+   - 본 문서(`admin/specs/wiki-glossary-learning.md`)에 M1 범위·AC·변경 파일 제한을 명시한다.
+   - 변경 기록: 체크포인트에 “Round 0 – Spec Locked” 남기고, 외부 감사와 공유한다.
+
+2. **Round 1 – 브랜치 준비**
+   - 실행: `git checkout chore/branch-protection-warmup && git pull` → `git checkout -b m1/wiki-split-layout`.
+   - 산출물: 새 브랜치 생성 로그 + TODO 체크리스트(README 또는 issue)에 “Round 1 완료” 표시.
+
+3. **Round 2 – M1 구현 (UI + 로컬 상태만)**
+   - 작업 범위는 지시문에 적힌 파일 리스트에 한정한다.
+   - 커밋 단위 예시: `SplitLayout`, `FileTreePanel`, `HoverPreview`, `Bookmark/Reading`, `SelectionQuickMenu` 등 기능별로 분리.
+   - 수락 기준 7개 시나리오를 자체 검증하고 스크린샷 확보.
+
+4. **Round 3 – PR 작성 및 리뷰**
+   - PR 제목: `Admin Wiki M1 – SplitLayout/Preview/Bookmark/Annotations`.
+   - PR 본문: “변경 요약 / 테스트(7개 시나리오) / 비호환 변경 없음 / 후속(M2) 계획” 구조로 작성.
+   - 리뷰 피드백을 반영한 뒤 승인·머지 완료까지 책임.
+
+5. **Round 4 – 문서/브랜치 정리**
+   - `main` 브랜치를 업데이트(`git checkout main && git pull`)한 뒤, 필요 시 작업 브랜치를 삭제.
+   - 본 문서에 “Round 4 완료”와 머지 커밋 번호를 기록하고, M2 계획 섹션을 업데이트한다.
+   - 체크포인트 폴더에 라운드별 요약을 남겨 추후 감사 대비.
 
 ## M1 UI/UX 세부
 

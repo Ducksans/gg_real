@@ -12,12 +12,14 @@ import type { FileNode } from '@/components/wiki/FileTreePanel';
 
 const ROOT = path.join(process.cwd(), '..', '..');
 const INCLUDED_FOLDERS = ['apps', 'packages', 'admin', 'docs'];
+const ROOT_FILES = ['basesettings.md'];
 const EXCLUDE_PATTERNS = [/\.git/, /node_modules/, /\.turbo/, /dist/, /build/];
 const MAX_DEPTH = 3;
 const MAX_CHILDREN = 50;
 
 export async function loadProjectFileTree(): Promise<FileNode[]> {
-  const entries = await Promise.all(
+  const [rootFiles, folders] = await Promise.all([
+    collectRootFiles(),
     INCLUDED_FOLDERS.map(async (folder) => {
       const fullPath = path.join(ROOT, folder);
       try {
@@ -29,8 +31,20 @@ export async function loadProjectFileTree(): Promise<FileNode[]> {
         return null;
       }
     }),
-  );
-  return (await Promise.all(entries)).filter(Boolean) as FileNode[];
+  ]);
+
+  const folderNodes = (await Promise.all(folders)).filter(Boolean) as FileNode[];
+  const tree: FileNode[] = [];
+  if (rootFiles.length > 0) {
+    tree.push({
+      name: '핵심 문서',
+      path: '__root__',
+      type: 'directory',
+      children: rootFiles,
+    });
+  }
+  tree.push(...folderNodes);
+  return tree;
 }
 
 async function buildNode(fullPath: string, name: string, depth: number): Promise<FileNode> {
@@ -61,5 +75,34 @@ async function buildNode(fullPath: string, name: string, depth: number): Promise
       console.warn(`[file-tree] ${entry.name} 처리 실패`, error);
     }
   }
+  children.sort(sortNodes);
   return { name, path: relativePath, type: 'directory', children };
+}
+
+async function collectRootFiles(): Promise<FileNode[]> {
+  const results = await Promise.all(
+    ROOT_FILES.map(async (relativePath) => {
+      const fullPath = path.join(ROOT, relativePath);
+      try {
+        const stats = await fs.stat(fullPath);
+        if (!stats.isFile()) return null;
+        return {
+          name: path.basename(relativePath),
+          path: relativePath,
+          type: 'file',
+        } as FileNode;
+      } catch (error) {
+        console.warn(`[file-tree] 루트 파일 ${relativePath} 탐색 실패`, error);
+        return null;
+      }
+    }),
+  );
+  return results.filter(Boolean) as FileNode[];
+}
+
+function sortNodes(a: FileNode, b: FileNode): number {
+  if (a.type !== b.type) {
+    return a.type === 'directory' ? -1 : 1;
+  }
+  return a.name.localeCompare(b.name, 'ko');
 }
