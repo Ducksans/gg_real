@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GG Figma Automation</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        color: #1f2937;
+        background: #f5f7fb;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px 20px;
+        width: 360px;
+      }
+
+      h1 {
+        font-size: 16px;
+        margin: 0;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 140px;
+        resize: vertical;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        padding: 12px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        background: #fff;
+      }
+
+      button {
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: none;
+        background: #2563eb;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        background: #9ca3af;
+        cursor: not-allowed;
+      }
+
+      footer {
+        font-size: 11px;
+        color: #6b7280;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Schema 실행</h1>
+      <textarea id="schema" placeholder="여기에 JSON 스키마를 붙여넣으세요."></textarea>
+      <button id="run">실행</button>
+      <footer>Codex 자동화 PoC · schema v0.1</footer>
+    </main>
+
+    <script>
+      const schemaInput = document.getElementById('schema');
+      const runButton = document.getElementById('run');
+
+      runButton.addEventListener('click', () => {
+        parent.postMessage(
+          {
+            pluginMessage: {
+              type: 'execute-schema',
+              payload: schemaInput.value
+            }
+          },
+          '*'
+        );
+      });
+    </script>
+  </body>
+</html>

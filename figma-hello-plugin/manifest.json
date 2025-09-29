@@ -1,0 +1,9 @@
+{
+  "name": "GG Figma Automation",
+  "id": "gg-figma-automation",
+  "api": "1.0.0",
+  "main": "dist/main.js",
+  "ui": "dist/ui.html",
+  "editorType": ["figma"],
+  "permissions": []
+}
