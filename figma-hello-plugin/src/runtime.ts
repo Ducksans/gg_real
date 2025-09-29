@@ -14,7 +14,12 @@ export async function runHelloFrame() {
   notifySuccess(`프레임 '${frame.name}' 생성 완료`);
 }
 
-export async function runSchemaFromString(raw: string) {
+export async function runSchemaFromString(
+  raw: string,
+  options?: {
+    targetPage?: string;
+  },
+) {
   if (!raw.trim()) {
     throw new Error('JSON 스키마가 비어 있습니다.');
   }
@@ -28,11 +33,17 @@ export async function runSchemaFromString(raw: string) {
     throw parseError;
   }
 
-  await runSchemaDocument(doc);
+  await runSchemaDocument(doc, options);
 }
 
-export async function runSchemaDocument(doc: SchemaDocument) {
-  const targetPageName = doc.target.page?.trim() || figma.currentPage.name;
+export async function runSchemaDocument(
+  doc: SchemaDocument,
+  options?: {
+    targetPage?: string;
+  },
+) {
+  const targetPageName =
+    options?.targetPage?.trim() || doc.target.page?.trim() || figma.currentPage.name;
   const page = findTargetPage(targetPageName);
   const nodes = await buildNodesFromSchema(doc.nodes, {
     tokenResolver,
@@ -60,5 +71,5 @@ function findTargetPage(pageName: string): PageNode {
   ) as PageNode | null;
 
   if (match) return match;
-  return figma.currentPage;
+  throw new Error(`페이지 '${pageName}'을(를) 찾을 수 없습니다.`);
 }

@@ -74,6 +74,11 @@
     <main>
       <h1>JSON 스키마 실행</h1>
       <textarea id="schema" placeholder="여기에 JSON 스키마를 붙여넣으세요."></textarea>
+      <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#4b5563;">
+        대상 페이지
+        <select id="targetPage" style="padding:8px;border-radius:8px;border:1px solid #d1d5db;">
+        </select>
+      </label>
       <div class="actions">
         <button id="loadSample" type="button">샘플 불러오기</button>
         <button id="createHello" type="button" class="secondary">Hello 박스</button>
@@ -87,6 +92,7 @@
       const runButton = document.getElementById('run');
       const loadSampleButton = document.getElementById('loadSample');
       const helloButton = document.getElementById('createHello');
+      const pageSelect = document.getElementById('targetPage');
 
       runButton.addEventListener('click', () => {
         parent.postMessage(
@@ -94,6 +100,7 @@
             pluginMessage: {
               type: 'execute-schema',
               payload: schemaInput.value,
+              targetPage: pageSelect.value,
             },
           },
           '*',
@@ -125,10 +132,35 @@
       window.onmessage = (event) => {
         const msg = event.data?.pluginMessage;
         if (!msg) return;
-        if (msg.type === 'load-sample') {
-          schemaInput.value = msg.payload ?? '';
+        switch (msg.type) {
+          case 'init':
+          case 'load-sample': {
+            const payload = msg.payload ?? {};
+            if (payload.sample) {
+              schemaInput.value = payload.sample;
+            }
+            if (payload.pages) {
+              populatePages(payload.pages, payload.currentPage);
+            }
+            break;
+          }
+          default:
+            break;
         }
       };
+
+      function populatePages(pages = [], current) {
+        pageSelect.innerHTML = '';
+        pages.forEach((name) => {
+          const option = document.createElement('option');
+          option.value = name;
+          option.textContent = name;
+          pageSelect.appendChild(option);
+        });
+        if (current && pages.includes(current)) {
+          pageSelect.value = current;
+        }
+      }
     </script>
   </body>
 </html>

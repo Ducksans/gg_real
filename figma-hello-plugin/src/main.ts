@@ -2,13 +2,17 @@ import { notifyError } from './lib/notifier';
 import { runHelloFrame, runSchemaFromString, SAMPLE_SCHEMA } from './runtime';
 
 const UI_WIDTH = 380;
-const UI_HEIGHT = 420;
+const UI_HEIGHT = 460;
 
 figma.on('run', () => {
   figma.showUI(__html__, { width: UI_WIDTH, height: UI_HEIGHT });
   figma.ui.postMessage({
-    type: 'load-sample',
-    payload: JSON.stringify(createSampleForCurrentPage(), null, 2),
+    type: 'init',
+    payload: {
+      sample: JSON.stringify(createSampleForCurrentPage(), null, 2),
+      pages: listPageNames(),
+      currentPage: figma.currentPage.name,
+    },
   });
 
   figma.ui.onmessage = async (message) => {
@@ -17,13 +21,19 @@ figma.on('run', () => {
     try {
       switch (message.type) {
         case 'execute-schema': {
-          await runSchemaFromString(message.payload ?? '');
+          await runSchemaFromString(message.payload ?? '', {
+            targetPage: message.targetPage,
+          });
           break;
         }
         case 'request-sample': {
           figma.ui.postMessage({
             type: 'load-sample',
-            payload: JSON.stringify(createSampleForCurrentPage(), null, 2),
+            payload: {
+              sample: JSON.stringify(createSampleForCurrentPage(), null, 2),
+              pages: listPageNames(),
+              currentPage: figma.currentPage.name,
+            },
           });
           break;
         }
@@ -51,4 +61,10 @@ function createSampleForCurrentPage() {
   }
   cloned.target.page = figma.currentPage.name;
   return cloned;
+}
+
+function listPageNames() {
+  return figma.root.children
+    .filter((node): node is PageNode => node.type === 'PAGE')
+    .map((page) => page.name);
 }
