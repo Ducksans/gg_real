@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "detail-form",
+    "section": "form-header",
+    "order": 20,
+    "description": "폼 상단 제목과 액션 버튼",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/detail",
+    "routeLabel": "Detail",
+    "slot": "main-header",
+    "slotLabel": "Form Header"
+  },
+  "target": {
+    "frameName": "DetailMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "FormHeader",
+      "layout": {
+        "type": "auto",
+        "direction": "HORIZONTAL",
+        "spacing": 12
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "FormTitle",
+          "text": { "content": "세부 정보 편집", "style": { "token": "font.heading.lg" } }
+        },
+        {
+          "type": "text",
+          "name": "FormActions",
+          "tokens": { "text": "color.text.link" },
+          "text": { "content": "저장", "style": { "token": "font.body" } }
+        }
+      ]
+    }
+  ]
+}

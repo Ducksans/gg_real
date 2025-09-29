@@ -3,7 +3,7 @@ file: admin/plan/figmapluginmake.md
 title: Figma Plugin 자동화 구축 계획
 owner: duksan
 created: 2025-09-27 06:03 UTC / 2025-09-27 15:03 KST
-updated: 2025-09-29 07:44 UTC / 2025-09-29 16:44 KST
+updated: 2025-09-29 18:41 UTC / 2025-09-30 03:41 KST
 status: draft
 tags: [plan, figma, automation, plugin]
 schemaVersion: 1
@@ -98,16 +98,58 @@ code_refs: []
 
 ## 6.2 남은 작업
 
-- [ ] [P1] 컴포넌트 레지스트리와 명명 규칙을 문서화하고 플러그인 검증 로직에 연동한다. (참고: `admin/references/figmaplugin/automation-plugins-research.md`, `admin/references/figmaplugin/figma-plugin-api.md`)
-- [ ] [P1] 레이아웃 DSL 초안을 작성해 스택/그리드/슬롯 규칙과 반응형 오버라이드 문법을 정의한다. (참고: `admin/references/figmaplugin/figma-plugin-samples.md`)
-- [ ] [P1] 증분 갱신 프로토콜(dry-run, op 세트, ROOT 프레임 정책)을 확정하고 Undo/Redo 테스트 절차를 마련한다. (참고: `admin/references/figmaplugin/figma-plugin-api.md`)
-- [ ] [P1] 오류/검증 로직을 강화해 미지원 타입·토큰 누락을 사전에 차단하고 사용자용 메시지를 개선한다. (참고: `admin/references/figmaplugin/figma-plugin-ui-guide.md`)
-- [ ] [P2] Variables/Styles 우선 순서를 구현하고 다크/라이트 토큰 자동 전환 규칙을 적용한다. (참고: `admin/references/figmaplugin/design-token-tools.md`)
-- [ ] [P2] 관찰성 메타데이터(로그 채널, pluginData, Dev Resources 링크) 스펙을 확정한다. (참고: `admin/references/figmaplugin/figma-plugin-api.md`, `admin/references/figmaplugin/figma-plugin-ui-guide.md`)
+- [x] [P1] 컴포넌트 레지스트리와 명명 규칙을 문서화하고 플러그인 검증 로직에 연동한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/automation-plugins-research.md`, `admin/references/figmaplugin/figma-plugin-api.md`)
+- [x] [P1] 레이아웃 DSL 초안을 작성해 스택/그리드/슬롯 규칙과 반응형 오버라이드 문법을 정의한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-samples.md`)
+- [x] [P1] 증분 갱신 프로토콜(dry-run, op 세트, ROOT 프레임 정책)을 확정하고 Undo/Redo 테스트 절차를 마련한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-api.md`)
+- [x] [P1] 오류/검증 로직을 강화해 미지원 타입·토큰 누락을 사전에 차단하고 사용자용 메시지를 개선한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-ui-guide.md`)
+- [ ] [P2] 프리셋 계층 구조(Route → Slot → Section)와 메타필드를 정의하고 manifest 생성 스크립트를 갱신한다. (참고: `admin/specs/ui-archetypes/devworkspace/sections/*.json`, `figma-hello-plugin/scripts/build-archetype-manifest.js`)
+- [ ] [P2] 플러그인 트리 UI를 3단계 계층/슬롯 요약으로 개편하고, 선택 요약·경고 표기를 개선한다. (참고: `figma-hello-plugin/src/ui/index.html`)
+- [ ] [P2] Slot 기반 실행 파이프라인을 구축해 루트 그리드·영역별 프레임을 생성하고 섹션을 지정 슬롯에 배치한다. (참고: `figma-hello-plugin/src/runtime.ts`, `figma-hello-plugin/src/lib/nodeFactory.ts`)
+- [ ] [P2] 슬롯별 가드레일과 검증 로직을 추가해 1920×1080 기준 레이아웃/노드 제한을 enforce한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/specs/figmaplugin-p2-variables.md`)
+- [ ] [P2] 관찰성 메타데이터(로그 채널, pluginData, Dev Resources 링크) 스펙을 확정한다. (Dry-run 결과를 Dev Workspace/체크포인트와 연결, `admin/specs/figma-plugin-p2-telemetry.md` 참고)
 - [ ] [P2] Codex ↔ 플러그인 인터페이스(상태 질의, 패치 계약, 승인 플로)를 문서화하고 샌드박스를 구축한다. (참고: `admin/references/figmaplugin/figma-manifest-v2.md`, `admin/references/figmaplugin/figma-developer-api.md`)
-- [ ] [P2] 드라이런 → 변경 요약 → 승인 적용 UX를 Dev Workspace와 맞물리도록 설계한다. (참고: `admin/references/figmaplugin/figma-plugin-ui-guide.md`)
-- [ ] [P3] 접근성 필드(a11yRole, ariaLabel 등)와 스키마 검증 규칙을 추가한다. (참고: `admin/references/figmaplugin/figma-plugin-api.md`)
-- [ ] [P3] 성능 대응 전략(배치 처리, 프리패브, 지연 스타일 적용)을 실험하고 기준치를 정의한다. (참고: `admin/references/figmaplugin/figma-plugin-samples.md`, `admin/references/figmaplugin/automation-plugins-research.md`)
+- [ ] [P2] 드라이런 → 변경 요약 → 승인 적용 UX를 Dev Workspace와 맞물리도록 설계한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-ui-guide.md`)
+- [x] [P2] Variables/Styles 우선 순서를 구현하고 다크/라이트 토큰 자동 전환 규칙을 적용한다. (참고: `admin/references/figmaplugin/design-token-tools.md`)
+
+- [x] [P2] JSON 섹션의 크기/중첩 한도를 정의하고, 임계치 초과 시 경고/실패 규칙을 구현한다.
+
+# 6.3 P2 실행 순서 (재정비)
+
+※ 우선순위는 1 → 4를 모두 마친 뒤 5 ~ 7을 진행한다.
+
+1. **프리셋 계층 구조 재설계 (Design Surface → Route → Slot → Section)**
+   - 최상위 카테고리를 `designSurface`(예: `admin`, `user`, `shared`)로 정의하고, 각 surface 아래에 실제 라우트와 슬롯을 배치한다.
+   - `admin/specs/ui-archetypes/` JSON에 `designSurface`, `route`, `slot`, `section` 메타를 추가하고, manifest 생성 스크립트가 4단계 계층을 출력하도록 수정한다.
+   - 구현 절차
+     1. 섹션 JSON 메타 업데이트 (`designSurface`, `routeLabel`, `slotLabel` 포함)
+     2. manifest 스크립트에 surface→route→slot→section 계층 및 타입 정의 추가
+     3. CI 전 `npm run build:manifest`로 산출물 갱신, 변경 내용 캡처
+   - 산출물: 업데이트된 섹션 JSON, `archetypeManifest` 4레벨 구조, 문서화(이 섹션 포함).
+
+2. **트리 UI 3단계 표현 및 요약 패널 개선**
+   - 플러그인 UI에 Route/Slot/Section 접기·펼치기, 선택 요약(슬롯별 칩), 경고 배지를 추가해 가독성을 높인다.
+   - 산출물: `figma-hello-plugin/src/ui/index.html` 및 관련 스크립트 개편, UX 캡처.
+
+3. **Slot 기반 레이아웃 컨테이너/실행 파이프라인 구축**
+   - 루트 프레임을 1920×1080 기준 Grid/AutoLayout으로 생성하고, TopNav·LeftRail·MainPane·RightRail·Footer 등 슬롯 전용 프레임을 자동 배치한다.
+   - 섹션 실행 시 slot 정보에 맞춰 해당 프레임에 append/replace 하도록 런타임을 확장한다.
+
+4. **슬롯 검증 & 가드레일 고도화**
+   - 허용되지 않은 슬롯 배치, 과도한 노드/높이, 슬롯 간 순서 위반 등을 사전에 차단하고 Dry-run 경고를 표준 메시지로 노출한다.
+   - 필요 시 `pluginData`에 slot 메타를 저장해 Apply/Undo에서도 추적한다.
+
+5. **관찰성/승인 UX 연동** (착수 전)
+   - Dry-run 결과 JSON을 Dev Workspace 패널과 체크포인트 자동화에 전달하는 포맷/파이프를 확정한다.
+
+6. **Variables/Styles 자동 매핑** ✅
+   - Design Contract 토큰을 기반으로 Variables/Styles를 불러와 자동 적용하거나 누락 시 경고 — 스타일 ID 자동 매핑 및 가드레일 도입.
+
+7. **통합 테스트 & 문서 갱신** (진행 중)
+   - 샘플 섹션 조합(대시보드 전체)을 실행해 검증.
+   - `admin/specs/ui-archetypes/README.md`, Design Contract, figmapluginmake 계획서를 업데이트하고 체크포인트 기록.
+
+- [ ] [P3] 접근성 필드(a11yRole, ariaLabel 등)와 스키마 검증 규칙을 추가한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-api.md`)
+- [ ] [P3] 성능 대응 전략(배치 처리, 프리패브, 지연 스타일 적용)을 실험하고 기준치를 정의한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-samples.md`, `admin/references/figmaplugin/automation-plugins-research.md`)
 - [ ] [P3] 배포/공유 방식 결정(Private → Team → Community) 및 변경 로그·롤백 정책을 확정한다. (참고: `admin/references/figmaplugin/figma-manifest-v2.md`, `admin/references/figmaplugin/figma-developer-api.md`)
 
 # 7. 참고 자료 & API 레퍼런스
@@ -133,6 +175,8 @@ code_refs: []
 - `admin/references/figmaplugin/figma-developer-api.md`
 - `admin/references/figmaplugin/automation-plugins-research.md`
 - `admin/references/figmaplugin/design-token-tools.md`
+- `admin/specs/figmaplugin-p1-design.md`
+- `admin/plan/design-contract.md`
 
 # 8. 진행 현황 및 다음 액션
 
@@ -143,9 +187,9 @@ code_refs: []
 - 토큰 레지스트리(`tokenRegistry`)로 기본 색상/타이포/라운드 매핑 제공.
 - 대상 페이지 선택 드롭다운 및 현재 페이지 기본값 연동, 실행 시 즉시 append 방식으로 안정화.
 - 다음 작업
-  1. 컴포넌트 레지스트리·명명 규칙·DSL 초안을 정리하고 Dev Workspace 레퍼런스에 반영.
-  2. 증분 갱신 프로토콜(dry-run, 패치 요약, ROOT 프레임)과 로그/Undo 테스트 시나리오를 확정.
-  3. Codex ↔ 플러그인 인터페이스 문서와 샌드박스를 정비해 상태 질의·승인 플로 시연.
+  1. Variables/Styles 우선 순위와 토큰 자동 전환 규칙 설계(P2).
+  2. 관찰성/승인 UX를 Dev Workspace와 연결하는 인터페이스 문서화(P2).
+  3. P3 범위(접근성·성능·배포) 대비를 위해 테스트 환경 요구 사항을 정리.
 
 # 9. 리스크 및 대응
 

@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "list-filter",
+    "section": "filter-panel",
+    "order": 10,
+    "description": "필터 패널",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/list",
+    "routeLabel": "List",
+    "slot": "left-rail",
+    "slotLabel": "Filter Panel"
+  },
+  "target": {
+    "frameName": "ListMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "FilterPanel",
+      "tokens": { "fill": "color.surface.card" },
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 12,
+        "padding": { "top": 16, "right": 16, "bottom": 16, "left": 16 }
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "FilterPanelTitle",
+          "text": { "content": "필터", "style": { "token": "font.heading.sm" } }
+        },
+        {
+          "type": "stack",
+          "name": "FilterChips",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 8
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "FilterStatus",
+              "text": { "content": "상태: 전체", "style": { "token": "font.body" } }
+            },
+            {
+              "type": "text",
+              "name": "FilterDate",
+              "text": { "content": "업데이트 기간: 이번 달", "style": { "token": "font.body" } }
+            },
+            {
+              "type": "text",
+              "name": "FilterOwner",
+              "text": { "content": "담당자: 전체", "style": { "token": "font.body" } }
+            },
+            {
+              "type": "text",
+              "name": "FilterKeyword",
+              "text": { "content": "키워드: --", "style": { "token": "font.body" } }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

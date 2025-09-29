@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "detail-form",
+    "section": "summary",
+    "order": 0,
+    "description": "좌측 요약 카드",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/detail",
+    "routeLabel": "Detail",
+    "slot": "left-rail",
+    "slotLabel": "Summary Panel"
+  },
+  "target": {
+    "frameName": "DetailMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "SummaryCard",
+      "tokens": { "fill": "color.surface.card" },
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 8,
+        "padding": { "top": 20, "right": 20, "bottom": 20, "left": 20 }
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "SummaryTitle",
+          "text": { "content": "요약 정보", "style": { "token": "font.heading.sm" } }
+        },
+        {
+          "type": "text",
+          "name": "SummaryAuthor",
+          "text": { "content": "작성자: 김팀장", "style": { "token": "font.body" } }
+        },
+        {
+          "type": "text",
+          "name": "SummaryDate",
+          "text": { "content": "등록일: 2025-09-20", "style": { "token": "font.body" } }
+        },
+        {
+          "type": "text",
+          "name": "SummaryStatus",
+          "tokens": { "text": "color.text.warning" },
+          "text": { "content": "상태: 검토 대기", "style": { "token": "font.body" } }
+        }
+      ]
+    }
+  ]
+}

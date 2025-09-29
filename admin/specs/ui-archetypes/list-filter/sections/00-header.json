@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "list-filter",
+    "section": "header",
+    "order": 0,
+    "description": "목록 화면 제목과 주요 액션",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/list",
+    "routeLabel": "List",
+    "slot": "top",
+    "slotLabel": "List Header"
+  },
+  "target": {
+    "frameName": "ListMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "stack",
+      "name": "ListHeader",
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 6
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "HeaderTitle",
+          "text": { "content": "문서 목록", "style": { "token": "font.heading.lg" } }
+        },
+        {
+          "type": "text",
+          "name": "HeaderDesc",
+          "tokens": { "text": "color.text.secondary" },
+          "text": {
+            "content": "요청 상태와 담당자를 기준으로 필터링합니다.",
+            "style": { "token": "font.body" }
+          }
+        },
+        {
+          "type": "text",
+          "name": "HeaderAction",
+          "tokens": { "text": "color.text.link" },
+          "text": { "content": "새 문서", "style": { "token": "font.body" } }
+        }
+      ]
+    }
+  ]
+}

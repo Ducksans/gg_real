@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "dashboard",
+    "section": "recent-list",
+    "order": 20,
+    "description": "최근 업데이트 리스트",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/dashboard",
+    "routeLabel": "Dashboard",
+    "slot": "main",
+    "slotLabel": "Recent Activity"
+  },
+  "target": {
+    "frameName": "DashboardMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "stack",
+      "name": "RecentListSection",
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 16
+      },
+      "children": [
+        {
+          "type": "frame",
+          "name": "RecentHeader",
+          "layout": {
+            "type": "auto",
+            "direction": "HORIZONTAL",
+            "spacing": 16,
+            "padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "RecentTitle",
+              "text": { "content": "최근 업데이트", "style": { "token": "font.heading.md" } }
+            },
+            {
+              "type": "frame",
+              "name": "RecentActions",
+              "layout": {
+                "type": "auto",
+                "direction": "HORIZONTAL",
+                "spacing": 8
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "SeeAll",
+                  "tokens": { "text": "color.text.link" },
+                  "text": { "content": "전체 보기", "style": { "token": "font.body" } }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "name": "RecentRow",
+          "tokens": { "fill": "color.surface.card" },
+          "layout": {
+            "type": "auto",
+            "direction": "HORIZONTAL",
+            "spacing": 24,
+            "padding": { "top": 16, "right": 24, "bottom": 16, "left": 24 }
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "RecentItem",
+              "text": { "content": "문서 자동화 기획", "style": { "token": "font.body" } }
+            },
+            {
+              "type": "text",
+              "name": "RecentStatus",
+              "tokens": { "text": "color.text.positive" },
+              "text": { "content": "승인", "style": { "token": "font.body" } }
+            },
+            {
+              "type": "text",
+              "name": "RecentDate",
+              "text": { "content": "2025-09-28", "style": { "token": "font.body" } }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

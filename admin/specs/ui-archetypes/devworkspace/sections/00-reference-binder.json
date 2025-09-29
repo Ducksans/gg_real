@@ -1,0 +1,208 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "devworkspace",
+    "section": "reference-binder",
+    "order": 0,
+    "description": "좌측 Reference Binder 패널 (3열 레이아웃 기준 좌측 360px)",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/dev-workspace",
+    "routeLabel": "Dev Workspace",
+    "slot": "left-rail",
+    "slotLabel": "Reference Binder"
+  },
+  "target": {
+    "frameName": "DevWorkspaceMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "ReferenceBinderFrame",
+      "size": {
+        "width": 360,
+        "height": 940
+      },
+      "tokens": {
+        "fill": "color.surface.card"
+      },
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 12,
+        "padding": {
+          "top": 24,
+          "right": 20,
+          "bottom": 24,
+          "left": 20
+        }
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "ReferenceTitle",
+          "text": {
+            "content": "Reference Binder",
+            "style": {
+              "token": "typo.heading.md"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "name": "ReferenceDescription",
+          "tokens": {
+            "text": "color.text.secondary"
+          },
+          "text": {
+            "content": "체크포인트 · 결정 로그 · 요구사항을 한눈에 확인",
+            "style": {
+              "token": "typo.body.md"
+            }
+          }
+        },
+        {
+          "type": "stack",
+          "name": "ReferenceCards",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 10
+          },
+          "children": [
+            {
+              "type": "frame",
+              "name": "ReferenceCard1",
+              "tokens": {
+                "fill": "color.surface.muted"
+              },
+              "layout": {
+                "type": "auto",
+                "direction": "VERTICAL",
+                "spacing": 6,
+                "padding": {
+                  "top": 14,
+                  "right": 14,
+                  "bottom": 14,
+                  "left": 14
+                }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "CardTitle1",
+                  "text": {
+                    "content": "체크포인트",
+                    "style": {
+                      "token": "typo.heading.sm"
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "CardBody1",
+                  "tokens": {
+                    "text": "color.text.secondary"
+                  },
+                  "text": {
+                    "content": "최근 항목 요약과 빠른 연결 링크",
+                    "style": {
+                      "token": "typo.body.md"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "name": "ReferenceCard2",
+              "tokens": {
+                "fill": "color.surface.muted"
+              },
+              "layout": {
+                "type": "auto",
+                "direction": "VERTICAL",
+                "spacing": 6,
+                "padding": {
+                  "top": 14,
+                  "right": 14,
+                  "bottom": 14,
+                  "left": 14
+                }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "CardTitle2",
+                  "text": {
+                    "content": "결정 로그",
+                    "style": {
+                      "token": "typo.heading.sm"
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "CardBody2",
+                  "tokens": {
+                    "text": "color.text.secondary"
+                  },
+                  "text": {
+                    "content": "최근 항목 요약과 빠른 연결 링크",
+                    "style": {
+                      "token": "typo.body.md"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "name": "ReferenceCard3",
+              "tokens": {
+                "fill": "color.surface.muted"
+              },
+              "layout": {
+                "type": "auto",
+                "direction": "VERTICAL",
+                "spacing": 6,
+                "padding": {
+                  "top": 14,
+                  "right": 14,
+                  "bottom": 14,
+                  "left": 14
+                }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "CardTitle3",
+                  "text": {
+                    "content": "요구사항",
+                    "style": {
+                      "token": "typo.heading.sm"
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "CardBody3",
+                  "tokens": {
+                    "text": "color.text.secondary"
+                  },
+                  "text": {
+                    "content": "최근 항목 요약과 빠른 연결 링크",
+                    "style": {
+                      "token": "typo.body.md"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

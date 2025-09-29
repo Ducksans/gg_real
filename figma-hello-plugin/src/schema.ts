@@ -96,6 +96,12 @@ export interface SchemaDocument {
     description?: string;
     createdBy?: string;
     tokenset?: string;
+    designSurface?: string;
+    designSurfaceLabel?: string;
+    route?: string;
+    routeLabel?: string;
+    slot?: string;
+    slotLabel?: string;
   };
   target: {
     page?: string;

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "timeline-graph",
+    "section": "chart",
+    "order": 10,
+    "description": "라인 차트와 범례",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/timeline",
+    "routeLabel": "Timeline & Graph",
+    "slot": "main",
+    "slotLabel": "Timeline Chart"
+  },
+  "target": {
+    "frameName": "TimelineMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "ChartCanvas",
+      "tokens": { "fill": "color.surface.card" },
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 8,
+        "padding": { "top": 20, "right": 20, "bottom": 20, "left": 20 }
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "ChartTitle",
+          "text": { "content": "일별 참여 지표", "style": { "token": "font.heading.sm" } }
+        },
+        {
+          "type": "text",
+          "name": "ChartPlaceholder",
+          "tokens": { "text": "color.text.secondary" },
+          "text": { "content": "(라인 차트 자리)", "style": { "token": "font.body" } }
+        },
+        {
+          "type": "text",
+          "name": "ChartLegend",
+          "text": { "content": "● 신규 방문   ● 재방문", "style": { "token": "font.caption" } }
+        }
+      ]
+    }
+  ]
+}

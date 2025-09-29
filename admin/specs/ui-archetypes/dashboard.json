@@ -1,0 +1,272 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "title": "Admin Dashboard",
+    "description": "KPI 카드와 목록을 포함한 기본 대시보드",
+    "createdBy": "codex",
+    "tokenset": "gg_real/base"
+  },
+  "target": {
+    "page": "GG_real_user_acctype",
+    "frameName": "DashboardMock",
+    "mode": "replace"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "DashboardMock",
+      "size": { "width": 1440, "height": 900 },
+      "tokens": {
+        "fill": "color.bg.surface"
+      },
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 32,
+        "padding": { "top": 32, "right": 32, "bottom": 32, "left": 32 }
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "Heading",
+          "text": {
+            "content": "관리자 대시보드",
+            "style": { "token": "font.heading.lg" }
+          }
+        },
+        {
+          "type": "stack",
+          "name": "KPIRow",
+          "layout": {
+            "type": "auto",
+            "direction": "HORIZONTAL",
+            "spacing": 24
+          },
+          "children": [
+            {
+              "type": "stack",
+              "name": "CardRevenue",
+              "size": { "width": 280, "height": 160 },
+              "tokens": {
+                "fill": "color.surface.card",
+                "radius": "radius.lg"
+              },
+              "layout": {
+                "type": "auto",
+                "direction": "VERTICAL",
+                "spacing": 12,
+                "padding": { "top": 24, "right": 24, "bottom": 24, "left": 24 }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "CardRevenueTitle",
+                  "text": {
+                    "content": "이번 달 매출",
+                    "style": { "token": "font.heading.sm" }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "CardRevenueValue",
+                  "text": {
+                    "content": "₩128M",
+                    "style": { "token": "font.display" }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "CardRevenueDelta",
+                  "tokens": { "text": "color.text.positive" },
+                  "text": {
+                    "content": "+12% MoM",
+                    "style": { "token": "font.body" }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "stack",
+              "name": "CardVisitors",
+              "size": { "width": 280, "height": 160 },
+              "tokens": {
+                "fill": "color.surface.card",
+                "radius": "radius.lg"
+              },
+              "layout": {
+                "type": "auto",
+                "direction": "VERTICAL",
+                "spacing": 12,
+                "padding": { "top": 24, "right": 24, "bottom": 24, "left": 24 }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "CardVisitorsTitle",
+                  "text": {
+                    "content": "방문자",
+                    "style": { "token": "font.heading.sm" }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "CardVisitorsValue",
+                  "text": {
+                    "content": "34,512",
+                    "style": { "token": "font.display" }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "CardVisitorsDelta",
+                  "tokens": { "text": "color.text.positive" },
+                  "text": {
+                    "content": "지난주 대비 +8%",
+                    "style": { "token": "font.body" }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "stack",
+              "name": "CardTickets",
+              "size": { "width": 280, "height": 160 },
+              "tokens": {
+                "fill": "color.surface.card",
+                "radius": "radius.lg"
+              },
+              "layout": {
+                "type": "auto",
+                "direction": "VERTICAL",
+                "spacing": 12,
+                "padding": { "top": 24, "right": 24, "bottom": 24, "left": 24 }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "CardTicketsTitle",
+                  "text": {
+                    "content": "열린 티켓",
+                    "style": { "token": "font.heading.sm" }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "CardTicketsValue",
+                  "text": {
+                    "content": "42",
+                    "style": { "token": "font.display" }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "CardTicketsDelta",
+                  "tokens": { "text": "color.text.negative" },
+                  "text": {
+                    "content": "긴급 5건",
+                    "style": { "token": "font.body" }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "stack",
+          "name": "ListSection",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 16
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "ListHeading",
+              "text": {
+                "content": "최근 업데이트",
+                "style": { "token": "font.heading.md" }
+              }
+            },
+            {
+              "type": "stack",
+              "name": "ListHeader",
+              "layout": {
+                "type": "auto",
+                "direction": "HORIZONTAL",
+                "spacing": 24
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "TableCol1",
+                  "text": {
+                    "content": "항목",
+                    "style": { "token": "font.caption" }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "TableCol2",
+                  "text": {
+                    "content": "상태",
+                    "style": { "token": "font.caption" }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "TableCol3",
+                  "text": {
+                    "content": "업데이트",
+                    "style": { "token": "font.caption" }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "stack",
+              "name": "ListRow",
+              "tokens": {
+                "fill": "color.surface.card",
+                "radius": "radius.md"
+              },
+              "layout": {
+                "type": "auto",
+                "direction": "HORIZONTAL",
+                "spacing": 24,
+                "padding": { "top": 16, "right": 24, "bottom": 16, "left": 24 }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "RowTitle",
+                  "text": {
+                    "content": "문서 자동화 기획",
+                    "style": { "token": "font.body" }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "RowStatus",
+                  "tokens": { "text": "color.text.positive" },
+                  "text": {
+                    "content": "승인",
+                    "style": { "token": "font.body" }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "RowUpdated",
+                  "text": {
+                    "content": "2025-09-28",
+                    "style": { "token": "font.body" }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

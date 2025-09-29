@@ -3,7 +3,7 @@ file: basesettings.md
 title: 금강부동산허브 - 관리자 베이스 설정 및 실행계획
 owner: duksan
 created: 2025-09-22 07:34 UTC / 2025-09-22 16:34 KST
-updated: 2025-09-26 07:27 UTC / 2025-09-26 16:27 KST
+updated: 2025-09-29 18:41 UTC / 2025-09-30 03:41 KST
 status: in_progress
 tags: [admin, baseline, plan, timeline, vector, postgres]
 schemaVersion: 1
@@ -418,3 +418,4 @@ description: 지도/필터/정렬/지오서치 요구사항 요약
 
 - 본 설계도에 따라 실제 앱/서버/CI 골조를 올리기 위한 착수 계획은 `admin/plan/m1-kickoff.md` 문서를 새 채팅에서 트리거 문구로 실행하세요.
 - 예) “실행하라: M0-0 리포/도구 체계 세팅”
+- Dev Workspace(문서→시각화→코딩 일원화) 구축 절차와 도구 연계는 `admin/plan/devworkspace.md` 문서를 참조하세요.

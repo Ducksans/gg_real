@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "detail-form",
+    "section": "history",
+    "order": 10,
+    "description": "타임라인 이벤트",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/detail",
+    "routeLabel": "Detail",
+    "slot": "right-rail",
+    "slotLabel": "Activity Log"
+  },
+  "target": {
+    "frameName": "DetailMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "stack",
+      "name": "DetailHistory",
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 8
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "HistoryTitle",
+          "text": { "content": "히스토리", "style": { "token": "font.heading.sm" } }
+        },
+        {
+          "type": "text",
+          "name": "HistoryItem1",
+          "text": { "content": "2025-09-24 · 초안 작성", "style": { "token": "font.body" } }
+        },
+        {
+          "type": "text",
+          "name": "HistoryItem2",
+          "text": { "content": "2025-09-26 · 검토 요청", "style": { "token": "font.body" } }
+        }
+      ]
+    }
+  ]
+}

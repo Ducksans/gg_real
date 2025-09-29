@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "1.0.0",
+  "theme": "light",
+  "meta": {
+    "title": "Timeline + Graph",
+    "description": "그래프 캔버스와 타임라인 이벤트 리스트를 결합한 분석 화면"
+  },
+  "frames": [
+    {
+      "id": "layout/analytics",
+      "stack": {
+        "direction": "vertical",
+        "gap": "space.lg",
+        "padding": {
+          "top": "space.lg",
+          "right": "space.xl",
+          "bottom": "space.xl",
+          "left": "space.xl"
+        },
+        "children": [
+          {
+            "component": {
+              "componentName": "section.header",
+              "instanceKey": "analytics-header",
+              "slots": {
+                "leading": {
+                  "stack": {
+                    "direction": "vertical",
+                    "gap": "space.xs",
+                    "children": [
+                      { "text": { "style": "font.heading.lg", "value": "활동 그래프" } },
+                      {
+                        "text": {
+                          "style": "font.body",
+                          "value": "주요 이벤트와 지표 변화를 함께 확인합니다."
+                        }
+                      }
+                    ]
+                  }
+                },
+                "actions": {
+                  "component": {
+                    "componentName": "toolbar.filter",
+                    "instanceKey": "analytics-filters",
+                    "props": {
+                      "filters": ["기간", "이벤트 유형", "팀"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "grid": {
+              "columns": 12,
+              "columnGap": "space.lg",
+              "rowGap": "space.lg",
+              "children": [
+                {
+                  "area": "chart-area",
+                  "span": { "sm": 12, "md": 12, "lg": 8, "xl": 8 },
+                  "component": {
+                    "componentName": "chart.timeline",
+                    "instanceKey": "engagement-chart",
+                    "slots": {
+                      "header": {
+                        "text": { "style": "font.heading.md", "value": "일별 참여 지표" }
+                      },
+                      "canvas": {
+                        "props": {
+                          "type": "line",
+                          "dataset": "engagement"
+                        }
+                      },
+                      "legend": {
+                        "component": {
+                          "componentName": "legend.inline",
+                          "instanceKey": "chart-legend",
+                          "props": {
+                            "items": [
+                              { "label": "신규 방문", "token": "color.data.primary" },
+                              { "label": "재방문", "token": "color.data.secondary" }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "area": "timeline-area",
+                  "span": { "sm": 12, "md": 12, "lg": 4, "xl": 4 },
+                  "stack": {
+                    "direction": "vertical",
+                    "gap": "space.md",
+                    "children": [
+                      {
+                        "component": {
+                          "componentName": "timeline.vertical",
+                          "instanceKey": "event-timeline",
+                          "props": {
+                            "events": [
+                              {
+                                "timestamp": "2025-09-24T10:00",
+                                "label": "플러그인 배포",
+                                "status": "success"
+                              },
+                              {
+                                "timestamp": "2025-09-25T13:00",
+                                "label": "문서 자동화 활성화",
+                                "status": "info"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "component": {
+                          "componentName": "alert.inline",
+                          "instanceKey": "anomaly",
+                          "props": {
+                            "status": "warning",
+                            "title": "이상 징후",
+                            "description": "9월 26일 오후 데이터 급증이 감지되었습니다."
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "breakpoints": {
+                "sm": { "columns": 4 },
+                "md": { "columns": 8 },
+                "lg": { "columns": 12 }
+              }
+            }
+          }
+        ],
+        "breakpoints": {
+          "sm": {
+            "padding": {
+              "top": "space.md",
+              "right": "space.md",
+              "bottom": "space.lg",
+              "left": "space.md"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

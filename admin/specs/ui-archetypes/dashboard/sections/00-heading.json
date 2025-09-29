@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "dashboard",
+    "section": "heading",
+    "order": 0,
+    "description": "대시보드 제목과 요약 설명",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/dashboard",
+    "routeLabel": "Dashboard",
+    "slot": "top",
+    "slotLabel": "Dashboard Heading"
+  },
+  "target": {
+    "frameName": "DashboardMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "stack",
+      "name": "DashboardHeading",
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 6
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "HeadingTitle",
+          "text": {
+            "content": "관리자 대시보드",
+            "style": { "token": "font.heading.lg" }
+          }
+        },
+        {
+          "type": "text",
+          "name": "HeadingDescription",
+          "tokens": { "text": "color.text.secondary" },
+          "text": {
+            "content": "핵심 지표와 최근 활동을 한눈에 확인하세요.",
+            "style": { "token": "font.body" }
+          }
+        }
+      ]
+    }
+  ]
+}

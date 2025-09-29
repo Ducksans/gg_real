@@ -1,8 +1,9 @@
+import { archetypeManifest } from './lib/archetype-manifest';
 import { notifyError } from './lib/notifier';
-import { runHelloFrame, runSchemaFromString, SAMPLE_SCHEMA } from './runtime';
+import { runHelloFrame, runSchemaBatch, runSchemaFromString, SAMPLE_SCHEMA } from './runtime';
 
-const UI_WIDTH = 380;
-const UI_HEIGHT = 460;
+const UI_WIDTH = 500;
+const UI_HEIGHT = 620;
 
 figma.on('run', () => {
   figma.showUI(__html__, { width: UI_WIDTH, height: UI_HEIGHT });
@@ -12,6 +13,7 @@ figma.on('run', () => {
       sample: JSON.stringify(createSampleForCurrentPage(), null, 2),
       pages: listPageNames(),
       currentPage: figma.currentPage.name,
+      manifest: archetypeManifest,
     },
   });
 
@@ -21,9 +23,16 @@ figma.on('run', () => {
     try {
       switch (message.type) {
         case 'execute-schema': {
-          await runSchemaFromString(message.payload ?? '', {
-            targetPage: message.targetPage,
-          });
+          const payload = message.payload;
+          if (payload && typeof payload === 'object' && Array.isArray(payload.documents)) {
+            await runSchemaBatch(payload.documents, {
+              targetPage: message.targetPage ?? payload.targetPage,
+            });
+          } else {
+            await runSchemaFromString((payload as string) ?? '', {
+              targetPage: message.targetPage,
+            });
+          }
           break;
         }
         case 'request-sample': {
@@ -33,6 +42,7 @@ figma.on('run', () => {
               sample: JSON.stringify(createSampleForCurrentPage(), null, 2),
               pages: listPageNames(),
               currentPage: figma.currentPage.name,
+              manifest: archetypeManifest,
             },
           });
           break;

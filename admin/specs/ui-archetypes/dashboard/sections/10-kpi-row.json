@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "dashboard",
+    "section": "kpi-row",
+    "order": 10,
+    "description": "KPI 카드 3개 행",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/dashboard",
+    "routeLabel": "Dashboard",
+    "slot": "main",
+    "slotLabel": "KPI Row"
+  },
+  "target": {
+    "frameName": "DashboardMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "stack",
+      "name": "DashboardKpiRow",
+      "layout": {
+        "type": "auto",
+        "direction": "HORIZONTAL",
+        "spacing": 24
+      },
+      "children": [
+        {
+          "type": "frame",
+          "name": "CardRevenue",
+          "size": { "width": 280, "height": 160 },
+          "tokens": { "fill": "color.surface.card" },
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 12,
+            "padding": { "top": 24, "right": 24, "bottom": 24, "left": 24 }
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "RevenueTitle",
+              "text": { "content": "이번 달 매출", "style": { "token": "font.heading.sm" } }
+            },
+            {
+              "type": "text",
+              "name": "RevenueValue",
+              "text": { "content": "₩128M", "style": { "token": "font.display" } }
+            },
+            {
+              "type": "text",
+              "name": "RevenueDelta",
+              "tokens": { "text": "color.text.positive" },
+              "text": { "content": "+12% MoM", "style": { "token": "font.body" } }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "name": "CardVisitors",
+          "size": { "width": 280, "height": 160 },
+          "tokens": { "fill": "color.surface.card" },
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 12,
+            "padding": { "top": 24, "right": 24, "bottom": 24, "left": 24 }
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "VisitorsTitle",
+              "text": { "content": "방문자", "style": { "token": "font.heading.sm" } }
+            },
+            {
+              "type": "text",
+              "name": "VisitorsValue",
+              "text": { "content": "34,512", "style": { "token": "font.display" } }
+            },
+            {
+              "type": "text",
+              "name": "VisitorsDelta",
+              "text": { "content": "지난주 대비 +8%", "style": { "token": "font.body" } }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "name": "CardTickets",
+          "size": { "width": 280, "height": 160 },
+          "tokens": { "fill": "color.surface.card" },
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 12,
+            "padding": { "top": 24, "right": 24, "bottom": 24, "left": 24 }
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "TicketsTitle",
+              "text": { "content": "열린 티켓", "style": { "token": "font.heading.sm" } }
+            },
+            {
+              "type": "text",
+              "name": "TicketsValue",
+              "text": { "content": "42", "style": { "token": "font.display" } }
+            },
+            {
+              "type": "text",
+              "name": "TicketsDelta",
+              "tokens": { "text": "color.text.negative" },
+              "text": { "content": "긴급 5건", "style": { "token": "font.body" } }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

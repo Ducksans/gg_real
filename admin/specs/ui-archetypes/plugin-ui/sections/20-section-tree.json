@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "plugin-ui",
+    "section": "section-tree",
+    "order": 20,
+    "description": "Surface → Route → Slot → Section 트리 패널",
+    "designSurface": "plugin",
+    "designSurfaceLabel": "Plugin UI",
+    "route": "/plugin/ui",
+    "routeLabel": "Plugin Shell",
+    "slot": "tree",
+    "slotLabel": "Selection Tree"
+  },
+  "target": {
+    "frameName": "PluginUIMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "TreePanel",
+      "tokens": { "fill": "color.surface.card", "radius": "radius.md" },
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 12,
+        "padding": { "top": 16, "right": 16, "bottom": 16, "left": 16 }
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "TreeTitle",
+          "text": { "content": "Design Surface", "style": { "token": "typo.heading.sm" } }
+        },
+        {
+          "type": "stack",
+          "name": "TreeDisclosure",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 8
+          },
+          "children": [
+            {
+              "type": "frame",
+              "name": "SurfaceAdmin",
+              "tokens": { "fill": "color.surface.input", "radius": "radius.md" },
+              "layout": {
+                "type": "auto",
+                "direction": "VERTICAL",
+                "spacing": 6,
+                "padding": { "top": 10, "right": 12, "bottom": 10, "left": 12 }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "LabelAdminSurface",
+                  "text": { "content": "admin", "style": { "token": "typo.body.md" } }
+                },
+                {
+                  "type": "stack",
+                  "name": "AdminRoutes",
+                  "layout": {
+                    "type": "auto",
+                    "direction": "VERTICAL",
+                    "spacing": 4
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "AdminRouteDashboard",
+                      "tokens": { "text": "color.text.secondary" },
+                      "text": {
+                        "content": "Dashboard · Slots(3)",
+                        "style": { "token": "typo.caption" }
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "name": "AdminRouteDetail",
+                      "tokens": { "text": "color.text.secondary" },
+                      "text": {
+                        "content": "Detail Form · Slots(4)",
+                        "style": { "token": "typo.caption" }
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "name": "AdminRouteWorkspace",
+                      "tokens": { "text": "color.text.secondary" },
+                      "text": {
+                        "content": "Dev Workspace · Slots(3)",
+                        "style": { "token": "typo.caption" }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "name": "SurfaceUser",
+              "tokens": { "fill": "color.surface.input", "radius": "radius.md" },
+              "layout": {
+                "type": "auto",
+                "direction": "VERTICAL",
+                "spacing": 6,
+                "padding": { "top": 10, "right": 12, "bottom": 10, "left": 12 }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "LabelUserSurface",
+                  "text": { "content": "user", "style": { "token": "typo.body.md" } }
+                },
+                {
+                  "type": "text",
+                  "name": "LabelUserPlaceholder",
+                  "tokens": { "text": "color.text.secondary" },
+                  "text": { "content": "준비 중", "style": { "token": "typo.caption" } }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "name": "SurfaceShared",
+              "tokens": { "fill": "color.surface.input", "radius": "radius.md" },
+              "layout": {
+                "type": "auto",
+                "direction": "VERTICAL",
+                "spacing": 6,
+                "padding": { "top": 10, "right": 12, "bottom": 10, "left": 12 }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "LabelSharedSurface",
+                  "text": { "content": "common", "style": { "token": "typo.body.md" } }
+                },
+                {
+                  "type": "text",
+                  "name": "LabelSharedRoutes",
+                  "tokens": { "text": "color.text.secondary" },
+                  "text": {
+                    "content": "Guardrail · Slots(2)",
+                    "style": { "token": "typo.caption" }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "name": "SelectedState",
+          "tokens": { "fill": "color.surface.muted", "radius": "radius.md" },
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 4,
+            "padding": { "top": 10, "right": 12, "bottom": 10, "left": 12 }
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "SelectionLabel",
+              "text": { "content": "선택된 슬롯 없음", "style": { "token": "typo.caption" } }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "1.0.0",
+  "theme": "light",
+  "meta": {
+    "title": "List with Filters",
+    "description": "필터 툴바와 결과 테이블로 구성된 목록 화면"
+  },
+  "frames": [
+    {
+      "id": "layout/list",
+      "stack": {
+        "direction": "vertical",
+        "gap": "space.lg",
+        "padding": {
+          "top": "space.lg",
+          "right": "space.lg",
+          "bottom": "space.xl",
+          "left": "space.lg"
+        },
+        "children": [
+          {
+            "component": {
+              "componentName": "section.header",
+              "instanceKey": "list-header",
+              "slots": {
+                "leading": {
+                  "stack": {
+                    "direction": "vertical",
+                    "gap": "space.xs",
+                    "children": [
+                      { "text": { "style": "font.heading.lg", "value": "문서 목록" } },
+                      {
+                        "text": {
+                          "style": "font.body",
+                          "value": "요청 상태와 담당자를 기준으로 필터링합니다."
+                        }
+                      }
+                    ]
+                  }
+                },
+                "actions": {
+                  "component": {
+                    "componentName": "button.primary",
+                    "instanceKey": "new-document",
+                    "props": { "label": "새 문서" }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "component": {
+              "componentName": "filter.panel",
+              "instanceKey": "list-filters",
+              "props": {
+                "columns": 4,
+                "filters": [
+                  {
+                    "type": "select",
+                    "label": "상태",
+                    "options": ["전체", "검토중", "승인", "거절"]
+                  },
+                  { "type": "daterange", "label": "업데이트 기간" },
+                  {
+                    "type": "select",
+                    "label": "담당자",
+                    "options": ["전체", "김대리", "이매니저"]
+                  },
+                  { "type": "search", "label": "키워드" }
+                ]
+              }
+            }
+          },
+          {
+            "component": {
+              "componentName": "table.standard",
+              "instanceKey": "document-table",
+              "slots": {
+                "toolbar": {
+                  "component": {
+                    "componentName": "toolbar.bulkActions",
+                    "instanceKey": "bulk-actions",
+                    "props": {
+                      "actions": ["선택 승인", "선택 반려"]
+                    }
+                  }
+                },
+                "head": {
+                  "tableHead": {
+                    "columns": [
+                      { "id": "col-select", "type": "checkbox", "width": 48 },
+                      { "id": "col-title", "label": "제목", "width": "flex" },
+                      { "id": "col-owner", "label": "담당자", "width": 140 },
+                      { "id": "col-status", "label": "상태", "width": 120 },
+                      { "id": "col-updated", "label": "업데이트", "width": 160 }
+                    ]
+                  }
+                },
+                "rows": {
+                  "emptyState": {
+                    "componentName": "empty.state",
+                    "instanceKey": "no-documents",
+                    "props": {
+                      "title": "조건에 맞는 문서가 없습니다",
+                      "description": "필터를 조정하거나 키워드를 변경해 보세요."
+                    }
+                  }
+                },
+                "pagination": {
+                  "component": {
+                    "componentName": "pagination.standard",
+                    "instanceKey": "document-pagination",
+                    "props": { "total": 0 }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "breakpoints": {
+          "sm": {
+            "direction": "vertical",
+            "gap": "space.md",
+            "padding": {
+              "top": "space.md",
+              "right": "space.md",
+              "bottom": "space.lg",
+              "left": "space.md"
+            }
+          },
+          "md": {
+            "gap": "space.lg"
+          },
+          "lg": {
+            "gap": "space.lg"
+          }
+        }
+      }
+    }
+  ]
+}

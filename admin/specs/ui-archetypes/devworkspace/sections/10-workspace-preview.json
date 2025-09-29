@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "devworkspace",
+    "section": "workspace-preview",
+    "order": 10,
+    "description": "중앙 Workspace Preview 패널 (중앙 960px, 상단 플러그인 / 하단 디자인 요약)",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/dev-workspace",
+    "routeLabel": "Dev Workspace",
+    "slot": "main",
+    "slotLabel": "Workspace Preview"
+  },
+  "target": {
+    "frameName": "DevWorkspaceMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "WorkspacePreviewFrame",
+      "size": {
+        "width": 960,
+        "height": 940
+      },
+      "tokens": {
+        "fill": "color.surface.base"
+      },
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 16,
+        "padding": {
+          "top": 24,
+          "right": 32,
+          "bottom": 24,
+          "left": 32
+        }
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "PreviewTitle",
+          "text": {
+            "content": "Workspace Preview",
+            "style": {
+              "token": "typo.heading.md"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "name": "PreviewSub",
+          "tokens": {
+            "text": "color.text.secondary"
+          },
+          "text": {
+            "content": "플러그인 실행 결과와 디자인 요약을 한 화면에서 확인합니다.",
+            "style": {
+              "token": "typo.body.md"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "name": "PluginEmbedMock",
+          "tokens": {
+            "fill": "color.surface.card"
+          },
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 10,
+            "padding": {
+              "top": 18,
+              "right": 18,
+              "bottom": 18,
+              "left": 18
+            }
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "PluginHeading",
+              "text": {
+                "content": "플러그인 실행 패널",
+                "style": {
+                  "token": "typo.heading.sm"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "name": "PluginDetail",
+              "tokens": {
+                "text": "color.text.secondary"
+              },
+              "text": {
+                "content": "섹션 선택 · Dry-run 로그 · 재실행 버튼을 제공",
+                "style": {
+                  "token": "typo.body.md"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "name": "DesignPreview",
+          "tokens": {
+            "fill": "color.surface.card"
+          },
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 6,
+            "padding": {
+              "top": 14,
+              "right": 14,
+              "bottom": 14,
+              "left": 14
+            }
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "DesignHeading",
+              "text": {
+                "content": "Figma 요약",
+                "style": {
+                  "token": "typo.heading.sm"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "name": "DesignDetail",
+              "tokens": {
+                "text": "color.text.secondary"
+              },
+              "text": {
+                "content": "선택된 섹션의 Figma 페이지 링크, Variables 상태, 누락 토큰을 표시",
+                "style": {
+                  "token": "typo.body.md"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

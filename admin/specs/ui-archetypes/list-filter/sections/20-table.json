@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "list-filter",
+    "section": "table",
+    "order": 20,
+    "description": "목록 테이블과 빈 상태",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/list",
+    "routeLabel": "List",
+    "slot": "main",
+    "slotLabel": "Results Table"
+  },
+  "target": {
+    "frameName": "ListMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "stack",
+      "name": "ListTable",
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 12
+      },
+      "children": [
+        {
+          "type": "frame",
+          "name": "TableHeader",
+          "layout": {
+            "type": "auto",
+            "direction": "HORIZONTAL",
+            "spacing": 16
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "ColTitle",
+              "text": { "content": "제목", "style": { "token": "font.caption" } }
+            },
+            {
+              "type": "text",
+              "name": "ColOwner",
+              "text": { "content": "담당자", "style": { "token": "font.caption" } }
+            },
+            {
+              "type": "text",
+              "name": "ColStatus",
+              "text": { "content": "상태", "style": { "token": "font.caption" } }
+            },
+            {
+              "type": "text",
+              "name": "ColUpdated",
+              "text": { "content": "업데이트", "style": { "token": "font.caption" } }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "name": "TableRow",
+          "tokens": { "fill": "color.surface.card" },
+          "layout": {
+            "type": "auto",
+            "direction": "HORIZONTAL",
+            "spacing": 16,
+            "padding": { "top": 12, "right": 16, "bottom": 12, "left": 16 }
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "RowTitle",
+              "text": { "content": "문서 자동화 기획", "style": { "token": "font.body" } }
+            },
+            {
+              "type": "text",
+              "name": "RowOwner",
+              "text": { "content": "김대리", "style": { "token": "font.body" } }
+            },
+            {
+              "type": "text",
+              "name": "RowStatus",
+              "tokens": { "text": "color.text.positive" },
+              "text": { "content": "승인", "style": { "token": "font.body" } }
+            },
+            {
+              "type": "text",
+              "name": "RowUpdated",
+              "text": { "content": "2025-09-28", "style": { "token": "font.body" } }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

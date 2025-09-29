@@ -1,0 +1,147 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "plugin-ui",
+    "section": "log-panel",
+    "order": 40,
+    "description": "Dry-run 결과 로그와 보조 액션",
+    "designSurface": "plugin",
+    "designSurfaceLabel": "Plugin UI",
+    "route": "/plugin/ui",
+    "routeLabel": "Plugin Shell",
+    "slot": "footer",
+    "slotLabel": "Logs & Secondary Actions"
+  },
+  "target": {
+    "frameName": "PluginUIMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "FooterPanel",
+      "tokens": { "fill": "color.surface.card", "radius": "radius.md" },
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 16,
+        "padding": { "top": 16, "right": 16, "bottom": 16, "left": 16 }
+      },
+      "children": [
+        {
+          "type": "stack",
+          "name": "LogHeader",
+          "layout": {
+            "type": "auto",
+            "direction": "HORIZONTAL",
+            "spacing": 12,
+            "primaryAlign": "SPACE_BETWEEN",
+            "counterAlign": "CENTER"
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "LogTitle",
+              "text": { "content": "Dry-run 결과 로그", "style": { "token": "typo.heading.sm" } }
+            },
+            {
+              "type": "stack",
+              "name": "LogActions",
+              "layout": {
+                "type": "auto",
+                "direction": "HORIZONTAL",
+                "spacing": 8
+              },
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "ButtonUndo",
+                  "tokens": { "fill": "color.surface.input", "radius": "radius.md" },
+                  "layout": {
+                    "type": "auto",
+                    "direction": "HORIZONTAL",
+                    "spacing": 4,
+                    "padding": { "top": 6, "right": 10, "bottom": 6, "left": 10 },
+                    "counterAlign": "CENTER"
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "UndoLabel",
+                      "text": { "content": "Undo", "style": { "token": "typo.body.md" } }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "name": "ButtonRedo",
+                  "tokens": { "fill": "color.surface.input", "radius": "radius.md" },
+                  "layout": {
+                    "type": "auto",
+                    "direction": "HORIZONTAL",
+                    "spacing": 4,
+                    "padding": { "top": 6, "right": 10, "bottom": 6, "left": 10 },
+                    "counterAlign": "CENTER"
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "RedoLabel",
+                      "text": { "content": "Redo", "style": { "token": "typo.body.md" } }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "stack",
+          "name": "LogArea",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 6
+          },
+          "children": [
+            {
+              "type": "frame",
+              "name": "LogBackground",
+              "tokens": {
+                "fill": "color.surface.base",
+                "stroke": "color.surface.muted",
+                "radius": "radius.md"
+              },
+              "layout": {
+                "type": "auto",
+                "direction": "VERTICAL",
+                "spacing": 6,
+                "padding": { "top": 12, "right": 12, "bottom": 12, "left": 12 }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "LogPlaceholderPrimary",
+                  "tokens": { "text": "color.text.secondary" },
+                  "text": {
+                    "content": "Dry-run 결과가 이 영역에 표시됩니다.",
+                    "style": { "token": "typo.body.md" }
+                  }
+                },
+                {
+                  "type": "text",
+                  "name": "LogPlaceholderSecondary",
+                  "tokens": { "text": "color.text.secondary" },
+                  "text": {
+                    "content": "필요 시 체크포인트 초안 생성, 승인 로그 등을 함께 보여줍니다.",
+                    "style": { "token": "typo.caption" }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "devworkspace",
+    "section": "approvals-rail",
+    "order": 20,
+    "description": "우측 Approvals & Automation 레일 (우측 360px)",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/dev-workspace",
+    "routeLabel": "Dev Workspace",
+    "slot": "right-rail",
+    "slotLabel": "Approvals & Automation"
+  },
+  "target": {
+    "frameName": "DevWorkspaceMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "ApprovalsRailFrame",
+      "size": {
+        "width": 360,
+        "height": 940
+      },
+      "tokens": {
+        "fill": "color.surface.card"
+      },
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 14,
+        "padding": {
+          "top": 24,
+          "right": 20,
+          "bottom": 24,
+          "left": 20
+        }
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "ApprovalsTitle",
+          "text": {
+            "content": "Approvals & Automation",
+            "style": {
+              "token": "typo.heading.md"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "name": "ApprovalsDescription",
+          "tokens": {
+            "text": "color.text.secondary"
+          },
+          "text": {
+            "content": "Dry-run 로그, 승인 체크리스트, 체크포인트 생성을 관리합니다.",
+            "style": {
+              "token": "typo.body.md"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "name": "LogCard",
+          "tokens": {
+            "fill": "color.surface.muted"
+          },
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 6,
+            "padding": {
+              "top": 12,
+              "right": 12,
+              "bottom": 12,
+              "left": 12
+            }
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "LogTitle",
+              "text": {
+                "content": "최근 Dry-run",
+                "style": {
+                  "token": "typo.heading.sm"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "name": "LogBody",
+              "tokens": {
+                "text": "color.text.secondary"
+              },
+              "text": {
+                "content": "생성 12 · 경고 1 · 오류 0 (3분 전)",
+                "style": {
+                  "token": "typo.body.md"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "name": "ApproveCard",
+          "tokens": {
+            "fill": "color.surface.muted"
+          },
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 6,
+            "padding": {
+              "top": 12,
+              "right": 12,
+              "bottom": 12,
+              "left": 12
+            }
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "ApproveHeading",
+              "text": {
+                "content": "승인 단계",
+                "style": {
+                  "token": "typo.heading.sm"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "name": "ApproveDetail",
+              "tokens": {
+                "text": "color.text.secondary"
+              },
+              "text": {
+                "content": "경고 해소 체크리스트 완료 → 승인 → 체크포인트 생성",
+                "style": {
+                  "token": "typo.body.md"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

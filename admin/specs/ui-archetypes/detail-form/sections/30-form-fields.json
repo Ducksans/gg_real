@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "detail-form",
+    "section": "form-fields",
+    "order": 30,
+    "description": "2열 폼 필드",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/detail",
+    "routeLabel": "Detail",
+    "slot": "main-body",
+    "slotLabel": "Form Body"
+  },
+  "target": {
+    "frameName": "DetailMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "stack",
+      "name": "FormFields",
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 12
+      },
+      "children": [
+        {
+          "type": "frame",
+          "name": "FieldTitle",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 4
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "LabelTitle",
+              "text": { "content": "제목", "style": { "token": "font.caption" } }
+            },
+            {
+              "type": "text",
+              "name": "ValueTitle",
+              "text": { "content": "문서 자동화 기획", "style": { "token": "font.body" } }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "name": "FieldOwner",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 4
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "LabelOwner",
+              "text": { "content": "담당자", "style": { "token": "font.caption" } }
+            },
+            {
+              "type": "text",
+              "name": "ValueOwner",
+              "text": { "content": "김대리", "style": { "token": "font.body" } }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "name": "FieldDescription",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 4
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "LabelDesc",
+              "text": { "content": "설명", "style": { "token": "font.caption" } }
+            },
+            {
+              "type": "text",
+              "name": "ValueDesc",
+              "text": {
+                "content": "본 문서는 자동화 절차를 설명합니다.",
+                "style": { "token": "font.body" }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

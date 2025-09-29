@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "timeline-graph",
+    "section": "timeline",
+    "order": 20,
+    "description": "이벤트 타임라인",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/timeline",
+    "routeLabel": "Timeline & Graph",
+    "slot": "bottom",
+    "slotLabel": "Timeline Events"
+  },
+  "target": {
+    "frameName": "TimelineMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "stack",
+      "name": "EventTimeline",
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 8
+      },
+      "children": [
+        {
+          "type": "text",
+          "name": "TimelineTitle",
+          "text": { "content": "타임라인", "style": { "token": "font.heading.sm" } }
+        },
+        {
+          "type": "text",
+          "name": "TimelineEvent1",
+          "text": { "content": "2025-09-24 · 플러그인 배포", "style": { "token": "font.body" } }
+        },
+        {
+          "type": "text",
+          "name": "TimelineEvent2",
+          "text": {
+            "content": "2025-09-25 · 문서 자동화 활성화",
+            "style": { "token": "font.body" }
+          }
+        },
+        {
+          "type": "text",
+          "name": "TimelineWarning",
+          "tokens": { "text": "color.text.warning" },
+          "text": { "content": "경고: 9월 26일 데이터 급증", "style": { "token": "font.body" } }
+        }
+      ]
+    }
+  ]
+}

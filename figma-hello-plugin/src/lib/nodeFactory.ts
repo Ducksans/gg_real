@@ -2,6 +2,7 @@ import { NodeSpec } from '../schema';
 
 export interface BuildContext {
   tokenResolver: (token: string) => Paint | null;
+  paintStyleResolver?: (token: string) => string | null;
   radiusResolver: (token: string) => number | null;
   typographyResolver: (token: string) => TypographyToken | null;
 }
@@ -11,6 +12,7 @@ interface TypographyToken {
   fontSize: number;
   lineHeight?: number;
   colorToken?: string;
+  styleId?: string;
 }
 
 type ParentNode = PageNode | FrameNode;
@@ -57,7 +59,14 @@ async function createNode(spec: NodeSpec, ctx: BuildContext): Promise<SceneNode 
 
 async function createTextNode(spec: Extract<NodeSpec, { type: 'text' }>, ctx: BuildContext) {
   const text = figma.createText();
-  const { fontName, fontSize, lineHeight, fillPaint } = await resolveTextStyle(spec, ctx);
+  const defaultFont: FontName = { family: 'Inter', style: 'Regular' };
+  await figma.loadFontAsync(defaultFont);
+  text.fontName = defaultFont;
+
+  const { fontName, fontSize, lineHeight, fillPaint, textStyleId } = await resolveTextStyle(
+    spec,
+    ctx,
+  );
 
   if (fontName) {
     await figma.loadFontAsync(fontName);
@@ -74,6 +83,9 @@ async function createTextNode(spec: Extract<NodeSpec, { type: 'text' }>, ctx: Bu
   }
 
   text.characters = spec.text.content;
+  if (textStyleId) {
+    text.textStyleId = textStyleId;
+  }
   return text;
 }
 
@@ -89,6 +101,8 @@ async function createFrameNode(
 
   if (usesAutoLayout) {
     frame.layoutMode = spec.layout?.direction === 'HORIZONTAL' ? 'HORIZONTAL' : 'VERTICAL';
+    frame.primaryAxisSizingMode = 'AUTO';
+    frame.counterAxisSizingMode = 'AUTO';
     applyAutoLayout(frame, spec.layout);
   } else {
     frame.layoutMode = 'NONE';
@@ -116,6 +130,7 @@ async function resolveTextStyle(spec: Extract<NodeSpec, { type: 'text' }>, ctx: 
   let fontSize = directStyle?.fontSize ?? null;
   let lineHeight = directStyle?.lineHeight ?? undefined;
   let fillPaint: Paint | null = null;
+  let textStyleId: string | null = null;
 
   if (directStyle?.token) {
     const token = ctx.typographyResolver(directStyle.token);
@@ -123,6 +138,7 @@ async function resolveTextStyle(spec: Extract<NodeSpec, { type: 'text' }>, ctx: 
       fontName = token.font;
       fontSize = token.fontSize;
       lineHeight = token.lineHeight ?? undefined;
+      textStyleId = token.styleId ?? null;
       if (token.colorToken) {
         fillPaint = ctx.tokenResolver(token.colorToken);
       }
@@ -137,7 +153,7 @@ async function resolveTextStyle(spec: Extract<NodeSpec, { type: 'text' }>, ctx: 
     fillPaint = ctx.tokenResolver(spec.tokens.fill);
   }
 
-  return { fontName, fontSize, lineHeight, fillPaint };
+  return { fontName, fontSize, lineHeight, fillPaint, textStyleId };
 }
 
 function applySize(
@@ -194,9 +210,14 @@ function applyTokens(
   if (!tokens) return;
 
   if ('fill' in tokens && 'fills' in node) {
-    const paint = ctx.tokenResolver(tokens.fill);
-    if (paint) {
-      node.fills = [clonePaint(paint)];
+    const styleId = ctx.paintStyleResolver?.(tokens.fill);
+    if (styleId && 'fillStyleId' in node) {
+      (node as GeometryMixin).fillStyleId = styleId;
+    } else {
+      const paint = ctx.tokenResolver(tokens.fill);
+      if (paint) {
+        node.fills = [clonePaint(paint)];
+      }
     }
   }
 

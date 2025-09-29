@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "timeline-graph",
+    "section": "header",
+    "order": 0,
+    "description": "그래프 화면 제목과 필터",
+    "designSurface": "admin",
+    "designSurfaceLabel": "Admin",
+    "route": "/admin/timeline",
+    "routeLabel": "Timeline & Graph",
+    "slot": "top",
+    "slotLabel": "Analytics Header"
+  },
+  "target": {
+    "frameName": "TimelineMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "AnalyticsHeader",
+      "layout": {
+        "type": "auto",
+        "direction": "HORIZONTAL",
+        "spacing": 16
+      },
+      "children": [
+        {
+          "type": "stack",
+          "name": "HeaderText",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 4
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "HeaderTitle",
+              "text": { "content": "활동 그래프", "style": { "token": "font.heading.lg" } }
+            },
+            {
+              "type": "text",
+              "name": "HeaderDesc",
+              "tokens": { "text": "color.text.secondary" },
+              "text": {
+                "content": "주요 이벤트와 지표 변화를 함께 확인합니다.",
+                "style": { "token": "font.body" }
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "HeaderFilter",
+          "tokens": { "text": "color.text.link" },
+          "text": { "content": "기간: 최근 7일", "style": { "token": "font.body" } }
+        }
+      ]
+    }
+  ]
+}

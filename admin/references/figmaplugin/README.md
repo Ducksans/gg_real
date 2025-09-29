@@ -3,7 +3,7 @@ file: admin/references/figmaplugin/README.md
 title: Figma 플러그인 고도화 참고 자료 인덱스
 owner: duksan
 created: 2025-09-29 07:36 UTC / 2025-09-29 16:36 KST
-updated: 2025-09-29 07:44 UTC / 2025-09-29 16:44 KST
+updated: 2025-09-29 18:41 UTC / 2025-09-30 03:41 KST
 status: draft
 tags: [reference, index]
 schemaVersion: 1
@@ -19,6 +19,8 @@ description: Figma 플러그인 고도화를 위해 수집한 로컬 참고 노�
 - `figma-developer-api.md` — REST API 확장 고려 사항
 - `automation-plugins-research.md` — Automator/Locofy 등 벤치마크
 - `design-token-tools.md` — 디자인 토큰/Variables 참고
+- `admin/specs/figmaplugin-p1-design.md` — P1 설계 요약 (컴포넌트·DSL·패치·검증)
+- `admin/plan/design-contract.md` — 관리자 UI 설계 계약(토큰·타이포·레이아웃·DoD)
 
 ## 활용 제안
 

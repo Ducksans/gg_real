@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "plugin-ui",
+    "section": "detail-panel",
+    "order": 30,
+    "description": "결합된 JSON과 대상 페이지 입력",
+    "designSurface": "plugin",
+    "designSurfaceLabel": "Plugin UI",
+    "route": "/plugin/ui",
+    "routeLabel": "Plugin Shell",
+    "slot": "detail",
+    "slotLabel": "Detail Panel"
+  },
+  "target": {
+    "frameName": "PluginUIMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "DetailPanel",
+      "tokens": { "fill": "color.surface.card", "radius": "radius.md" },
+      "layout": {
+        "type": "auto",
+        "direction": "VERTICAL",
+        "spacing": 16,
+        "padding": { "top": 16, "right": 16, "bottom": 16, "left": 16 }
+      },
+      "children": [
+        {
+          "type": "stack",
+          "name": "CombinedJSON",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 8
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "JSONLabel",
+              "text": { "content": "결합된 JSON", "style": { "token": "typo.heading.sm" } }
+            },
+            {
+              "type": "frame",
+              "name": "JSONTextarea",
+              "tokens": {
+                "fill": "color.surface.base",
+                "stroke": "color.surface.muted",
+                "radius": "radius.md"
+              },
+              "layout": {
+                "type": "auto",
+                "direction": "VERTICAL",
+                "spacing": 6,
+                "padding": { "top": 12, "right": 12, "bottom": 12, "left": 12 },
+                "grow": 1
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "JSONPlaceholder",
+                  "tokens": { "text": "color.text.secondary" },
+                  "text": {
+                    "content": "선택된 섹션의 JSON이 여기에 표시됩니다.",
+                    "style": { "token": "typo.caption" }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "stack",
+          "name": "TargetPage",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 8
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "TargetLabel",
+              "text": { "content": "대상 페이지", "style": { "token": "typo.heading.sm" } }
+            },
+            {
+              "type": "frame",
+              "name": "TargetSelect",
+              "tokens": {
+                "fill": "color.surface.base",
+                "stroke": "color.surface.muted",
+                "radius": "radius.md"
+              },
+              "layout": {
+                "type": "auto",
+                "direction": "HORIZONTAL",
+                "spacing": 6,
+                "padding": { "top": 10, "right": 12, "bottom": 10, "left": 12 },
+                "counterAlign": "CENTER"
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "TargetPlaceholder",
+                  "text": {
+                    "content": "GG_real_user_acchtype",
+                    "style": { "token": "typo.body.md" }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "stack",
+          "name": "SelectionSummary",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 8
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "SummaryLabel",
+              "text": { "content": "선택한 슬롯", "style": { "token": "typo.heading.sm" } }
+            },
+            {
+              "type": "stack",
+              "name": "SummaryChips",
+              "layout": {
+                "type": "auto",
+                "direction": "HORIZONTAL",
+                "spacing": 6
+              },
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "ChipDashboard",
+                  "tokens": { "fill": "color.surface.input", "radius": "radius.md" },
+                  "layout": {
+                    "type": "auto",
+                    "direction": "HORIZONTAL",
+                    "spacing": 4,
+                    "padding": { "top": 6, "right": 10, "bottom": 6, "left": 10 }
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "ChipDashboardLabel",
+                      "tokens": { "text": "color.text.secondary" },
+                      "text": {
+                        "content": "Dashboard · header",
+                        "style": { "token": "typo.caption" }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "name": "ChipDetail",
+                  "tokens": { "fill": "color.surface.input", "radius": "radius.md" },
+                  "layout": {
+                    "type": "auto",
+                    "direction": "HORIZONTAL",
+                    "spacing": 4,
+                    "padding": { "top": 6, "right": 10, "bottom": 6, "left": 10 }
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "ChipDetailLabel",
+                      "tokens": { "text": "color.text.secondary" },
+                      "text": {
+                        "content": "Plugin UI · detail",
+                        "style": { "token": "typo.caption" }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

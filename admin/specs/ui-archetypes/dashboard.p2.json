@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "title": "Admin Dashboard (DSL ver)",
+    "description": "KPI 카드와 목록으로 구성된 대시보드 고도화 DSL",
+    "createdBy": "codex",
+    "tokenset": "gg_real/base"
+  },
+  "target": {
+    "page": "GG_real_user_acctype",
+    "frameName": "DashboardMock",
+    "mode": "replace"
+  },
+  "frames": [
+    {
+      "id": "layout/dashboard",
+      "grid": {
+        "columns": 12,
+        "gutter": "space.md",
+        "rowGap": "space.lg",
+        "columnGap": "space.md",
+        "padding": {
+          "top": "space.lg",
+          "right": "space.lg",
+          "bottom": "space.xl",
+          "left": "space.lg"
+        },
+        "breakpoints": {
+          "sm": { "columns": 4, "gutter": "space.sm" },
+          "md": { "columns": 8, "gutter": "space.md" },
+          "lg": { "columns": 12 },
+          "xl": { "columns": 12, "columnGap": "space.lg" }
+        },
+        "children": [
+          {
+            "area": "kpi-row",
+            "span": { "sm": 4, "md": 4, "lg": 3, "xl": 3 },
+            "component": {
+              "componentName": "card.standard",
+              "instanceKey": "kpi-revenue",
+              "slots": {
+                "header": { "text": "이번 달 매출" },
+                "body": {
+                  "stack": {
+                    "direction": "vertical",
+                    "gap": "space.sm",
+                    "children": [
+                      { "text": { "style": "font.heading.md", "value": "₩128M" } },
+                      { "text": { "style": "font.body", "value": "+12% MoM" } }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "area": "kpi-row",
+            "span": { "sm": 4, "md": 4, "lg": 3, "xl": 3 },
+            "component": {
+              "componentName": "card.standard",
+              "instanceKey": "kpi-visitors",
+              "slots": {
+                "header": { "text": "방문자" },
+                "body": {
+                  "text": { "style": "font.heading.md", "value": "34,512" }
+                }
+              }
+            }
+          },
+          {
+            "area": "list-section",
+            "span": { "sm": 4, "md": 8, "lg": 12, "xl": 12 },
+            "stack": {
+              "direction": "vertical",
+              "gap": "space.md",
+              "children": [
+                {
+                  "component": {
+                    "componentName": "section.header",
+                    "instanceKey": "recent-activities",
+                    "slots": {
+                      "leading": {
+                        "text": { "style": "font.heading.md", "value": "최근 활동" }
+                      },
+                      "actions": {
+                        "component": {
+                          "componentName": "button.secondary",
+                          "instanceKey": "see-all",
+                          "props": { "label": "전체 보기" }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "component": {
+                    "componentName": "table.standard",
+                    "instanceKey": "activity-table",
+                    "slots": {
+                      "toolbar": {
+                        "component": {
+                          "componentName": "toolbar.filter",
+                          "instanceKey": "filters",
+                          "props": {
+                            "filters": ["기간", "상태", "담당자"]
+                          }
+                        }
+                      },
+                      "head": {
+                        "tableHead": {
+                          "columns": [
+                            { "id": "col-name", "label": "항목", "width": "flex" },
+                            { "id": "col-status", "label": "상태", "width": 120 },
+                            { "id": "col-updated", "label": "업데이트", "width": 160 }
+                          ]
+                        }
+                      },
+                      "rows": {
+                        "emptyState": {
+                          "componentName": "empty.state",
+                          "instanceKey": "no-activity",
+                          "props": {
+                            "title": "활동 데이터가 없습니다",
+                            "actions": ["데이터 새로고침"]
+                          }
+                        }
+                      },
+                      "pagination": {
+                        "component": {
+                          "componentName": "pagination.standard",
+                          "instanceKey": "activity-pagination",
+                          "props": { "total": 0 }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

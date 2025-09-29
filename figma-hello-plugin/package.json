@@ -4,7 +4,8 @@
   "description": "Codex-assisted Figma automation plugin",
   "private": true,
   "scripts": {
-    "build": "npm run build:main && npm run build:ui",
+    "build": "npm run build:manifest && npm run build:main && npm run build:ui",
+    "build:manifest": "node scripts/build-archetype-manifest.js",
     "build:main": "esbuild src/main.ts --bundle --platform=node --target=es2018 --outfile=dist/main.js",
     "build:ui": "node scripts/copy-ui.js",
     "watch": "npm run build:main -- --watch",

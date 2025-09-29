@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "1.0.0",
+  "theme": "light",
+  "meta": {
+    "title": "Detail + Form",
+    "description": "좌측 정보 카드와 우측 편집 폼으로 구성된 상세 화면"
+  },
+  "frames": [
+    {
+      "id": "layout/detail",
+      "grid": {
+        "columns": 12,
+        "gutter": "space.lg",
+        "padding": {
+          "top": "space.lg",
+          "right": "space.xl",
+          "bottom": "space.xl",
+          "left": "space.xl"
+        },
+        "children": [
+          {
+            "area": "info-panel",
+            "span": { "sm": 12, "md": 12, "lg": 4, "xl": 4 },
+            "stack": {
+              "direction": "vertical",
+              "gap": "space.md",
+              "children": [
+                {
+                  "component": {
+                    "componentName": "card.standard",
+                    "instanceKey": "summary-card",
+                    "slots": {
+                      "header": { "text": "요약 정보" },
+                      "body": {
+                        "stack": {
+                          "direction": "vertical",
+                          "gap": "space.sm",
+                          "children": [
+                            { "text": { "style": "font.body", "value": "작성자: 김팀장" } },
+                            { "text": { "style": "font.body", "value": "등록일: 2025-09-20" } },
+                            {
+                              "component": {
+                                "componentName": "alert.inline",
+                                "instanceKey": "status",
+                                "props": {
+                                  "status": "warning",
+                                  "title": "검토 대기",
+                                  "description": "승인 전까지 수정 가능"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "component": {
+                    "componentName": "timeline.vertical",
+                    "instanceKey": "history",
+                    "props": {
+                      "events": [
+                        { "timestamp": "2025-09-25", "label": "초안 작성" },
+                        { "timestamp": "2025-09-26", "label": "검토 요청" }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "area": "form-panel",
+            "span": { "sm": 12, "md": 12, "lg": 8, "xl": 8 },
+            "stack": {
+              "direction": "vertical",
+              "gap": "space.lg",
+              "children": [
+                {
+                  "component": {
+                    "componentName": "section.header",
+                    "instanceKey": "form-header",
+                    "slots": {
+                      "leading": {
+                        "text": { "style": "font.heading.lg", "value": "세부 정보 편집" }
+                      },
+                      "actions": {
+                        "stack": {
+                          "direction": "horizontal",
+                          "gap": "space.sm",
+                          "children": [
+                            {
+                              "component": {
+                                "componentName": "button.tertiary",
+                                "instanceKey": "cancel",
+                                "props": { "label": "취소" }
+                              }
+                            },
+                            {
+                              "component": {
+                                "componentName": "button.primary",
+                                "instanceKey": "save",
+                                "props": { "label": "저장", "emphasis": "primary" }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "component": {
+                    "componentName": "form.layout",
+                    "instanceKey": "detail-form",
+                    "props": {
+                      "columns": 2,
+                      "fields": [
+                        {
+                          "componentName": "form.row",
+                          "instanceKey": "field-title",
+                          "slots": {
+                            "label": { "text": "제목" },
+                            "input": { "componentName": "input.text", "instanceKey": "title" },
+                            "hint": { "text": "최대 80자" }
+                          }
+                        },
+                        {
+                          "componentName": "form.row",
+                          "instanceKey": "field-owner",
+                          "slots": {
+                            "label": { "text": "담당자" },
+                            "input": { "componentName": "select.user", "instanceKey": "owner" }
+                          }
+                        },
+                        {
+                          "componentName": "form.row",
+                          "instanceKey": "field-description",
+                          "props": { "span": 2 },
+                          "slots": {
+                            "label": { "text": "설명" },
+                            "input": { "componentName": "textarea", "instanceKey": "description" }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "breakpoints": {
+                "sm": { "direction": "vertical", "gap": "space.md" },
+                "md": { "columns": 1 }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "plugin-ui",
+    "section": "surface-tabs",
+    "order": 10,
+    "description": "Design Surface 전환 탭",
+    "designSurface": "plugin",
+    "designSurfaceLabel": "Plugin UI",
+    "route": "/plugin/ui",
+    "routeLabel": "Plugin Shell",
+    "slot": "surface-tabs",
+    "slotLabel": "Surface Tabs"
+  },
+  "target": {
+    "frameName": "PluginUIMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "SurfaceTabs",
+      "tokens": { "fill": "color.surface.base", "radius": "radius.md" },
+      "layout": {
+        "type": "auto",
+        "direction": "HORIZONTAL",
+        "spacing": 8,
+        "padding": { "top": 8, "right": 8, "bottom": 8, "left": 8 }
+      },
+      "children": [
+        {
+          "type": "frame",
+          "name": "TabAdmin",
+          "tokens": {
+            "fill": "color.surface.card",
+            "stroke": "color.text.link",
+            "radius": "radius.md"
+          },
+          "layout": {
+            "type": "auto",
+            "direction": "HORIZONTAL",
+            "spacing": 6,
+            "padding": { "top": 8, "right": 16, "bottom": 8, "left": 16 },
+            "counterAlign": "CENTER"
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "LabelAdmin",
+              "tokens": { "text": "color.text.link" },
+              "text": { "content": "admin", "style": { "token": "typo.body.md" } }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "name": "TabUser",
+          "tokens": { "fill": "color.surface.card", "radius": "radius.md" },
+          "layout": {
+            "type": "auto",
+            "direction": "HORIZONTAL",
+            "spacing": 6,
+            "padding": { "top": 8, "right": 16, "bottom": 8, "left": 16 },
+            "counterAlign": "CENTER"
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "LabelUser",
+              "tokens": { "text": "color.text.secondary" },
+              "text": { "content": "user", "style": { "token": "typo.body.md" } }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "name": "TabShared",
+          "tokens": { "fill": "color.surface.card", "radius": "radius.md" },
+          "layout": {
+            "type": "auto",
+            "direction": "HORIZONTAL",
+            "spacing": 6,
+            "padding": { "top": 8, "right": 16, "bottom": 8, "left": 16 },
+            "counterAlign": "CENTER"
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "LabelShared",
+              "tokens": { "text": "color.text.secondary" },
+              "text": { "content": "common", "style": { "token": "typo.body.md" } }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

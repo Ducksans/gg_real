@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "plugin-ui",
+    "section": "header",
+    "order": 0,
+    "description": "플러그인 상단 헤더와 실행 버튼",
+    "designSurface": "plugin",
+    "designSurfaceLabel": "Plugin UI",
+    "route": "/plugin/ui",
+    "routeLabel": "Plugin Shell",
+    "slot": "header",
+    "slotLabel": "Header"
+  },
+  "target": {
+    "frameName": "PluginUIMock",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "HeaderBar",
+      "tokens": { "fill": "color.surface.card", "radius": "radius.md" },
+      "layout": {
+        "type": "auto",
+        "direction": "HORIZONTAL",
+        "spacing": 16,
+        "padding": { "top": 18, "right": 20, "bottom": 18, "left": 20 },
+        "primaryAlign": "SPACE_BETWEEN",
+        "counterAlign": "CENTER"
+      },
+      "children": [
+        {
+          "type": "stack",
+          "name": "HeaderTitle",
+          "layout": {
+            "type": "auto",
+            "direction": "VERTICAL",
+            "spacing": 4
+          },
+          "children": [
+            {
+              "type": "text",
+              "name": "Title",
+              "text": { "content": "JSON 스키마 실행", "style": { "token": "typo.heading.md" } }
+            },
+            {
+              "type": "text",
+              "name": "Subtitle",
+              "tokens": { "text": "color.text.secondary" },
+              "text": {
+                "content": "Design Surface · Route · Slot을 선택해 Dry-run을 실행합니다.",
+                "style": { "token": "typo.body.md" }
+              }
+            }
+          ]
+        },
+        {
+          "type": "stack",
+          "name": "HeaderActions",
+          "layout": {
+            "type": "auto",
+            "direction": "HORIZONTAL",
+            "spacing": 8,
+            "counterAlign": "CENTER"
+          },
+          "children": [
+            {
+              "type": "frame",
+              "name": "ButtonDryRun",
+              "tokens": {
+                "fill": "color.surface.card",
+                "stroke": "color.text.link",
+                "radius": "radius.lg"
+              },
+              "layout": {
+                "type": "auto",
+                "direction": "HORIZONTAL",
+                "spacing": 6,
+                "padding": { "top": 8, "right": 12, "bottom": 8, "left": 12 },
+                "counterAlign": "CENTER"
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "DryRunLabel",
+                  "tokens": { "text": "color.text.link" },
+                  "text": { "content": "Dry-run", "style": { "token": "typo.body.md" } }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "name": "ButtonApply",
+              "tokens": {
+                "fill": "color.surface.card",
+                "stroke": "color.text.positive",
+                "radius": "radius.lg"
+              },
+              "layout": {
+                "type": "auto",
+                "direction": "HORIZONTAL",
+                "spacing": 6,
+                "padding": { "top": 8, "right": 12, "bottom": 8, "left": 12 },
+                "counterAlign": "CENTER"
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "name": "ApplyLabel",
+                  "tokens": { "text": "color.text.positive" },
+                  "text": { "content": "Apply", "style": { "token": "typo.body.md" } }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
