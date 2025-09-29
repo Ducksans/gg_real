@@ -3,7 +3,7 @@ file: admin/specs/figma-plugin-schema.md
 title: Figma 자동 생성용 JSON 스키마 초안
 owner: duksan
 created: 2025-09-29 02:58 UTC / 2025-09-29 11:58 KST
-updated: 2025-09-29 03:57 UTC / 2025-09-29 12:57 KST
+updated: 2025-09-29 04:56 UTC / 2025-09-29 13:56 KST
 status: draft
 tags: [schema, figma, plugin, automation]
 schemaVersion: 1
@@ -22,6 +22,7 @@ linkedPlans:
   - 자식 노드가 있는 요소는 `children: []` 배열을 포함한다.
   - 스타일은 토큰(`tokens.color.primary`) 또는 직접 값(`rgba`, `fontSize`)으로 지정 가능하며, 토큰 우선 적용.
   - 치수/여백 단위는 px 기준 숫자. auto-layout 속성은 Figma naming(`layoutMode`, `primaryAxisAlignItems`) 사용.
+- 샘플 JSON: `figma-hello-plugin/src/samples/glossary.ts`
 
 # 2. 루트 구조
 

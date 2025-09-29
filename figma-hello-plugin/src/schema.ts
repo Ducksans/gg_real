@@ -4,22 +4,9 @@ export interface BaseNodeSpec {
   type: NodeType;
   name: string;
   tokens?: Record<string, string>;
-  constraints?: {
-    horizontal?: LayoutConstraint;
-    vertical?: LayoutConstraint;
-  };
+  constraints?: Partial<Constraints>;
   pluginData?: Record<string, string | number | boolean>;
 }
-
-type LayoutConstraint =
-  | 'LEFT'
-  | 'RIGHT'
-  | 'LEFT_RIGHT'
-  | 'CENTER'
-  | 'SCALE'
-  | 'TOP'
-  | 'BOTTOM'
-  | 'TOP_BOTTOM';
 
 export interface Size {
   width?: number;

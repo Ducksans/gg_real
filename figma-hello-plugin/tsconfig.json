@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "types": ["figma-typings"],
+    "types": ["@figma/plugin-typings"],
     "baseUrl": "src"
   },
   "include": ["src/**/*"]

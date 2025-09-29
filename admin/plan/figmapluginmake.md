@@ -3,7 +3,7 @@ file: admin/plan/figmapluginmake.md
 title: Figma Plugin 자동화 구축 계획
 owner: duksan
 created: 2025-09-27 06:03 UTC / 2025-09-27 15:03 KST
-updated: 2025-09-29 03:57 UTC / 2025-09-29 12:57 KST
+updated: 2025-09-29 04:56 UTC / 2025-09-29 13:56 KST
 status: draft
 tags: [plan, figma, automation, plugin]
 schemaVersion: 1
@@ -53,8 +53,8 @@ code_refs: []
 
 - [x] JSON 스키마 초안 작성 (레이아웃/스타일/컴포넌트) 후 devworkspace와 연동.
 - [x] 플러그인 boilerplate 생성 (manifest, UI, controller).
-- [ ] 토큰 매핑 전략 설계: Figma 스타일 네이밍 규칙 정리.
-- [ ] 샘플 JSON → Figma 생성 PoC (단순 3단 레이아웃).
+- [x] 토큰 매핑 전략 설계: Figma 스타일 네이밍 규칙 정리.
+- [x] 샘플 JSON → Figma 생성 PoC (단순 3단 레이아웃).
 - [ ] 오류/검증 로직 추가, Undo/Redo 동작 테스트.
 - [ ] Codex ↔ 플러그인 연동 인터페이스 문서화 (명령 프로토콜).
 - [ ] 배포/공유 방식 결정(사내 전용 or 커뮤니티).
@@ -77,10 +77,12 @@ code_refs: []
 - 2025-09-29: VirtualBox 기반 Windows 환경 구축, 공유 폴더 연동 완료.
 - `figma-hello-plugin` 초기 버전에서 `Hello World` 프레임 생성 PoC 성공.
 - TypeScript 기반 플러그인 보일러플레이트 구성(`src/`, `dist/`, `package.json`, `README`).
+- 샘플 JSON(`samples/glossary.ts`)을 UI와 연동하여 2분할 레이아웃 생성 기능 구현.
+- 토큰 레지스트리(`tokenRegistry`)로 기본 색상/타이포/라운드 매핑 제공.
 - 다음 작업
-  1. 샘플 JSON 스키마 작성 및 플러그인 파서에 연동.
-  2. UI 패널 확장(입력 폼, 검증, 실행 로그).
-  3. 토큰 매핑/스타일 적용 로직 실험 및 문서화.
+  1. 컴포넌트/이미지 타입 지원 및 토큰 테이블 자동 동기화.
+  2. 실행 로그/검증 메시지 강화, undo 테스트 절차 수립.
+  3. Codex ↔ 플러그인 명령 프로토콜 문서화 및 샌드박스 구축.
 
 # 8. 리스크 및 대응
 

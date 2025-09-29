@@ -1,7 +1,16 @@
-import { NodeSpec } from '../schema';
+import type { LayoutSpec, NodeSpec } from '../schema';
 
 export interface BuildContext {
-  tokenResolver: (token: string) => Paint | SolidPaint | null;
+  tokenResolver: (token: string) => Paint | null;
+  radiusResolver: (token: string) => number | null;
+  typographyResolver: (token: string) => TypographyToken | null;
+}
+
+interface TypographyToken {
+  font: FontName;
+  fontSize: number;
+  lineHeight?: number;
+  colorToken?: string;
 }
 
 export async function buildNodesFromSchema(
@@ -23,7 +32,7 @@ export async function buildNodesFromSchema(
 async function createNode(spec: NodeSpec, ctx: BuildContext): Promise<SceneNode | null> {
   switch (spec.type) {
     case 'text':
-      return createTextNode(spec);
+      return createTextNode(spec, ctx);
     case 'frame':
     case 'stack':
       return createFrameNode(spec, ctx);
@@ -35,9 +44,13 @@ async function createNode(spec: NodeSpec, ctx: BuildContext): Promise<SceneNode 
   }
 }
 
-async function createTextNode(spec: Extract<NodeSpec, { type: 'text' }>): Promise<TextNode> {
+async function createTextNode(
+  spec: Extract<NodeSpec, { type: 'text' }>,
+  ctx: BuildContext,
+): Promise<TextNode> {
   const text = figma.createText();
-  const { fontName, fontSize } = resolveTextStyle(spec.text.style);
+  const { fontName, fontSize, lineHeight, fillPaint } = await resolveTextStyle(spec, ctx);
+
   if (fontName) {
     await figma.loadFontAsync(fontName);
     text.fontName = fontName;
@@ -45,7 +58,17 @@ async function createTextNode(spec: Extract<NodeSpec, { type: 'text' }>): Promis
   if (fontSize) {
     text.fontSize = fontSize;
   }
+  if (lineHeight) {
+    text.lineHeight = { value: lineHeight, unit: 'PIXELS' };
+  }
+  if (fillPaint) {
+    text.fills = [fillPaint];
+  }
+
   text.characters = spec.text.content;
+  applyPluginData(text, spec.pluginData);
+  applyConstraints(text, spec.constraints);
+
   return text;
 }
 
@@ -55,23 +78,20 @@ async function createFrameNode(
 ): Promise<FrameNode> {
   const frame = figma.createFrame();
   frame.name = spec.name;
-  if (spec.size?.width && spec.size.width > 0 && spec.size?.height && spec.size.height > 0) {
-    frame.resize(spec.size.width, spec.size.height);
+
+  const usesAutoLayout = spec.layout?.type === 'auto' || spec.type === 'stack';
+  applySize(frame, spec.size, usesAutoLayout);
+
+  if (usesAutoLayout) {
+    frame.layoutMode = spec.layout?.direction === 'HORIZONTAL' ? 'HORIZONTAL' : 'VERTICAL';
+    applyAutoLayout(frame, spec.layout);
+  } else {
+    frame.layoutMode = 'NONE';
   }
 
-  if (spec.layout?.type === 'auto' || spec.type === 'stack') {
-    frame.layoutMode = spec.layout?.direction === 'HORIZONTAL' ? 'HORIZONTAL' : 'VERTICAL';
-    if (typeof spec.layout?.spacing === 'number') {
-      frame.itemSpacing = spec.layout.spacing;
-    }
-    if (spec.layout?.padding) {
-      const { top = 0, right = 0, bottom = 0, left = 0 } = spec.layout.padding;
-      frame.paddingTop = top;
-      frame.paddingRight = right;
-      frame.paddingBottom = bottom;
-      frame.paddingLeft = left;
-    }
-  }
+  applyTokens(frame, spec.tokens, ctx);
+  applyPluginData(frame, spec.pluginData);
+  applyConstraints(frame, spec.constraints);
 
   if (spec.children?.length) {
     const nested = await buildNodesFromSchema(spec.children, ctx);
@@ -87,11 +107,156 @@ async function createSpacer(spec: Extract<NodeSpec, { type: 'spacer' }>): Promis
   rect.opacity = 0;
   rect.resize(spec.size?.width ?? 1, spec.size?.height ?? 1);
   rect.fills = [];
+  if (spec.layout?.grow) {
+    rect.layoutGrow = spec.layout.grow;
+  }
+  applyPluginData(rect, spec.pluginData);
+  applyConstraints(rect, spec.constraints);
   return rect;
 }
 
-function resolveTextStyle(style?: { font?: FontName; fontSize?: number; token?: string }) {
-  const fontName = style?.font ?? null;
-  const fontSize = style?.fontSize ?? null;
-  return { fontName, fontSize };
+async function resolveTextStyle(spec: Extract<NodeSpec, { type: 'text' }>, ctx: BuildContext) {
+  const directStyle = spec.text.style;
+  let fontName = directStyle?.font ?? null;
+  let fontSize = directStyle?.fontSize ?? null;
+  let lineHeight = directStyle?.lineHeight ?? undefined;
+  let fillPaint: Paint | null = null;
+
+  if (directStyle?.token) {
+    const token = ctx.typographyResolver(directStyle.token);
+    if (token) {
+      fontName = token.font;
+      fontSize = token.fontSize;
+      lineHeight = token.lineHeight ?? undefined;
+      if (token.colorToken) {
+        fillPaint = ctx.tokenResolver(token.colorToken);
+      }
+    }
+  }
+
+  if (!fillPaint && spec.tokens?.text) {
+    fillPaint = ctx.tokenResolver(spec.tokens.text);
+  }
+
+  if (spec.tokens?.fill) {
+    fillPaint = ctx.tokenResolver(spec.tokens.fill);
+  }
+
+  return { fontName, fontSize, lineHeight, fillPaint };
+}
+
+function applySize(
+  frame: FrameNode,
+  size: { width?: number; height?: number } | undefined,
+  autoLayout: boolean,
+) {
+  const hasWidth = typeof size?.width === 'number';
+  const hasHeight = typeof size?.height === 'number';
+
+  if (hasWidth && hasHeight) {
+    frame.resize(size!.width!, size!.height!);
+  } else if (autoLayout) {
+    frame.primaryAxisSizingMode = 'AUTO';
+    frame.counterAxisSizingMode = 'AUTO';
+  }
+}
+
+function applyAutoLayout(frame: FrameNode, layout?: LayoutSpec) {
+  if (!layout) return;
+
+  if (typeof layout.spacing === 'number') {
+    frame.itemSpacing = layout.spacing;
+  }
+  if (layout.padding) {
+    const { top = 0, right = 0, bottom = 0, left = 0 } = layout.padding;
+    frame.paddingTop = top;
+    frame.paddingRight = right;
+    frame.paddingBottom = bottom;
+    frame.paddingLeft = left;
+  }
+
+  if (layout.primaryAlign) {
+    const primaryAlignValue = primaryAlignMap[layout.primaryAlign] ?? 'MIN';
+    frame.primaryAxisAlignItems = primaryAlignValue;
+  }
+
+  if (layout.counterAlign) {
+    const counterAlignValue = counterAlignMap[layout.counterAlign] ?? 'MIN';
+    frame.counterAxisAlignItems =
+      counterAlignValue as unknown as typeof frame.counterAxisAlignItems;
+    if (layout.counterAlign === 'STRETCH') {
+      frame.counterAxisSizingMode = 'AUTO';
+    }
+  }
+}
+
+function applyTokens(
+  node: SceneNode,
+  tokens: Record<string, string> | undefined,
+  ctx: BuildContext,
+) {
+  if (!tokens) return;
+
+  if ('fill' in tokens && 'fills' in node) {
+    const paint = ctx.tokenResolver(tokens.fill);
+    if (paint) {
+      node.fills = [clonePaint(paint)];
+    }
+  }
+
+  if ('stroke' in tokens && 'strokes' in node) {
+    const paint = ctx.tokenResolver(tokens.stroke);
+    if (paint) {
+      node.strokes = [clonePaint(paint)];
+    }
+  }
+
+  if ('radius' in tokens) {
+    const radius = ctx.radiusResolver(tokens.radius);
+    if (typeof radius === 'number' && isCornerMixin(node)) {
+      node.cornerRadius = radius;
+    }
+  }
+}
+
+function applyPluginData(
+  node: SceneNode,
+  pluginData: Record<string, string | number | boolean> | undefined,
+) {
+  if (!pluginData) return;
+
+  Object.entries(pluginData).forEach(([key, value]) => {
+    node.setPluginData(key, String(value));
+  });
+}
+
+function applyConstraints(node: SceneNode, constraints?: Partial<Constraints>) {
+  if (!constraints || !('constraints' in node)) return;
+
+  node.constraints = {
+    horizontal: constraints.horizontal ?? node.constraints.horizontal,
+    vertical: constraints.vertical ?? node.constraints.vertical,
+  };
+}
+
+function clonePaint(paint: Paint): Paint {
+  return JSON.parse(JSON.stringify(paint));
+}
+
+const primaryAlignMap: Record<string, 'MIN' | 'CENTER' | 'MAX' | 'SPACE_BETWEEN'> = {
+  START: 'MIN',
+  CENTER: 'CENTER',
+  END: 'MAX',
+  SPACE_BETWEEN: 'SPACE_BETWEEN',
+};
+
+const counterAlignMap: Record<string, 'MIN' | 'CENTER' | 'MAX' | 'BASELINE' | 'STRETCH'> = {
+  START: 'MIN',
+  CENTER: 'CENTER',
+  END: 'MAX',
+  STRETCH: 'STRETCH',
+};
+
+function isCornerMixin(node: SceneNode): node is SceneNode & CornerMixin {
+  return 'cornerRadius' in node;
 }

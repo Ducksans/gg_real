@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -26,7 +26,7 @@
 
       textarea {
         width: 100%;
-        min-height: 140px;
+        min-height: 180px;
         resize: vertical;
         border-radius: 8px;
         border: 1px solid #d1d5db;
@@ -46,6 +46,10 @@
         cursor: pointer;
       }
 
+      button.secondary {
+        background: #111827;
+      }
+
       button:disabled {
         background: #9ca3af;
         cursor: not-allowed;
@@ -55,31 +59,76 @@
         font-size: 11px;
         color: #6b7280;
       }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .actions button {
+        flex: 1;
+      }
     </style>
   </head>
   <body>
     <main>
-      <h1>Schema 실행</h1>
+      <h1>JSON 스키마 실행</h1>
       <textarea id="schema" placeholder="여기에 JSON 스키마를 붙여넣으세요."></textarea>
-      <button id="run">실행</button>
+      <div class="actions">
+        <button id="loadSample" type="button">샘플 불러오기</button>
+        <button id="createHello" type="button" class="secondary">Hello 박스</button>
+      </div>
+      <button id="run" type="button">JSON 실행</button>
       <footer>Codex 자동화 PoC · schema v0.1</footer>
     </main>
 
     <script>
       const schemaInput = document.getElementById('schema');
       const runButton = document.getElementById('run');
+      const loadSampleButton = document.getElementById('loadSample');
+      const helloButton = document.getElementById('createHello');
 
       runButton.addEventListener('click', () => {
         parent.postMessage(
           {
             pluginMessage: {
               type: 'execute-schema',
-              payload: schemaInput.value
-            }
+              payload: schemaInput.value,
+            },
           },
-          '*'
+          '*',
         );
       });
+
+      loadSampleButton.addEventListener('click', () => {
+        parent.postMessage(
+          {
+            pluginMessage: {
+              type: 'request-sample',
+            },
+          },
+          '*',
+        );
+      });
+
+      helloButton.addEventListener('click', () => {
+        parent.postMessage(
+          {
+            pluginMessage: {
+              type: 'create-hello',
+            },
+          },
+          '*',
+        );
+      });
+
+      window.onmessage = (event) => {
+        const msg = event.data?.pluginMessage;
+        if (!msg) return;
+        if (msg.type === 'load-sample') {
+          schemaInput.value = msg.payload ?? '';
+        }
+      };
     </script>
   </body>
 </html>
