@@ -1,4 +1,4 @@
-import type { LayoutSpec, NodeSpec } from '../schema';
+import { NodeSpec } from '../schema';
 
 export interface BuildContext {
   tokenResolver: (token: string) => Paint | null;
@@ -13,7 +13,10 @@ interface TypographyToken {
   colorToken?: string;
 }
 
-export async function buildNodesFromSchema(
+type ParentNode = PageNode | FrameNode;
+
+export async function appendNodesFromSchema(
+  parent: ParentNode,
   specs: NodeSpec[],
   ctx: BuildContext,
 ): Promise<SceneNode[]> {
@@ -21,8 +24,16 @@ export async function buildNodesFromSchema(
 
   for (const spec of specs) {
     const node = await createNode(spec, ctx);
-    if (node) {
-      created.push(node);
+    if (!node) continue;
+
+    parent.appendChild(node);
+    created.push(node);
+
+    applyPluginData(node, spec.pluginData);
+    applyConstraints(node, spec.constraints);
+
+    if ((spec.type === 'frame' || spec.type === 'stack') && spec.children?.length) {
+      await appendNodesFromSchema(node, spec.children, ctx);
     }
   }
 
@@ -44,10 +55,7 @@ async function createNode(spec: NodeSpec, ctx: BuildContext): Promise<SceneNode 
   }
 }
 
-async function createTextNode(
-  spec: Extract<NodeSpec, { type: 'text' }>,
-  ctx: BuildContext,
-): Promise<TextNode> {
+async function createTextNode(spec: Extract<NodeSpec, { type: 'text' }>, ctx: BuildContext) {
   const text = figma.createText();
   const { fontName, fontSize, lineHeight, fillPaint } = await resolveTextStyle(spec, ctx);
 
@@ -66,16 +74,13 @@ async function createTextNode(
   }
 
   text.characters = spec.text.content;
-  applyPluginData(text, spec.pluginData);
-  applyConstraints(text, spec.constraints);
-
   return text;
 }
 
 async function createFrameNode(
   spec: Extract<NodeSpec, { type: 'frame' | 'stack' }>,
   ctx: BuildContext,
-): Promise<FrameNode> {
+) {
   const frame = figma.createFrame();
   frame.name = spec.name;
 
@@ -90,18 +95,10 @@ async function createFrameNode(
   }
 
   applyTokens(frame, spec.tokens, ctx);
-  applyPluginData(frame, spec.pluginData);
-  applyConstraints(frame, spec.constraints);
-
-  if (spec.children?.length) {
-    const nested = await buildNodesFromSchema(spec.children, ctx);
-    nested.forEach((child) => frame.appendChild(child));
-  }
-
   return frame;
 }
 
-async function createSpacer(spec: Extract<NodeSpec, { type: 'spacer' }>): Promise<RectangleNode> {
+async function createSpacer(spec: Extract<NodeSpec, { type: 'spacer' }>) {
   const rect = figma.createRectangle();
   rect.name = spec.name;
   rect.opacity = 0;
@@ -110,8 +107,6 @@ async function createSpacer(spec: Extract<NodeSpec, { type: 'spacer' }>): Promis
   if (spec.layout?.grow) {
     rect.layoutGrow = spec.layout.grow;
   }
-  applyPluginData(rect, spec.pluginData);
-  applyConstraints(rect, spec.constraints);
   return rect;
 }
 
@@ -212,9 +207,9 @@ function applyTokens(
     }
   }
 
-  if ('radius' in tokens) {
+  if ('radius' in tokens && isCornerMixin(node)) {
     const radius = ctx.radiusResolver(tokens.radius);
-    if (typeof radius === 'number' && isCornerMixin(node)) {
+    if (typeof radius === 'number') {
       node.cornerRadius = radius;
     }
   }
@@ -225,7 +220,6 @@ function applyPluginData(
   pluginData: Record<string, string | number | boolean> | undefined,
 ) {
   if (!pluginData) return;
-
   Object.entries(pluginData).forEach(([key, value]) => {
     node.setPluginData(key, String(value));
   });
@@ -260,4 +254,29 @@ const counterAlignMap: Record<string, 'MIN' | 'CENTER' | 'MAX' | 'BASELINE'> = {
 
 function isCornerMixin(node: SceneNode): node is SceneNode & CornerMixin {
   return 'cornerRadius' in node;
+}
+
+interface LayoutSpec {
+  type?: 'auto' | 'absolute';
+  direction?: 'VERTICAL' | 'HORIZONTAL';
+  primaryAlign?: 'START' | 'CENTER' | 'END' | 'SPACE_BETWEEN';
+  counterAlign?: 'START' | 'CENTER' | 'END' | 'STRETCH';
+  padding?: {
+    top?: number;
+    right?: number;
+    bottom?: number;
+    left?: number;
+  };
+  spacing?: number;
+  grow?: number;
+  grid?: {
+    columns: number;
+    gutter: number;
+    margins: number;
+  };
+}
+
+interface Constraints {
+  horizontal?: 'LEFT' | 'RIGHT' | 'CENTER' | 'LEFT_RIGHT' | 'SCALE';
+  vertical?: 'TOP' | 'BOTTOM' | 'CENTER' | 'TOP_BOTTOM' | 'SCALE';
 }

@@ -1,5 +1,5 @@
 import { createHelloFrame } from './lib/hello';
-import { buildNodesFromSchema } from './lib/nodeFactory';
+import { appendNodesFromSchema } from './lib/nodeFactory';
 import { notifyError, notifySuccess } from './lib/notifier';
 import { resolvePaintToken, resolveRadiusToken, resolveTypographyToken } from './lib/tokenRegistry';
 import { SchemaDocument } from './schema';
@@ -45,20 +45,16 @@ export async function runSchemaDocument(
   const targetPageName =
     options?.targetPage?.trim() || doc.target.page?.trim() || figma.currentPage.name;
   const page = findTargetPage(targetPageName);
-  const nodes = await buildNodesFromSchema(doc.nodes, {
+
+  if (doc.target.mode === 'replace') {
+    removeExistingFrame(page, doc.target.frameName);
+  }
+
+  const nodes = await appendNodesFromSchema(page, doc.nodes, {
     tokenResolver,
     radiusResolver: resolveRadiusToken,
     typographyResolver: resolveTypographyToken,
   });
-
-  const targetName = doc.target.frameName;
-
-  if (doc.target.mode === 'replace') {
-    const existing = page.findOne((node) => node.type === 'FRAME' && node.name === targetName);
-    existing?.remove();
-  }
-
-  nodes.forEach((node) => page.appendChild(node));
   figma.currentPage = page;
   figma.currentPage.selection = nodes;
 
@@ -72,4 +68,9 @@ function findTargetPage(pageName: string): PageNode {
 
   if (match) return match;
   throw new Error(`페이지 '${pageName}'을(를) 찾을 수 없습니다.`);
+}
+
+function removeExistingFrame(page: PageNode, frameName: string) {
+  const existing = page.findOne((node) => node.type === 'FRAME' && node.name === frameName);
+  existing?.remove();
 }
