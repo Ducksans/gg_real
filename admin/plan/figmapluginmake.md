@@ -3,7 +3,7 @@ file: admin/plan/figmapluginmake.md
 title: Figma Plugin 자동화 구축 계획
 owner: duksan
 created: 2025-09-27 06:03 UTC / 2025-09-27 15:03 KST
-updated: 2025-09-29 04:56 UTC / 2025-09-29 13:56 KST
+updated: 2025-09-29 06:49 UTC / 2025-09-29 15:49 KST
 status: draft
 tags: [plan, figma, automation, plugin]
 schemaVersion: 1
@@ -79,6 +79,7 @@ code_refs: []
 - TypeScript 기반 플러그인 보일러플레이트 구성(`src/`, `dist/`, `package.json`, `README`).
 - 샘플 JSON(`samples/glossary.ts`)을 UI와 연동하여 2분할 레이아웃 생성 기능 구현.
 - 토큰 레지스트리(`tokenRegistry`)로 기본 색상/타이포/라운드 매핑 제공.
+- 대상 페이지 선택 드롭다운 및 현재 페이지 기본값 연동, 실행 시 즉시 append 방식으로 안정화.
 - 다음 작업
   1. 컴포넌트/이미지 타입 지원 및 토큰 테이블 자동 동기화.
   2. 실행 로그/검증 메시지 강화, undo 테스트 절차 수립.

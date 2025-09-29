@@ -3,7 +3,7 @@ file: admin/plan/devworkspace.md
 title: 관리자 개발 워크스페이스(Dev Workspace) 구축 계획
 owner: duksan
 created: 2025-09-27 03:54 UTC / 2025-09-27 12:54 KST
-updated: 2025-09-29 03:57 UTC / 2025-09-29 12:57 KST
+updated: 2025-09-29 06:49 UTC / 2025-09-29 15:49 KST
 status: draft
 tags: [plan, workspace, ux, tooling]
 schemaVersion: 1
@@ -98,7 +98,7 @@ description: 관리자 페이지 내 개발자 탭을 신설해 문서→시각�
 # 7. TODO 및 리스크
 
 - [ ] code-server 인프라 구성안 작성 및 보안 검토.
-- [ ] Figma API/플러그인 권한 범위 조사 및 PoC.
+- [x] Figma API/플러그인 권한 범위 조사 및 PoC.
 - [ ] Dev Workspace UI의 상태 관리(store) 설계 (단계별 승인/잠금).
 - [ ] Codex와 Figma를 연결할 브릿지 서버/웹훅 설계.
 - [ ] 관리자 탭 접근 권한, 감사 로그 저장 위치 결정.
@@ -114,5 +114,5 @@ description: 관리자 페이지 내 개발자 탭을 신설해 문서→시각�
 1. Dev Workspace IA/Wireframe을 Excalidraw/Figma로 작성해 합의.
 2. code-server를 Docker로 띄우는 운영 가이드 작성, 인증 방식(SSO/토큰) 결정.
 3. 관리자 페이지에 “개발자 탭” 라우트를 생성하고, 모드 전환/레퍼런스 패널 뼈대를 구현.
-4. Figma Embed + Excalidraw 연동 PoC를 Dev Workspace에서 확인.
+4. Figma Embed + 플러그인 실행 흐름을 Dev Workspace에서 확인하고 페이지 선택/JSON 실행 가이드를 통합.
 5. Codex와 VS Code 통합 후, 문서→시각화→코딩 승인 흐름에 맞춰 자동 체크포인트 스크립트 구성.
