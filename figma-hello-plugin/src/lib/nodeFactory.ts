@@ -181,11 +181,12 @@ function applyAutoLayout(frame: FrameNode, layout?: LayoutSpec) {
   }
 
   if (layout.counterAlign) {
-    const counterAlignValue = counterAlignMap[layout.counterAlign] ?? 'MIN';
-    frame.counterAxisAlignItems =
-      counterAlignValue as unknown as typeof frame.counterAxisAlignItems;
     if (layout.counterAlign === 'STRETCH') {
       frame.counterAxisSizingMode = 'AUTO';
+      frame.counterAxisAlignItems = 'MIN';
+    } else {
+      const counterAlignValue = counterAlignMap[layout.counterAlign] ?? 'MIN';
+      frame.counterAxisAlignItems = counterAlignValue;
     }
   }
 }
@@ -250,11 +251,11 @@ const primaryAlignMap: Record<string, 'MIN' | 'CENTER' | 'MAX' | 'SPACE_BETWEEN'
   SPACE_BETWEEN: 'SPACE_BETWEEN',
 };
 
-const counterAlignMap: Record<string, 'MIN' | 'CENTER' | 'MAX' | 'BASELINE' | 'STRETCH'> = {
+const counterAlignMap: Record<string, 'MIN' | 'CENTER' | 'MAX' | 'BASELINE'> = {
   START: 'MIN',
   CENTER: 'CENTER',
   END: 'MAX',
-  STRETCH: 'STRETCH',
+  BASELINE: 'BASELINE',
 };
 
 function isCornerMixin(node: SceneNode): node is SceneNode & CornerMixin {
