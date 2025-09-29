@@ -32,7 +32,8 @@ export async function runSchemaFromString(raw: string) {
 }
 
 export async function runSchemaDocument(doc: SchemaDocument) {
-  const page = findTargetPage(doc.target.page);
+  const targetPageName = doc.target.page?.trim() || figma.currentPage.name;
+  const page = findTargetPage(targetPageName);
   const nodes = await buildNodesFromSchema(doc.nodes, {
     tokenResolver,
     radiusResolver: resolveRadiusToken,

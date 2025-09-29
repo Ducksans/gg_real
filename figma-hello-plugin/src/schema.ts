@@ -98,7 +98,7 @@ export interface SchemaDocument {
     tokenset?: string;
   };
   target: {
-    page: string;
+    page?: string;
     frameName: string;
     mode: 'replace' | 'append' | 'update';
   };

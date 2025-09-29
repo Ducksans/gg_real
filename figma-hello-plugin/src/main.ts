@@ -8,7 +8,7 @@ figma.on('run', () => {
   figma.showUI(__html__, { width: UI_WIDTH, height: UI_HEIGHT });
   figma.ui.postMessage({
     type: 'load-sample',
-    payload: JSON.stringify(SAMPLE_SCHEMA, null, 2),
+    payload: JSON.stringify(createSampleForCurrentPage(), null, 2),
   });
 
   figma.ui.onmessage = async (message) => {
@@ -23,7 +23,7 @@ figma.on('run', () => {
         case 'request-sample': {
           figma.ui.postMessage({
             type: 'load-sample',
-            payload: JSON.stringify(SAMPLE_SCHEMA, null, 2),
+            payload: JSON.stringify(createSampleForCurrentPage(), null, 2),
           });
           break;
         }
@@ -43,3 +43,12 @@ figma.on('run', () => {
     }
   };
 });
+
+function createSampleForCurrentPage() {
+  const cloned = JSON.parse(JSON.stringify(SAMPLE_SCHEMA));
+  if (!cloned.target) {
+    cloned.target = { frameName: 'GeneratedFrame', mode: 'append' };
+  }
+  cloned.target.page = figma.currentPage.name;
+  return cloned;
+}
