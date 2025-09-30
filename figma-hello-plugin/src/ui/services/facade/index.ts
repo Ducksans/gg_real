@@ -2,4 +2,4 @@
 
 export { createExecutionService } from '../execution';
 export { createCheckpointDraft } from '../checkpoint';
-export { updatePreviewFrame } from '../preview';
+export { createPreviewService } from '../preview';

@@ -1,6 +1,7 @@
 import { archetypeManifest } from './lib/archetype-manifest';
 import { notifyError } from './lib/notifier';
 import { runHelloFrame, runSchemaBatch, runSchemaFromString } from './runtime';
+import { normalizeSlotName, PLUGINDATA_KEYS } from './runtime/utils';
 import { glossaryLayoutSample } from './samples/glossary';
 
 const UI_WIDTH = 960;
@@ -59,6 +60,21 @@ figma.on('run', () => {
           figma.closePlugin();
           break;
         }
+        case 'preview-focus-frame': {
+          focusFrameByName(message.frameName);
+          break;
+        }
+        case 'preview-highlight-section': {
+          const sections: string[] = Array.isArray(message.sectionIds)
+            ? message.sectionIds
+            : message.sectionId
+              ? [message.sectionId]
+              : Array.isArray(message.sections)
+                ? message.sections
+                : [];
+          highlightSections(sections);
+          break;
+        }
         default:
           figma.notify('Unknown action received.');
       }
@@ -81,4 +97,47 @@ function listPageNames() {
   return figma.root.children
     .filter((node): node is PageNode => node.type === 'PAGE')
     .map((page) => page.name);
+}
+
+function focusFrameByName(frameName?: string) {
+  if (!frameName) {
+    figma.notify('포커스할 프레임 이름이 없습니다.');
+    return;
+  }
+  const frame = figma.currentPage.findOne(
+    (node): node is FrameNode => node.type === 'FRAME' && node.name === frameName,
+  );
+  if (!frame) {
+    figma.notify(`프레임 "${frameName}"을 찾을 수 없습니다.`);
+    return;
+  }
+  figma.currentPage.selection = [frame];
+  figma.viewport.scrollAndZoomIntoView([frame]);
+}
+
+function highlightSections(sectionIds: string[]) {
+  if (!sectionIds.length) {
+    figma.notify('하이라이트할 섹션이 없습니다.');
+    return;
+  }
+  const normalized = sectionIds
+    .map((id) => normalizeSlotName(id))
+    .filter((id): id is string => Boolean(id));
+  if (!normalized.length) {
+    figma.notify('유효한 섹션 식별자가 없습니다.');
+    return;
+  }
+  const nodes = figma.currentPage.findAll((node) => {
+    if ('getPluginData' in node) {
+      const slotId = node.getPluginData(PLUGINDATA_KEYS.slotId);
+      return normalized.includes(slotId);
+    }
+    return false;
+  });
+  if (!nodes.length) {
+    figma.notify('선택할 섹션 노드를 찾지 못했습니다.');
+    return;
+  }
+  figma.currentPage.selection = nodes;
+  figma.viewport.scrollAndZoomIntoView(nodes);
 }

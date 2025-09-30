@@ -23,18 +23,30 @@ export interface GuardrailState {
   readonly warnings: GuardrailIssue[];
   readonly errors: GuardrailIssue[];
   readonly metrics: GuardrailMetrics | null;
+  readonly history: GuardrailHistoryEntry[];
 }
 
 export interface GuardrailStore {
   readonly state: Signal<GuardrailState>;
-  setSnapshot: (snapshot: Partial<GuardrailState>) => void;
+  setSnapshot: (snapshot: GuardrailSnapshot) => void;
   reset: () => void;
+}
+
+export interface GuardrailHistoryEntry {
+  readonly timestamp: number;
+  readonly intent?: 'dry-run' | 'apply';
+  readonly metrics: GuardrailMetrics;
+}
+
+export interface GuardrailSnapshot extends Partial<GuardrailState> {
+  readonly intent?: 'dry-run' | 'apply';
 }
 
 const createInitialState = (): GuardrailState => ({
   warnings: [],
   errors: [],
   metrics: null,
+  history: [],
 });
 
 export const createGuardrailStore = (): GuardrailStore => {
@@ -43,10 +55,18 @@ export const createGuardrailStore = (): GuardrailStore => {
   return {
     state,
     setSnapshot(snapshot) {
+      const current = state.value;
+      const history = snapshot.metrics
+        ? [
+            ...current.history,
+            { metrics: snapshot.metrics, timestamp: Date.now(), intent: snapshot.intent },
+          ].slice(-10)
+        : current.history;
       state.value = {
         warnings: snapshot.warnings ?? [],
         errors: snapshot.errors ?? [],
         metrics: snapshot.metrics ?? null,
+        history,
       };
     },
     reset() {

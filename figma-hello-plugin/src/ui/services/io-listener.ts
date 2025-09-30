@@ -100,6 +100,7 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
         warnings: warningIssues,
         errors: errorIssues,
         metrics: guardrailMetrics,
+        intent,
       });
 
       previewStore.setPreview({

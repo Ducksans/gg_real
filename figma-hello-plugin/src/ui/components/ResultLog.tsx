@@ -75,6 +75,15 @@ const GuardrailDetails = ({ entry }: GuardrailDetailsProps) => {
 
   return (
     <div class="log-entry__guardrail">
+      <div class="log-entry__badge-row">
+        <span class="log-badge log-badge--created">생성 {metrics?.created ?? 0}</span>
+        <span class="log-badge log-badge--warning">
+          경고 {metrics?.warnings ?? entry.guardrail.warnings.length}
+        </span>
+        <span class="log-badge log-badge--error">
+          오류 {metrics?.errors ?? entry.guardrail.errors.length}
+        </span>
+      </div>
       {metrics && (
         <dl class="log-entry__metric-grid">
           <div>

@@ -3,7 +3,7 @@ file: admin/plan/figmaplugin-refactor.md
 title: Figma Plugin 컴포넌트화 리팩터링 계획
 owner: duksan
 created: 2025-09-30 06:10 UTC / 2025-09-30 15:10 KST
-updated: 2025-09-30 13:39 UTC / 2025-09-30 22:39 KST
+updated: 2025-09-30 13:52 UTC / 2025-09-30 22:52 KST
 status: draft
 tags: [plan, figma, refactor]
 schemaVersion: 1
@@ -31,6 +31,7 @@ code_refs:
     'figma-hello-plugin/src/ui/services/execution.ts',
     'figma-hello-plugin/src/ui/services/facade/index.ts',
     'figma-hello-plugin/src/ui/services/index.ts',
+    'figma-hello-plugin/src/ui/services/preview.ts',
     'figma-hello-plugin/src/ui/services/io-listener.ts',
     'figma-hello-plugin/src/ui/store/executionStore.ts',
     'figma-hello-plugin/src/ui/store/index.ts',
@@ -303,4 +304,4 @@ code_refs:
   7. **CI 통합** — `.github/workflows/build.yml`에 `gg-figma-plugin build/test/typecheck` 잡을 추가해 Preact UI 회귀 검증을 자동화한다.
 - **가드레일**: postMessage DTO, `runSchema*` API, Runtime/Manifest 코드는 변경하지 않는다. WebView 로딩 시 `dist/ui.js`만 교체. 회귀 방지를 위해 기존 구조 테스트(`tests/structure.test.ts`)에 Preact 엔트리 검증 추가.
 - **향후 확장**: ExecutionPanel/ResultLog 이후 GuardrailSummary → PreviewControls → RouteTree → Before/After 비교 순으로 이관하며, 각 단계에서 store slice와 components를 분할한다.
-- **현황**: 2025-09-30 13:31 UTC / 2025-09-30 22:31 KST — GuardrailSummary·PreviewControls·ResultLog를 Signals 기반으로 재구성했고, guardrail/preview/section 스토어 및 CI `gg-figma-plugin build/test/typecheck` 잡을 추가해 빌드·테스트·타입체크가 자동 검증된다.
+- **현황**: 2025-09-30 13:48 UTC / 2025-09-30 22:48 KST — GuardrailSummary·ResultLog에 메트릭 배지/추세 히스토리를 추가하고, PreviewControls에서 프레임 포커스·섹션 하이라이트 postMessage를 연결했으며 guardrail/preview/section 스토어와 CI `gg-figma-plugin build/test/typecheck` 잡으로 자동 검증 루프를 구축했다.

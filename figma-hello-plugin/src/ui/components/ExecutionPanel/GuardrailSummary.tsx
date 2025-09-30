@@ -1,6 +1,6 @@
 // doc_refs: ["admin/plan/figmaplugin-refactor.md"]
 
-import type { GuardrailStore } from '../../store';
+import type { GuardrailHistoryEntry, GuardrailMetrics, GuardrailStore } from '../../store';
 
 interface GuardrailSummaryProps {
   guardrailStore: GuardrailStore;
@@ -13,13 +13,47 @@ const formatFileSize = (bytes?: number) => {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 };
 
+const computeDelta = (history: GuardrailHistoryEntry[], key: keyof GuardrailMetrics) => {
+  if (history.length < 2) {
+    return null;
+  }
+  const latest = history[history.length - 1].metrics?.[key] ?? 0;
+  const previous = history[history.length - 2].metrics?.[key] ?? 0;
+  const delta = latest - previous;
+  if (!delta) return null;
+  return delta;
+};
+
 export const GuardrailSummary = ({ guardrailStore }: GuardrailSummaryProps) => {
-  const { warnings, errors, metrics } = guardrailStore.state.value;
+  const { warnings, errors, metrics, history } = guardrailStore.state.value;
   const hasIssues = warnings.length > 0 || errors.length > 0;
+  const warningDelta = computeDelta(history, 'warnings');
+  const errorDelta = computeDelta(history, 'errors');
+  const createdDelta = computeDelta(history, 'created');
 
   return (
     <div class="guardrail-summary">
       <h3 class="guardrail-summary__title">Guardrail 상태</h3>
+      <div class="guardrail-summary__badges">
+        <span class="guardrail-badge guardrail-badge--created">
+          생성 {metrics?.created ?? 0}
+          {createdDelta ? (
+            <small>{createdDelta > 0 ? `▲${createdDelta}` : `▼${Math.abs(createdDelta)}`}</small>
+          ) : null}
+        </span>
+        <span class="guardrail-badge guardrail-badge--warning">
+          경고 {metrics?.warnings ?? warnings.length}
+          {warningDelta ? (
+            <small>{warningDelta > 0 ? `▲${warningDelta}` : `▼${Math.abs(warningDelta)}`}</small>
+          ) : null}
+        </span>
+        <span class="guardrail-badge guardrail-badge--error">
+          오류 {metrics?.errors ?? errors.length}
+          {errorDelta ? (
+            <small>{errorDelta > 0 ? `▲${errorDelta}` : `▼${Math.abs(errorDelta)}`}</small>
+          ) : null}
+        </span>
+      </div>
       <dl class="guardrail-summary__metrics">
         <div>
           <dt>생성 노드</dt>
@@ -70,6 +104,28 @@ export const GuardrailSummary = ({ guardrailStore }: GuardrailSummaryProps) => {
         </div>
       ) : (
         <p class="guardrail-summary__empty">문제가 발견되지 않았습니다.</p>
+      )}
+      {history.length > 1 && (
+        <div class="guardrail-summary__history">
+          <h4>최근 실행 추세</h4>
+          <ul>
+            {history
+              .slice(-5)
+              .reverse()
+              .map((entry) => (
+                <li key={entry.timestamp}>
+                  <span class="guardrail-history__time">
+                    {entry.intent?.toUpperCase() ?? 'RUN'} ·{' '}
+                    {new Date(entry.timestamp).toLocaleTimeString()}
+                  </span>
+                  <span class="guardrail-history__stats">
+                    C{entry.metrics.created ?? 0} / W{entry.metrics.warnings ?? 0} / E
+                    {entry.metrics.errors ?? 0}
+                  </span>
+                </li>
+              ))}
+          </ul>
+        </div>
       )}
     </div>
   );

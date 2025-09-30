@@ -12,6 +12,7 @@ export type {
   GuardrailState,
   GuardrailIssue,
   GuardrailMetrics,
+  GuardrailHistoryEntry,
 } from './guardrailStore';
 export type { PreviewStore, PreviewState } from './previewStore';
 export type { SectionStore, SectionState } from './sectionStore';
