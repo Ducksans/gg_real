@@ -6,6 +6,7 @@ import type { GuardrailIssue, GuardrailMetrics, GuardrailStore } from '../store/
 import type { LogStore } from '../store/logStore';
 import type { PreviewStore } from '../store/previewStore';
 import type { SectionStore } from '../store/sectionStore';
+import { getAvailableSections, registerArchetypeManifest } from './schema-builder';
 
 interface ListenerDeps {
   executionStore: ExecutionStore;
@@ -17,6 +18,13 @@ interface ListenerDeps {
 
 interface RuntimeGuardrailPayload {
   metrics?: GuardrailMetrics;
+}
+
+interface InitPayload {
+  sample?: string;
+  pages?: string[];
+  currentPage?: string;
+  manifest?: unknown;
 }
 
 interface RuntimeResultPayload {
@@ -36,6 +44,7 @@ interface RuntimeResultPayload {
 }
 
 type RuntimeMessage =
+  | { type: 'init'; payload: InitPayload }
   | { type: 'dry-run-result'; payload: RuntimeResultPayload }
   | { type: 'dry-run-warning'; message: string }
   | { type: 'dry-run-error'; message: string }
@@ -62,6 +71,19 @@ const toIssues = (
 const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
   const { executionStore, guardrailStore, logStore, previewStore, sectionStore } = deps;
   switch (message.type) {
+    case 'init': {
+      const manifest = message.payload.manifest as
+        | Parameters<typeof registerArchetypeManifest>[0]
+        | undefined;
+      if (manifest) {
+        registerArchetypeManifest(manifest);
+      }
+      const sections = getAvailableSections();
+      sectionStore.setAvailableSections(sections);
+      previewStore.reset();
+      previewStore.setPreview({ page: message.payload.currentPage, sections: [] });
+      break;
+    }
     case 'dry-run-result': {
       executionStore.setIdle();
       const {
@@ -110,7 +132,9 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
         lastIntent: intent,
       });
 
-      sectionStore.setAvailableSections(sections ?? []);
+      if (sections && sections.length) {
+        sectionStore.selectSections(sections);
+      }
       break;
     }
     case 'dry-run-warning':

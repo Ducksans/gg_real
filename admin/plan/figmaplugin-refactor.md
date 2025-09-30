@@ -3,7 +3,7 @@ file: admin/plan/figmaplugin-refactor.md
 title: Figma Plugin 컴포넌트화 리팩터링 계획
 owner: duksan
 created: 2025-09-30 06:10 UTC / 2025-09-30 15:10 KST
-updated: 2025-09-30 14:14 UTC / 2025-09-30 23:14 KST
+updated: 2025-09-30 16:45 UTC / 2025-10-01 01:45 KST
 status: draft
 tags: [plan, figma, refactor]
 schemaVersion: 1
@@ -20,8 +20,13 @@ code_refs:
     'figma-hello-plugin/src/ui/main.tsx',
     'figma-hello-plugin/src/ui/components/ExecutionPanel.tsx',
     'figma-hello-plugin/src/ui/components/ExecutionPanel/GuardrailSummary.tsx',
-    'figma-hello-plugin/src/ui/components/ExecutionPanel/TargetSelect.tsx',
     'figma-hello-plugin/src/ui/components/ExecutionPanel/index.ts',
+    'figma-hello-plugin/src/ui/components/SectionList/index.tsx',
+    'figma-hello-plugin/src/ui/components/SectionList/SectionFilter.tsx',
+    'figma-hello-plugin/src/ui/components/SectionList/SectionItem.tsx',
+    'figma-hello-plugin/src/ui/components/SchemaEditor/index.tsx',
+    'figma-hello-plugin/src/ui/components/SchemaEditor/EditorPanel.tsx',
+    'figma-hello-plugin/src/ui/components/SchemaEditor/ReadonlyPanel.tsx',
     'figma-hello-plugin/src/ui/components/ResultLog.tsx',
     'figma-hello-plugin/src/ui/components/PreviewControls/index.tsx',
     'figma-hello-plugin/src/ui/components/PreviewControls/BeforeAfter.tsx',
@@ -34,6 +39,7 @@ code_refs:
     'figma-hello-plugin/src/ui/services/index.ts',
     'figma-hello-plugin/src/ui/services/preview.ts',
     'figma-hello-plugin/src/ui/services/io-listener.ts',
+    'figma-hello-plugin/src/ui/services/schema-builder.ts',
     'figma-hello-plugin/src/ui/store/executionStore.ts',
     'figma-hello-plugin/src/ui/store/index.ts',
     'figma-hello-plugin/src/ui/store/guardrailStore.ts',
@@ -307,3 +313,4 @@ code_refs:
 - **가드레일**: postMessage DTO, `runSchema*` API, Runtime/Manifest 코드는 변경하지 않는다. WebView 로딩 시 `dist/ui.js`만 교체. 회귀 방지를 위해 기존 구조 테스트(`tests/structure.test.ts`)에 Preact 엔트리 검증 추가.
 - **향후 확장**: ExecutionPanel/ResultLog 이후 GuardrailSummary → PreviewControls → RouteTree → Before/After 비교 순으로 이관하며, 각 단계에서 store slice와 components를 분할한다.
 - **현황**: 2025-09-30 13:48 UTC / 2025-09-30 22:48 KST — GuardrailSummary·ResultLog에 메트릭 배지/추세 히스토리를 추가하고, PreviewControls에서 프레임 포커스·섹션 하이라이트 postMessage를 연결했으며 guardrail/preview/section 스토어와 CI `gg-figma-plugin build/test/typecheck` 잡으로 자동 검증 루프를 구축했다.
+- **검증 노트**: ES2017 + inline HTML 번들 방식은 `scripts/build-ui.ts`에서 번들·CSS를 `ui.html`에 삽입하고, CI `plugin-ui` 잡에서 `pnpm --filter gg-figma-plugin build/test/typecheck`로 매 실행 시 검증한다. 로컬 격리 환경에서는 `pnpm --filter gg-figma-plugin build`만으로 동일한 산출물을 생산해야 한다.

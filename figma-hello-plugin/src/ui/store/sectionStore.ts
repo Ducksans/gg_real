@@ -2,14 +2,24 @@
 
 import { signal, type Signal } from '@preact/signals';
 
+export interface SectionInfo {
+  readonly id: string;
+  readonly label: string;
+  readonly slotId?: string;
+  readonly slotLabel?: string;
+  readonly order?: number;
+  readonly description?: string;
+}
+
 export interface SectionState {
-  readonly availableSections: string[];
+  readonly availableSections: SectionInfo[];
   readonly selectedSectionIds: string[];
 }
 
 export interface SectionStore {
   readonly state: Signal<SectionState>;
-  setAvailableSections: (sections: string[]) => void;
+  setAvailableSections: (sections: SectionInfo[]) => void;
+  selectSections: (sectionIds: string[]) => void;
   toggleSelection: (sectionId: string) => void;
   clearSelection: () => void;
 }
@@ -25,9 +35,11 @@ export const createSectionStore = (): SectionStore => {
   return {
     state,
     setAvailableSections(sections) {
-      const uniqueSections = Array.from(new Set(sections));
+      const uniqueSections = sections.filter(
+        (section, index, arr) => arr.findIndex((item) => item.id === section.id) === index,
+      );
       const currentSelection = state.value.selectedSectionIds.filter((id) =>
-        uniqueSections.includes(id),
+        uniqueSections.some((section) => section.id === id),
       );
       state.value = {
         availableSections: uniqueSections,
@@ -36,12 +48,22 @@ export const createSectionStore = (): SectionStore => {
             ? []
             : currentSelection.length
               ? currentSelection
-              : uniqueSections,
+              : uniqueSections.map((section) => section.id),
+      };
+    },
+    selectSections(sectionIds) {
+      const { availableSections } = state.value;
+      const validIds = sectionIds.filter((id) =>
+        availableSections.some((section) => section.id === id),
+      );
+      state.value = {
+        availableSections,
+        selectedSectionIds: validIds,
       };
     },
     toggleSelection(sectionId) {
       const { selectedSectionIds, availableSections } = state.value;
-      if (!availableSections.includes(sectionId)) {
+      if (!availableSections.some((section) => section.id === sectionId)) {
         return;
       }
       const isSelected = selectedSectionIds.includes(sectionId);

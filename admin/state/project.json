@@ -4,7 +4,7 @@
     "id": "kk-real-admin",
     "title": "금강부동산허브 관리자 베이스",
     "created": "2025-09-22 08:00 UTC / 2025-09-22 17:00 KST",
-    "updated": "2025-10-01 03:10 UTC / 2025-10-01 12:10 KST"
+    "updated": "2025-10-01 03:40 UTC / 2025-10-01 12:40 KST"
   },
   "milestones": [
     { "id": "m0", "title": "스캐폴딩/도구", "status": "completed" },

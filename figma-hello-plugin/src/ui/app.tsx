@@ -1,8 +1,10 @@
 // doc_refs: ["admin/plan/figmaplugin-refactor.md"]
 
+import { useEffect } from 'preact/hooks';
 import { ExecutionPanel, PreviewControls, ResultLog } from './components';
 import { useRuntimeListener } from './services';
 import type { ExecutionStore, GuardrailStore, LogStore, PreviewStore, SectionStore } from './store';
+import { getAvailableSections } from './services/schema-builder';
 
 import './styles/app.css';
 
@@ -30,6 +32,12 @@ const Shell = ({
     previewStore,
     sectionStore,
   });
+
+  useEffect(() => {
+    if (!sectionStore.state.value.availableSections.length) {
+      sectionStore.setAvailableSections(getAvailableSections());
+    }
+  }, []);
 
   return (
     <div class="plugin-shell">
