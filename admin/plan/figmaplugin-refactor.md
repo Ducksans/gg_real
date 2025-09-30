@@ -3,7 +3,7 @@ file: admin/plan/figmaplugin-refactor.md
 title: Figma Plugin 컴포넌트화 리팩터링 계획
 owner: duksan
 created: 2025-09-30 06:10 UTC / 2025-09-30 15:10 KST
-updated: 2025-09-30 13:34 UTC / 2025-09-30 22:34 KST
+updated: 2025-09-30 13:39 UTC / 2025-09-30 22:39 KST
 status: draft
 tags: [plan, figma, refactor]
 schemaVersion: 1
@@ -303,4 +303,4 @@ code_refs:
   7. **CI 통합** — `.github/workflows/build.yml`에 `gg-figma-plugin build/test/typecheck` 잡을 추가해 Preact UI 회귀 검증을 자동화한다.
 - **가드레일**: postMessage DTO, `runSchema*` API, Runtime/Manifest 코드는 변경하지 않는다. WebView 로딩 시 `dist/ui.js`만 교체. 회귀 방지를 위해 기존 구조 테스트(`tests/structure.test.ts`)에 Preact 엔트리 검증 추가.
 - **향후 확장**: ExecutionPanel/ResultLog 이후 GuardrailSummary → PreviewControls → RouteTree → Before/After 비교 순으로 이관하며, 각 단계에서 store slice와 components를 분할한다.
-- **현황**: 2025-09-30 13:05 UTC / 2025-09-30 22:05 KST — ExecutionPanel/ResultLog Preact 스캐폴드와 Signals 기반 store/services를 정리했고, `pnpm --filter gg-figma-plugin build`, `test`, `typecheck`를 실행해 UI 번들(`ui.js/ui.css`)과 런타임 검증이 모두 통과했다.
+- **현황**: 2025-09-30 13:31 UTC / 2025-09-30 22:31 KST — GuardrailSummary·PreviewControls·ResultLog를 Signals 기반으로 재구성했고, guardrail/preview/section 스토어 및 CI `gg-figma-plugin build/test/typecheck` 잡을 추가해 빌드·테스트·타입체크가 자동 검증된다.
