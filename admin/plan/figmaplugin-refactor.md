@@ -3,7 +3,7 @@ file: admin/plan/figmaplugin-refactor.md
 title: Figma Plugin 컴포넌트화 리팩터링 계획
 owner: duksan
 created: 2025-09-30 06:10 UTC / 2025-09-30 15:10 KST
-updated: 2025-09-30 09:13 UTC / 2025-09-30 18:13 KST
+updated: 2025-09-30 11:27 UTC / 2025-09-30 20:27 KST
 status: draft
 tags: [plan, figma, refactor]
 schemaVersion: 1
@@ -19,8 +19,11 @@ code_refs:
 
 # 1. 배경
 
-- DSL/P1 기능이 안정화되면서 런타임과 manifest 빌더, UI 스크립트에 책임이 과도하게 몰려 유지보수 및 디버깅이 어려운 상태다.
-- 향후 P2/P3 기능(관찰성, 승인 UX, 테스트 자동화)을 안정적으로 구현하려면 모듈 경계를 명확히 해야 한다.
+- **현재 런타임 구조**: `figma-hello-plugin/src/runtime.ts` 한 파일이 Surface DSL 변환, Guardrail 검사, Dry-run/Apply 실행, 슬롯 동기화, 플러그인 메타데이터 주입까지 모두 담당하고 있다. Surface/Slot 정의는 Manifest에서 불러온 뒤 즉석에서 해시를 계산하고(`runtime.ts:46` 근처), Dry-run과 Apply는 동일한 코드 경로를 타며 intent 플래그만 바꾼다(`runtime.ts:223-420`). 증분 갱신을 지원하는 것처럼 보이지만 실제로는 `syncSlotChildren` 단계에서 기존 노드를 통째로 제거 후 재생성하기 때문에(`runtime.ts:640-720`) Before/After 비교나 부분 갱신을 붙이려면 구조 자체를 다시 쪼개야 한다.
+- **노드/토큰 처리 병목**: 노드 생성은 `figma-hello-plugin/src/lib/nodeFactory.ts:20-124`에 집중돼 있고, 현재 Text/Frame/Stack/Spacer만 지원한다. 스키마에 정의된 Component/Image 타입은 런타임에서 바로 `figma.notify` 경고를 띄우고 무시하기 때문에 UX 확장이 막혀 있다. 토큰 해석(`tokenRegistry.ts:1-110`)과 스타일 캐시는 전역 함수로 얽혀 있어 Slot 단위 검증이나 스타일 대체 전략을 독립적으로 테스트할 방법이 없다.
+- **UI 상태 및 UX 한계**: 플러그인 패널은 단일 HTML 파일(`figma-hello-plugin/src/ui/index.html:320-720`) 안에 스타일, DOM 템플릿, 상태, 이벤트가 뒤섞여 있다. Surface → Route → Slot 트리, 섹션 선택, Dry-run 실행, 로그/경고 표시는 모두 전역 배열과 Map을 공유하며 즉시 DOM을 조작한다. 프리뷰 프레임, Before/After 슬라이더, 체크포인트 초안 등 새로운 UX를 붙이려면 상태 구조부터 갈아엎어야 하므로 실험이 멈춰 있는 상황이다.
+- **입력→출력→전달→보고→감사 흐름의 단절**: 입력(JSON 스키마)은 Manifest와 섹션 파일에서 읽어 오지만, 출력된 노드/로그가 어디에 저장되고 누가 검증하는지 명확하지 않다. Dry-run 결과는 UI 로그에만 남고(`notifier.ts:1-20`), 체크포인트 초안 버튼은 더미 경고만 띄운다. 감사(LOT 기록)를 위해 필요한 pluginData는 붙지만, 현재 구조에서는 어떤 슬롯이 언제 어떤 의도로 갱신됐는지 추적 로그를 남길 모듈이 따로 없다. 결국 “입력→실행→상태 보고→검증→감사” 사이클이 연결되지 않아 프리뷰 UX나 승인 플로우가 중간에서 끊긴다.
+- **기술 부채 요약**: Manifest 빌더(`scripts/build-archetype-manifest.js`)는 Node 스크립트 한 파일로, Surface/Route/Slot을 읽어서 바로 TS 파일을 생성한다. 런타임/빌더/UITree가 모두 단일 책임을 벗어나 있는 탓에 테스트를 붙이거나, 특정 레이어만 교체하는 작업이 불가능하다. 이 상태에서 P1 기능을 마저 완성해도 리팩터링 라운드에서 다시 해체해야 하므로, 우선 기능 단위 모듈화를 선행하고 나서 P1 수용 기준을 재검증하려는 것이 이번 리팩터링의 의도다.
 
 # 2. 리팩터링 목표
 
@@ -71,15 +74,168 @@ code_refs:
 - **인터랙티브 슬롯 액션**: 슬롯별 버튼으로 “빈 슬롯 채우기/교체/확대” 등을 제공, 선택 즉시 해당 슬롯 재생성.
 - **자동 동기화 알림**: 섹션 수정 감지 시 프리뷰 배너를 “Out of date”로 바꾸고, 패널에서 “프리뷰 재생성” 버튼 강조.
 
+# 3-3. 런타임 계층 상세 설계 (1파일 1책임 규칙)
+
+- **surface-config/**
+  - `index.ts`: Surface 설정 조회 파사드. 외부에서는 이 파일만 임포트한다.
+  - `normalizer.ts`: Manifest Raw 데이터를 런타임용 구조로 변환한다.
+  - `hash.ts`: Surface/Slot 해시 계산만 담당한다. (LOC ≤ 120)
+  - `registry.ts`: Normalized Surface/Slot 캐시와 필수 슬롯 목록을 관리한다.
+  - `types.ts`: Surface 관련 타입 정의만 보관한다.
+- **slot-manager/**
+  - `index.ts`: Slot 배치 API. SurfaceConfig/NodeSync/Metadata를 조합한다.
+  - `container-factory.ts`: 타깃 프레임과 슬롯 컨테이너 생성/AutoLayout 적용.
+  - `diff-engine.ts`: 기존 자식과 새 스펙을 비교하고 add/update/remove 목록을 만든다.
+  - `metadata.ts`: pluginData 표준키를 세팅하고 감사 메타를 기록한다.
+  - `reporter.ts`: 실행 결과를 DTO로 만들어 Executor에게 전달한다.
+- **guardrails/**
+  - `index.ts`: Guardrail 평가 파이프라인 조립.
+  - `counters.ts`: 노드 수/깊이/JSON 크기 계산만 수행.
+  - `validators.ts`: 슬롯 허용 여부 등 구조 검사를 수행.
+  - `thresholds.ts`: 허용치 테이블과 환경별 override를 정의.
+  - `messages.ts`: 경고/오류 메시지 템플릿을 한 곳에서 관리.
+- **executor/**
+  - `index.ts`: Dry-run/Apply 엔트리 포인트. Intent 전환만 담당한다.
+  - `context-factory.ts`: 실행 옵션, SurfaceConfig, Guardrail 결과를 묶은 Context 객체를 만든다.
+  - `dry-run.ts`: 프리뷰 프레임 정책과 SlotManager 호출을 담당한다.
+  - `apply.ts`: 실제 적용/선택 이동/Undo 보호 로직만 처리한다.
+  - `result-dto.ts`: Runtime→UI 전달 DTO 스키마만 정의한다.
+- **io-channel/**
+  - `index.ts`: 런타임에서 사용할 송신 헬퍼. postMessage 호출만 수행.
+  - `message-types.ts`: 런타임↔UI 왕복 메시지 타입/페이로드 정의.
+  - `dispatcher.ts`: 수신 메시지를 Executor/서비스로 라우팅한다.
+  - `logger.ts`: 메시지 로그/디버깅 훅. 테스트 시 안전하게 스텁 가능.
+- 각 디렉터리의 파일은 책임이 1개이며 200줄 이하, 순환 의존 금지(ESLint 규칙 추가 예정). 공용 util은 `src/runtime/utils/`로 이동하되 파일당 1 util만 허용한다.
+
+# 3-4. 데이터/유틸 계층 상세 설계
+
+- **scripts/manifest/**
+  - `loader.ts`: JSON 파일을 읽어 객체로 반환한다.
+  - `validator.ts`: Schema를 AJV로 검사한다.
+  - `normalizer.ts`: Surface/Route/Section 구조를 정규화.
+  - `emitter.ts`: TS 소스코드 생성만 담당한다.
+  - `watcher.ts`: 개발 모드에서 파일 변경을 감지한다.
+- **schema/**
+  - `parser.ts`: Raw JSON → `SchemaDocument`. 필수 필드 보정.
+  - `idempotent.ts`: idempotentKey 채움/검증 전용.
+  - `validator.ts`: 파싱 후 구조 검증 수행.
+  - `merge.ts`: 다중 섹션 병합 전용 유틸.
+- **token/**
+  - `registry.ts`: Resolve API 파사드.
+  - `paint.ts`, `typography.ts`, `radius.ts`: 각 토큰 타입만 담당.
+  - `cache.ts`: Figma 스타일 캐시 초기화/무효화.
+  - `provider.ts`: 향후 변수/외부 소스 연결용 인터페이스.
+- **notifier/**
+  - `index.ts`: 외부 사용 API (success/warning/error/result)만 노출.
+  - `toast.ts`: figma.notify 래퍼.
+  - `event-bus.ts`: UI 메시지 전송.
+  - `formatter.ts`: 로그 메시지 형식화.
+- 모든 데이터/유틸 파일은 단일 책임을 지키며, cross-layer 로직은 파사드(index)에서만 결합한다.
+
+# 3-5. UI 상태/서비스 계층 상세 설계
+
+- **store/**
+  - `surfaceStore.ts`: Surface/Route/Slot 선택 상태.
+  - `sectionStore.ts`: 섹션 선택/검색/정렬.
+  - `schemaStore.ts`: 병합된 JSON, 편집 내용.
+  - `executionStore.ts`: 실행 로딩/결과 요약.
+  - `previewStore.ts`: 프리뷰 프레임/히스토리 상태.
+  - `logStore.ts`: Dry-run/경고 로그 이력.
+  - `index.ts`: Store 조합과 Provider 설정만 담당.
+- **services/**
+  - `execution.ts`: Dry-run/Apply 파이프라인 조립.
+  - `schema-builder.ts`: 선택 섹션을 SchemaDocument 배열로 변환.
+  - `preview.ts`: 프리뷰 프레임 이동/히스토리/슬라이더.
+  - `checkpoint.ts`: 체크포인트 초안 생성.
+  - `io-listener.ts`: 런타임 메시지 수신 후 Store로 분배.
+  - `analytics.ts`: 실행/선택 이벤트를 로깅(선택 사항).
+- 각 Store/Service 파일의 책임을 명확히 분리해 디버깅 시 영향 범위를 즉시 파악 가능하도록 한다.
+
+# 3-6. UI 컴포넌트 매핑 (파일 단위 세분화)
+
+- `SurfaceTabs/`
+  - `index.tsx`: Surface 탭 렌더링.
+  - `SurfaceBadge.tsx`: 필수 슬롯/경고 뱃지.
+  - `SurfaceStats.tsx`: 선택 Surface 통계.
+- `RouteTree/`
+  - `index.tsx`: Route/Slot 트리 루트.
+  - `RouteNode.tsx`: Route 레벨 렌더링.
+  - `SlotNode.tsx`: Slot 레벨 렌더링 및 전체 선택.
+  - `SlotSummary.tsx`: 슬롯 설명/허용 섹션 표시.
+- `SectionList/`
+  - `index.tsx`: 슬롯별 섹션 목록.
+  - `SectionItem.tsx`: 개별 섹션 항목.
+  - `SectionFilter.tsx`: 검색/필터 UI.
+- `SchemaEditor/`
+  - `index.tsx`: JSON 뷰/편집 탭 전환.
+  - `ReadonlyPanel.tsx`: 읽기 전용 프리뷰.
+  - `EditorPanel.tsx`: 코드 편집기 래퍼.
+- `ExecutionPanel/`
+  - `index.tsx`: 버튼/설정 묶음.
+  - `TargetSelect.tsx`: 페이지/프레임 선택.
+  - `GuardrailSummary.tsx`: 경고 요약.
+- `ResultLog/`
+  - `index.tsx`: 로그 리스트 컨테이너.
+  - `LogEntry.tsx`: 로그 항목.
+  - `MetricsBar.tsx`: 생성/경고/오류 수치.
+- `PreviewControls/`
+  - `index.tsx`: 프리뷰 제어 허브.
+  - `BeforeAfter.tsx`: 슬라이더 전용.
+  - `SlotHighlight.tsx`: 슬롯 토글.
+- `QuickActions/`
+  - `index.tsx`: 단축 액션 묶음.
+  - `SampleLoader.tsx`: 샘플 로드 버튼.
+  - `HelloAction.tsx`: Hello 프레임 생성.
+  - `CheckpointAction.tsx`: 체크포인트 내보내기.
+- 모든 컴포넌트는 Props 타입을 별도 `types.ts`에 정의하고, 스타일은 `styles.css` 또는 모듈 CSS로 분리한다. 1파일 1UI 책임을 지켜 재사용과 디버깅을 단순화한다.
+
+# 3-7. 상호 작용 흐름
+
+1. 사용자가 Surface/Slot을 선택 → Store가 선택 상태를 업데이트하고 `SectionList`/`SchemaEditor`가 즉시 반응한다.
+2. `ExecutionPanel`에서 Dry-run을 트리거 → `services/execution`이 SchemaDocument 배열을 구성하고 io-channel로 `execute-schema` 메시지를 보낸다.
+3. Executor는 surface-config → guardrails → slot-manager → notifier 순으로 호출하고, 결과 DTO를 io-channel에 실어 UI로 보낸다.
+4. UI의 `io-listener`가 결과를 수신 → Store에 Dry-run 결과/경고/프리뷰 정보 반영 → `ResultLog`와 `PreviewControls`가 즉시 갱신된다.
+5. 사용자가 Apply를 선택하면 Executor가 같은 파이프라인을 intent `apply`로 실행하고, SlotManager가 생성/갱신 결과를 보고한다.
+6. `services/checkpoint`가 Dry-run/Apply 결과를 바탕으로 체크포인트 초안을 생성하고, 필요 시 UI에서 바로 파일로 저장하도록 안내한다.
+7. 모든 실행 이벤트는 Store에 축적돼 Undo/Redo·감사 로그·세션 요약에 재사용된다.
+
+# 3-8. 병목 제거형 서브모듈 설계
+
+- **Slot Manager 분기**
+  - `strategies/` 디렉터리를 두고 `dryRun.ts`, `apply.ts`, `preview.ts`를 분리해 목적별 파이프라인을 정의한다.
+  - `auditor/`에 `writer.ts`(pluginData 기록), `snapshot.ts`(이전 상태 캡처), `diff-formatter.ts`(UI 전송용 요약)를 쪼개 넣어 감사/리포트 책임을 명확히 한다.
+  - `registry.ts`는 읽기 전용 캐시만 담당하게 하고, Slot 변환 로직은 `transformers/` 하위 파일(예: `autoLayout.ts`, `componentInstance.ts`)로 옮긴다.
+  - 고빈도 호출 구간은 `profiling.ts`로 계측해 Guardrails/CI 테스트에서 병목이 없는지 주기적으로 점검한다.
+- **Executor 커맨드 패턴**
+  - `commands/`에 `DryRunCommand.ts`, `ApplyCommand.ts`, `PreviewCommand.ts`를 두고, 각 명령이 `execute(context)` 메서드 하나만 노출한다.
+  - 명령별 후속 처리(프리뷰 프레임 이동, 체크포인트 트리거, notifier 호출)는 `hooks/`에서 `afterDryRun.ts`, `afterApply.ts`로 분리해 확장 시 영향 범위를 최소화한다.
+  - `pipeline.ts`에서 Guardrails→SlotManager→Notifier 순서를 미리 선언하고, 테스트에서 배열 비교로 회귀를 감지한다.
+- **Token Registry 확장 대비**
+  - `providers/` 디렉터리에 `figma.ts`, `variables.ts`, `remote.ts`를 두어 소스별 해결 전략을 독립 파일로 유지한다.
+  - `resolvers/`에는 `color.ts`, `typography.ts`, `radius.ts`, `spacing.ts`, `shadow.ts` 등 토큰 타입별로 쪼개고, 각 파일은 오직 1개의 switch/if만 허용한다.
+  - 캐시 무효화는 `cache/evict.ts`, 초기화는 `cache/bootstrap.ts`로 분리해 재사용성과 테스트 용이성을 확보한다.
+- **UI Store/Service 가드레일**
+  - Store는 최대 150줄, selector는 `selectors/` 폴더에서만 정의하고, Store 파일에는 상태 초기값과 액션만 둔다.
+  - 긴 생애주기를 갖는 작업(프리뷰 히스토리, Dry-run 로그)은 `history/` 폴더로 뽑아 `history/persistor.ts`, `history/replayer.ts`로 나눈다.
+  - 서비스 계층은 `facade/index.ts`에서만 외부로 노출하고, 실제 구현은 `steps/` 폴더의 작은 함수(예: `buildSchemaDocument.ts`, `enqueuePreview.ts`)로 분리해 재사용한다.
+- **ResultLog/PreviewControls 세분화**
+  - `ResultLog`는 `aggregator.ts`(스토어 구독 및 정규화), `timeline.tsx`(시간순 렌더), `details/`(경고/오류 패널)로 쪼갠다.
+  - `PreviewControls`는 `targets.tsx`(프레임 이동), `comparisons/`(Before/After, 히트맵), `overlays/`(슬롯 하이라이트)로 나눠 UX 실험 시 교체 비용을 낮춘다.
+- **계측·디버깅 파이프라인**
+  - 공통 로거는 `src/runtime/instrumentation/logger.ts`, UI 측 로거는 `src/ui/instrumentation/logger.ts`로 분리한다.
+  - `diagnostics/metrics.ts`에서 실행 시간, Guardrail 카운터, 에러 비율을 수집해 향후 대시보드/테스트와 연계한다.
+  - 모든 고빈도 함수에 JSDoc으로 예상 입력/출력/복잡도를 명시하고, CI에서 `pnpm run lint:bottleneck`(추가 예정)으로 순환 의존과 파일 길이를 검사한다.
+
 # 4. 작업 순서
 
-1. **준비(P0)**: 현재 manifest/런타임/UITree 사용 패턴 점검, 상호 의존성 정리, 테스트 샘플(json/expected)을 확보한다.
+1. **준비(P0)**: 현재 manifest/런타임/UITree 사용 패턴 점검, 상호 의존성 정리, 테스트 샘플(json/expected)을 확보한다. _(완료 2025-09-30 11:24 UTC / 2025-09-30 20:24 KST — 런타임 의존 관계 분석, manifest 스냅샷, 샘플/테스트 목록화 완료)_
 2. **Manifest 모듈화(P1)**
    - `scripts/build-archetype-manifest.js`를 TS 기반 `scripts/manifest/`로 분리(Loader/Builder/Emitter).
    - Surface/Route/Slot 구조 검증 및 JSON Schema 초안 작성.
 3. **런타임 분리(P1)**
    - `runtime.ts`를 위에서 정의한 SurfaceConfig/SlotManager/Guardrails/Executor 모듈로 쪼개고, `index.ts`에서 조립.
    - 기존 API(`runSchemaFromString`, `runSchemaBatch`, `runSchemaDocument`)와 메시지 포맷 유지.
+   - SlotManager `strategies/`, Executor `commands/`, Token Registry `providers/` 등 서브폴더를 동시에 생성해 후속 확장 시 파일 이동이 필요 없도록 한다.
 4. **UI 분리(P2)**
    - manifest 로더와 상태 관리, 컴포넌트 렌더링 로직을 파일 단위로 나눠 Webpack/esbuild 번들을 적용.
    - Route/Slot 트리 컴포넌트에서 manifest 타입 정의를 재사용.
@@ -96,12 +252,20 @@ code_refs:
 - `npm run build` 및 새 테스트 스크립트가 성공하며, Dry-run/Apply 기능이 리팩터링 전과 동일하게 동작한다.
 - 문서와 코드의 상호 참조(code_refs/doc_refs)가 최신 구조를 반영한다.
 - 회귀 대응을 위해 최소 3가지 샘플 JSON 시나리오에 대한 Dry-run 결과가 리팩터링 전과 일치한다.
+- SlotManager/Executor/Token Registry/ResultLog/PreviewControls 디렉터리에 서브모듈(`strategies/`, `commands/`, `providers/`, `aggregator/`, `comparisons/` 등)이 존재하고 각 파일이 단일 책임과 LOC≤200을 충족한다.
 
 # 6. 일정 및 의존 관계
 
-- 착수 시점: 현재 P1 안정화(DSL/증분 갱신) 완료 후.
-- 선행 조건: Surface DSL/Guardrails가 정상 동작하고 주요 버그가 없는 상태.
-- P2/P3 기능 개발과 병행하지 않고 짧은 리팩터링 스프린트(약 2~3일)로 수행.
+- 착수 시점: `chore: snapshot plugin state before refactor` 커밋(프리뷰 UX 실험 직전) 이후, P1 산출물이 막힌 채로 즉시 리팩터링 스프린트를 시작한다. P1 안정화가 완료된 후가 아니라, 막힌 지점(런타임 재구성/프리뷰 UX) 해소를 위해 선행 실행한다.
+- 선행 조건: `admin/plan/figmapluginmake.md` 8장의 P1 선행 과제 중 (1) Surface/Slot 확장 스키마 요구사항과 (3) Dry-run 검증 강화 항목을 리팩터링 설계에 반영했음을 확인한다. 추가 구현은 모듈 분리 후 재개한다.
+- 실행 순서 및 예상 소요
+  1. 준비(P0) — 현 구조 스캔, 샘플/테스트 케이스 확보 (0.5일)
+  2. Manifest 모듈화(P1) — `scripts/manifest/*` 작성 및 스키마 검증 (0.5일)
+  3. 런타임 분리(P1) — SurfaceConfig/SlotManager/Guardrails/Executor 구성 (1.0일)
+  4. UI 상태·컴포넌트 재구성(P2) — Store/Actions/Components 정리 (1.0일)
+  5. 테스트·문서·체크포인트(P2) — 단위 테스트, 체크포인트, 문서 동기화 (0.5일)
+- 재착수 조건: 각 단계가 끝날 때마다 figmapluginmake P1 수용 기준(증분 갱신, Dry-run 검증)을 다시 실행해 통과해야 하며, 통과 후에만 P1 본 작업(프리뷰 UX 구현)을 재개한다.
+- 외부 의존: 최신 `admin/specs/ui-archetypes/**` JSON, pre-commit 메타 스크립트 체인(`scripts/update_frontmatter_time.js → pnpm run validate:docs → pnpm run validate:refs`), 리팩터링 전 스냅샷 커밋을 기준으로 한 롤백 가능 상태.
 
 # 7. 후속 계획
 

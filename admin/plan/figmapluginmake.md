@@ -3,7 +3,7 @@ file: admin/plan/figmapluginmake.md
 title: Figma Plugin 자동화 구축 계획
 owner: duksan
 created: 2025-09-27 06:03 UTC / 2025-09-27 15:03 KST
-updated: 2025-09-30 09:13 UTC / 2025-09-30 18:13 KST
+updated: 2025-09-30 11:27 UTC / 2025-09-30 20:27 KST
 status: draft
 tags: [plan, figma, automation, plugin]
 schemaVersion: 1
@@ -102,6 +102,9 @@ code_refs: []
 - Surface/Slot 정의 스키마 확장: 폭·높이·padding·gap·layoutGrow·허용 컴포넌트 리스트를 `admin/specs/figmaplugin-p1-design.md`, `figma-hello-plugin/src/schema.ts`에 반영한다.
 - 프리셋 계층(Design Surface → Route → Slot → Section) 메타를 `admin/specs/ui-archetypes/...`에 추가하고, `scripts/build-archetype-manifest.js`가 확장된 DSL을 출력하도록 수정한다.
 - `runtime.ts`를 Surface → Slot → Component 순회 구조로 재작성해 AutoLayout 속성(`primaryAxisSizingMode`, `counterAxisSizingMode`, `layoutAlign`, `layoutGrow`)을 JSON에 맞춰 적용한다.
+- SlotManager를 `strategies/`(dry-run/apply/preview), `auditor/`(writer/snapshot/diff-formatter), `transformers/` 구조로 분할하고, Executor는 `commands/`와 `hooks/` 디렉터리를 도입해 1파일 1책임을 강제한다.
+- Token Registry는 `providers/`(figma/variables/remote), `resolvers/`(color/typography/radius/spacing/shadow), `cache/`(bootstrap/evict) 폴더로 나눠 확장성과 성능 튜닝 지점을 명확히 한다.
+- UI Store/Services는 `selectors/`, `history/`, `steps/` 하위 파일을 포함하도록 스캐폴딩을 준비하고, ResultLog/PreviewControls 컴포넌트는 `aggregator/`, `timeline/`, `comparisons/`, `overlays/` 등 서브 디렉터리를 선행 구성한다.
 - 증분 갱신 프로토콜 구현: 각 노드에 `idempotentKey`를 부여하고 `op: add/update/remove` 패치를 지원하며, `pluginData`에 `slotId`, `layoutHash`, `schemaVersion`을 저장한다.
 - Dry-run 사전 검증 강화: 필수 필드 누락, 슬롯 중복, 허용되지 않은 컴포넌트/토큰을 감지하고 사용자 메시지를 표준화한다.
 
@@ -111,6 +114,7 @@ code_refs: []
 - Dry-run 실행 시 AutoLayout/slot 배치가 JSON 값과 동일하게 생성되어 겹침/불필요한 여백이 재발하지 않는다.
 - 재실행 시 `idempotentKey`와 `pluginData`를 이용해 기존 노드가 안전하게 업데이트/삭제되며 중복 생성이 발생하지 않는다.
 - 유효성 검증 실패 시 Dry-run이 중단되고 명확한 오류/경고 메시지가 표시된다.
+- 새 디렉터리(`strategies/`, `commands/`, `providers/`, `selectors/`, `history/`, `aggregator/` 등)가 생성돼 각 파일이 단일 책임과 LOC≤200 규정을 충족한다.
 - _(현 시점 메모)_ 프리뷰 UX 실험으로 인해 Dry-run이 실제 프레임을 생성하는 상태이므로, 리팩터링 라운드에서 구조 재정비 후 본 수용 기준을 다시 검증한다.
 
 ## 6.3 P2 — Dry-run 관찰성 및 실행 플로 강화
@@ -144,6 +148,7 @@ code_refs: []
 - 배포/공유 방식 결정(Private → Team → Community) 및 변경 로그·롤백 정책을 확정한다. (참고: `admin/references/figmaplugin/figma-manifest-v2.md`, `admin/references/figmaplugin/figma-developer-api.md`)
 - 플러그인 런타임/UI/빌더를 기능 단위 모듈로 분리하는 리팩터링 계획을 별도 문서(`admin/plan/figmaplugin-refactor.md`)로 수립하고, P1 안정화 후 착수한다.
 - Dry-run 실행 시 프리뷰 전용 프레임을 생성해 실물 레이아웃과 요약 브리프를 동시에 보여주는 UX 실험을 진행하며, 확정 플로우는 리팩터링 계획서에서 정의한 실행/체크포인트 흐름을 따른다.
+- 리팩터링 문서(`admin/plan/figmaplugin-refactor.md`)의 병목 제거 서브모듈(예: SlotManager `strategies/`, Executor `commands/`, Token Registry `providers/`)과 본 계획서의 실행 항목을 매 라운드 종료 시 교차 검증한다.
 
 ### 수용 기준
 
@@ -187,9 +192,9 @@ code_refs: []
 - 대상 페이지 선택 드롭다운 및 현재 페이지 기본값 연동, 실행 시 즉시 append 방식으로 안정화.
 - 다음 작업 (P1 선행)
   1. Surface/Slot 확장 스키마 정의와 manifest 계층(Design Surface → Route → Slot → Section) 업데이트.
-  2. `runtime.ts` 재구성으로 AutoLayout/slot 배치 로직을 적용하고, idempotentKey 기반 증분 갱신을 구현한다.
-  3. Dry-run 사전 검증 로직을 강화해 필수 필드·슬롯 중복·토큰 누락을 차단하고 사용자 메시지를 정비한다.
-  4. P1 산출물(스키마/manifest/런타임/검증)을 체크포인트로 남기고 Dev Workspace 문서와 연결한다.
+  2. `runtime.ts` 재구성으로 AutoLayout/slot 배치 로직을 적용하고, SlotManager/Executor/Token Registry/Store/ResultLog를 세분화한 새 디렉터리 구조를 동시에 도입한다.
+  3. Dry-run 사전 검증 로직을 강화해 필수 필드·슬롯 중복·토큰 누락을 차단하고, Guardrails/Notifier/IO 채널을 커맨드/훅 구조와 연계한 메시지 파이프라인으로 재구성한다.
+  4. P1 산출물(스키마/manifest/런타임/검증)에 대한 체크포인트를 작성하고, 새 디렉터리/파일 목록과 LOC 검증 결과를 함께 기록해 후속 라운드에서 회귀를 방지한다.
 
 # 9. 리스크 및 대응
 
@@ -200,6 +205,7 @@ code_refs: []
 - **성능**: 큰 레이아웃을 한 번에 생성할 때 지연 발생 가능 → 배치 단위 작업, 프리패브, 진행률 표시.
 - **학습 곡선**: 팀이 스키마를 이해해야 함 → 예제와 문서, 테스트 JSON 제공.
 - **승인/관찰성 누락**: 드라이런 또는 로그 축적을 건너뛰면 감사 추적이 어려움 → Dev Workspace 승인 플로를 필수 단계로 강제.
+- **모듈 비대화**: SlotManager/Executor/스토어가 후속 기능 추가로 다시 단일 파일로 회귀할 위험 → 리팩터링 계획서의 서브모듈 체크리스트(LOC, 디렉터리 존재, eslint 규칙)를 CI에 연동해 위반 시 실패 처리.
 
 # 10. 기록 및 후속 작업
 

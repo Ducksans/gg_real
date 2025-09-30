@@ -9,11 +9,14 @@
     "build:main": "esbuild src/main.ts --bundle --platform=node --target=es2018 --outfile=dist/main.js",
     "build:ui": "node scripts/copy-ui.js",
     "watch": "npm run build:main -- --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --config vitest.config.ts",
+    "test:watch": "vitest watch --config vitest.config.ts"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.84.0",
     "esbuild": "^0.23.0",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
   }
 }

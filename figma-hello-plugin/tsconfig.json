@@ -8,7 +8,36 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "types": ["@figma/plugin-typings"],
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "paths": {
+      "@runtime/*": ["runtime/*"],
+      "@runtime/surface-config/*": ["runtime/surface-config/*"],
+      "@runtime/slot-manager/*": ["runtime/slot-manager/*"],
+      "@runtime/slot-manager/strategies/*": ["runtime/slot-manager/strategies/*"],
+      "@runtime/slot-manager/auditor/*": ["runtime/slot-manager/auditor/*"],
+      "@runtime/slot-manager/transformers/*": ["runtime/slot-manager/transformers/*"],
+      "@runtime/guardrails/*": ["runtime/guardrails/*"],
+      "@runtime/executor/*": ["runtime/executor/*"],
+      "@runtime/executor/commands/*": ["runtime/executor/commands/*"],
+      "@runtime/executor/hooks/*": ["runtime/executor/hooks/*"],
+      "@runtime/io-channel/*": ["runtime/io-channel/*"],
+      "@runtime/utils/*": ["runtime/utils/*"],
+      "@runtime/instrumentation/*": ["runtime/instrumentation/*"],
+      "@runtime/diagnostics/*": ["runtime/diagnostics/*"],
+      "@schema/*": ["schema/*"],
+      "@token/*": ["token/*"],
+      "@token/providers/*": ["token/providers/*"],
+      "@token/resolvers/*": ["token/resolvers/*"],
+      "@token/cache/*": ["token/cache/*"],
+      "@notifier/*": ["notifier/*"],
+      "@ui/store/*": ["ui/store/*"],
+      "@ui/store/selectors/*": ["ui/store/selectors/*"],
+      "@ui/history/*": ["ui/history/*"],
+      "@ui/services/*": ["ui/services/*"],
+      "@ui/services/steps/*": ["ui/services/steps/*"],
+      "@ui/services/facade/*": ["ui/services/facade/*"],
+      "@ui/components/*": ["ui/components/*"]
+    }
   },
   "include": ["src/**/*"]
 }
