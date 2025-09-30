@@ -22,6 +22,10 @@ for (const [key, values] of Object.entries(tsconfig.compilerOptions?.paths ?? {}
 }
 
 export default defineConfig({
+  esbuild: {
+    jsx: 'automatic',
+    jsxImportSource: 'preact',
+  },
   resolve: {
     alias,
   },

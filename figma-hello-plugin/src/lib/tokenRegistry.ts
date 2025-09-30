@@ -143,14 +143,19 @@ export function resolveRadiusToken(token: string | undefined): number | null {
 export function resolveTypographyToken(token: string | undefined): TypographyToken | null {
   if (!token) return null;
   const style = findTextStyle(token);
-  if (style && style.fontName !== figma.mixed) {
+  if (style) {
+    const lineHeightValue =
+      style.lineHeight &&
+      typeof style.lineHeight === 'object' &&
+      'unit' in style.lineHeight &&
+      style.lineHeight.unit === 'PIXELS'
+        ? style.lineHeight.value
+        : undefined;
+
     return {
       font: style.fontName,
       fontSize: style.fontSize,
-      lineHeight:
-        style.lineHeight !== figma.mixed && style.lineHeight?.unit === 'PIXELS'
-          ? style.lineHeight.value
-          : undefined,
+      lineHeight: lineHeightValue,
       styleId: style.id,
     };
   }

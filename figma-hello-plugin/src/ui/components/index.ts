@@ -1,26 +1,4 @@
-export { renderSurfaceTabs } from './SurfaceTabs';
-export { renderSurfaceBadge } from './SurfaceTabs/SurfaceBadge';
-export { renderSurfaceStats } from './SurfaceTabs/SurfaceStats';
-export { renderRouteTree } from './RouteTree';
-export { renderRouteNode } from './RouteTree/RouteNode';
-export { renderSlotNode } from './RouteTree/SlotNode';
-export { renderSlotSummary } from './RouteTree/SlotSummary';
-export { renderSectionList } from './SectionList';
-export { renderSectionItem } from './SectionList/SectionItem';
-export { renderSectionFilter } from './SectionList/SectionFilter';
-export { renderSchemaEditor } from './SchemaEditor';
-export { renderReadonlyPanel } from './SchemaEditor/ReadonlyPanel';
-export { renderEditorPanel } from './SchemaEditor/EditorPanel';
-export { renderExecutionPanel } from './ExecutionPanel';
-export { renderTargetSelect } from './ExecutionPanel/TargetSelect';
-export { renderGuardrailSummary } from './ExecutionPanel/GuardrailSummary';
-export { renderResultLog } from './ResultLog';
-export { renderLogEntry } from './ResultLog/LogEntry';
-export { renderMetricsBar } from './ResultLog/MetricsBar';
-export { renderPreviewControls } from './PreviewControls';
-export { renderBeforeAfter } from './PreviewControls/BeforeAfter';
-export { renderSlotHighlight } from './PreviewControls/SlotHighlight';
-export { renderQuickActions } from './QuickActions';
-export { renderSampleLoader } from './QuickActions/SampleLoader';
-export { renderHelloAction } from './QuickActions/HelloAction';
-export { renderCheckpointAction } from './QuickActions/CheckpointAction';
+// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
+
+export { ExecutionPanel } from './ExecutionPanel';
+export { ResultLog } from './ResultLog';

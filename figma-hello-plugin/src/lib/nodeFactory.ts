@@ -1,4 +1,4 @@
-import { NodeSpec } from '../schema';
+import { NodeSpec, Constraints, ConstraintHorizontal, ConstraintVertical } from '../schema';
 
 export interface BuildContext {
   tokenResolver: (token: string) => Paint | null;
@@ -34,7 +34,11 @@ export async function appendNodesFromSchema(
     applyPluginData(node, spec.pluginData);
     applyConstraints(node, spec.constraints);
 
-    if ((spec.type === 'frame' || spec.type === 'stack') && spec.children?.length) {
+    if (
+      node.type === 'FRAME' &&
+      (spec.type === 'frame' || spec.type === 'stack') &&
+      spec.children?.length
+    ) {
       await appendNodesFromSchema(node, spec.children, ctx);
     }
   }
@@ -246,12 +250,34 @@ function applyPluginData(
   });
 }
 
-function applyConstraints(node: SceneNode, constraints?: Partial<Constraints>) {
-  if (!constraints || !('constraints' in node)) return;
+function applyConstraints(node: SceneNode, constraints?: Constraints) {
+  if (!constraints || !isConstraintMixin(node)) return;
+
+  const horizontalMap: Record<ConstraintHorizontal, ConstraintType> = {
+    LEFT: 'MIN',
+    RIGHT: 'MAX',
+    CENTER: 'CENTER',
+    LEFT_RIGHT: 'STRETCH',
+    SCALE: 'SCALE',
+    STRETCH: 'STRETCH',
+  };
+
+  const verticalMap: Record<ConstraintVertical, ConstraintType> = {
+    TOP: 'MIN',
+    BOTTOM: 'MAX',
+    CENTER: 'CENTER',
+    TOP_BOTTOM: 'STRETCH',
+    SCALE: 'SCALE',
+    STRETCH: 'STRETCH',
+  };
 
   node.constraints = {
-    horizontal: constraints.horizontal ?? node.constraints.horizontal,
-    vertical: constraints.vertical ?? node.constraints.vertical,
+    horizontal: constraints.horizontal
+      ? (horizontalMap[constraints.horizontal] ?? node.constraints.horizontal)
+      : node.constraints.horizontal,
+    vertical: constraints.vertical
+      ? (verticalMap[constraints.vertical] ?? node.constraints.vertical)
+      : node.constraints.vertical,
   };
 }
 
@@ -297,7 +323,6 @@ interface LayoutSpec {
   };
 }
 
-interface Constraints {
-  horizontal?: 'LEFT' | 'RIGHT' | 'CENTER' | 'LEFT_RIGHT' | 'SCALE';
-  vertical?: 'TOP' | 'BOTTOM' | 'CENTER' | 'TOP_BOTTOM' | 'SCALE';
+function isConstraintMixin(node: SceneNode): node is SceneNode & ConstraintMixin {
+  return 'constraints' in node;
 }

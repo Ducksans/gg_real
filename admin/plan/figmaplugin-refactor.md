@@ -3,7 +3,7 @@ file: admin/plan/figmaplugin-refactor.md
 title: Figma Plugin 컴포넌트화 리팩터링 계획
 owner: duksan
 created: 2025-09-30 06:10 UTC / 2025-09-30 15:10 KST
-updated: 2025-09-30 12:02 UTC / 2025-09-30 21:02 KST
+updated: 2025-09-30 13:13 UTC / 2025-09-30 22:13 KST
 status: draft
 tags: [plan, figma, refactor]
 schemaVersion: 1
@@ -12,8 +12,24 @@ code_refs:
   [
     'figma-hello-plugin/scripts/manifest/index.ts',
     'figma-hello-plugin/scripts/manifest/builder.ts',
+    'figma-hello-plugin/scripts/build-ui.ts',
     'figma-hello-plugin/src/runtime/executor/index.ts',
     'figma-hello-plugin/src/runtime/slot-manager',
+    'figma-hello-plugin/src/ui/app.tsx',
+    'figma-hello-plugin/src/ui/main.tsx',
+    'figma-hello-plugin/src/ui/components/ExecutionPanel.tsx',
+    'figma-hello-plugin/src/ui/components/ResultLog.tsx',
+    'figma-hello-plugin/src/ui/components/index.ts',
+    'figma-hello-plugin/src/ui/index.ts',
+    'figma-hello-plugin/src/ui/index.html',
+    'figma-hello-plugin/src/ui/services/execution.ts',
+    'figma-hello-plugin/src/ui/services/facade/index.ts',
+    'figma-hello-plugin/src/ui/services/index.ts',
+    'figma-hello-plugin/src/ui/services/io-listener.ts',
+    'figma-hello-plugin/src/ui/store/executionStore.ts',
+    'figma-hello-plugin/src/ui/store/index.ts',
+    'figma-hello-plugin/src/ui/store/logStore.ts',
+    'figma-hello-plugin/src/ui/styles/app.css',
   ]
 ---
 
@@ -259,3 +275,21 @@ code_refs:
 
 - 리팩터링 완료 후, UI를 React/Preact 기반으로 마이그레이션할지 여부 검토.
 - 자동화 테스트 확장(`pnpm --filter plugin test`) 및 CI 통합 계획 수립.
+
+# 7-1. Preact UI 전환 전략(비차단/병행)
+
+- **목표**: WebView UI를 Preact 기반 스캐폴드로 전환해 컴포넌트 단위 책임을 명확히 하고, 런타임 메시지 계약(postMessage DTO) 유지 상태에서 ExecutionPanel·ResultLog를 우선 이관한다.
+- **선행 조건**: `pnpm --filter gg-figma-plugin typecheck` 통과(기존 nodeFactory/tokenRegistry 타입 충돌 해결). Manifest/Runtime 모듈 분리 완료(3단계) 상태에서 병행.
+- **작업 순서**
+  1. **타입 정리** — `src/lib/nodeFactory.ts`, `src/lib/tokenRegistry.ts`의 Figma 타입 충돌을 제거하고 typecheck가 통과하도록 수정.
+  2. **의존성 추가** — `pnpm add preact @preact/signals`로 UI 런타임 의존성을 등록하고, `package.json` scripts에 `build:ui`(`pnpm exec tsx scripts/build-ui.ts`)를 연결한다.
+  3. **디렉터리 구성** — `src/ui/` 하위에 `index.html`(root div, `<script src="../dist/ui.js">`), `main.tsx`(Preact entry)와 `store/`, `services/`, `components/`를 작성.
+     - `store/executionStore.ts`, `store/logStore.ts`, `store/index.ts`
+     - `services/io-listener.ts`, `services/execution.ts`
+     - `components/ExecutionPanel/index.tsx`, `components/ResultLog/index.tsx`
+  4. **최소 구현** — ExecutionPanel에서 Dry-run/Apply 버튼이 `services/execution`을 호출하고, ResultLog는 최근 로그 배열을 렌더링한다. `services/io-listener`는 `useEffect`로 postMessage를 구독.
+  5. **번들/엔트리 연결** — `scripts/build-ui.ts`에서 esbuild를 호출해 `src/ui/main.tsx`를 `dist/ui.js`와 `dist/ui.css`로 번들하고, `index.html`을 `ui.html`로 복사하도록 구성(`pnpm exec tsx scripts/build-ui.ts`).
+  6. **테스트/검증** — `pnpm --filter gg-figma-plugin build && test && typecheck` 실행. WebView에서 Dry-run 버튼 클릭 시 ResultLog가 즉시 갱신되는지 수동 확인.
+- **가드레일**: postMessage DTO, `runSchema*` API, Runtime/Manifest 코드는 변경하지 않는다. WebView 로딩 시 `dist/ui.js`만 교체. 회귀 방지를 위해 기존 구조 테스트(`tests/structure.test.ts`)에 Preact 엔트리 검증 추가.
+- **향후 확장**: ExecutionPanel/ResultLog 이후 GuardrailSummary → PreviewControls → RouteTree → Before/After 비교 순으로 이관하며, 각 단계에서 store slice와 components를 분할한다.
+- **현황**: 2025-09-30 13:05 UTC / 2025-09-30 22:05 KST — ExecutionPanel/ResultLog Preact 스캐폴드와 Signals 기반 store/services를 정리했고, `pnpm --filter gg-figma-plugin build`, `test`, `typecheck`를 실행해 UI 번들(`ui.js/ui.css`)과 런타임 검증이 모두 통과했다.

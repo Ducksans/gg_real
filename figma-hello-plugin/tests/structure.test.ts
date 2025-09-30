@@ -3,19 +3,19 @@ import { beforeAll, describe, expect, it, vi } from 'vitest';
 beforeAll(() => {
   const frameFactory = () =>
     ({
-      type: 'FRAME',
+      type: 'FRAME' as const,
       name: 'Frame',
       children: [] as SceneNode[],
-      layoutMode: 'VERTICAL',
-      primaryAxisSizingMode: 'AUTO',
-      counterAxisSizingMode: 'AUTO',
+      layoutMode: 'VERTICAL' as AutoLayout,
+      primaryAxisSizingMode: 'AUTO' as 'AUTO' | 'FIXED',
+      counterAxisSizingMode: 'AUTO' as 'AUTO' | 'FIXED',
       itemSpacing: 0,
       paddingTop: 0,
       paddingRight: 0,
       paddingBottom: 0,
       paddingLeft: 0,
-      fills: [],
-      strokes: [],
+      fills: [] as Paint[],
+      strokes: [] as Paint[],
       layoutGrow: 0,
       height: 0,
       width: 0,
@@ -41,7 +41,7 @@ beforeAll(() => {
     }) as unknown as FrameNode;
 
   const pageNode = {
-    type: 'PAGE',
+    type: 'PAGE' as const,
     name: 'TestPage',
     children: [] as SceneNode[],
     appendChild(node: SceneNode) {
@@ -72,7 +72,7 @@ beforeAll(() => {
 describe('runtime exports', () => {
   it('exposes executor entrypoints', async () => {
     const { runHelloFrame, runSchemaFromString, runSchemaBatch, runSchemaDocument } = await import(
-      '@runtime/executor'
+      '@runtime'
     );
     expect(typeof runHelloFrame).toBe('function');
     expect(typeof runSchemaFromString).toBe('function');
@@ -106,17 +106,15 @@ describe('token registry scaffolding', () => {
 
 describe('ui scaffolding', () => {
   it('exposes store factories', async () => {
-    const { createSurfaceStore, createExecutionStore } = await import('@ui/store');
-    expect(typeof createSurfaceStore).toBe('function');
+    const { createExecutionStore, createLogStore } = await import('@ui/store');
     expect(typeof createExecutionStore).toBe('function');
+    expect(typeof createLogStore).toBe('function');
   });
 
   it('exposes key UI components', async () => {
-    const { renderSurfaceTabs, renderResultLog, renderPreviewControls } = await import(
-      '@ui/components'
-    );
-    expect(typeof renderSurfaceTabs).toBe('function');
-    expect(typeof renderResultLog).toBe('function');
-    expect(typeof renderPreviewControls).toBe('function');
+    const module = await import('@ui/components');
+    const { ExecutionPanel, ResultLog } = module as Record<string, unknown>;
+    expect(typeof ExecutionPanel).toBe('function');
+    expect(typeof ResultLog).toBe('function');
   });
 });

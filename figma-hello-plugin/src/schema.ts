@@ -2,6 +2,14 @@ export type NodeType = 'frame' | 'stack' | 'text' | 'component' | 'vector' | 'im
 
 export type NodeOperation = 'add' | 'update' | 'remove';
 
+export type ConstraintHorizontal = 'LEFT' | 'RIGHT' | 'CENTER' | 'LEFT_RIGHT' | 'SCALE' | 'STRETCH';
+export type ConstraintVertical = 'TOP' | 'BOTTOM' | 'CENTER' | 'TOP_BOTTOM' | 'SCALE' | 'STRETCH';
+
+export interface Constraints {
+  horizontal?: ConstraintHorizontal;
+  vertical?: ConstraintVertical;
+}
+
 export interface BaseNodeSpec {
   type: NodeType;
   name: string;
@@ -142,6 +150,8 @@ export interface SchemaDocument {
     routeLabel?: string;
     slot?: string;
     slotLabel?: string;
+    section?: string;
+    sectionLabel?: string;
   };
   target: {
     page?: string;

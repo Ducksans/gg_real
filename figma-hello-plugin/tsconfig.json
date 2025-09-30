@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
     "target": "ES2018",
     "module": "ESNext",
     "moduleResolution": "Node",
@@ -11,6 +13,8 @@
     "baseUrl": "src",
     "paths": {
       "@runtime/*": ["runtime/*"],
+      "@runtime": ["runtime/index.ts"],
+      "@runtime/lib/*": ["lib/*"],
       "@runtime/surface-config/*": ["runtime/surface-config/*"],
       "@runtime/slot-manager/*": ["runtime/slot-manager/*"],
       "@runtime/slot-manager/strategies/*": ["runtime/slot-manager/strategies/*"],
@@ -32,12 +36,15 @@
       "@lib/*": ["lib/*"],
       "@notifier/*": ["notifier/*"],
       "@ui/store/*": ["ui/store/*"],
+      "@ui/store": ["ui/store/index.ts"],
       "@ui/store/selectors/*": ["ui/store/selectors/*"],
       "@ui/history/*": ["ui/history/*"],
       "@ui/services/*": ["ui/services/*"],
+      "@ui/services": ["ui/services/index.ts"],
       "@ui/services/steps/*": ["ui/services/steps/*"],
       "@ui/services/facade/*": ["ui/services/facade/*"],
-      "@ui/components/*": ["ui/components/*"]
+      "@ui/components/*": ["ui/components/*"],
+      "@ui/components": ["ui/components/index.ts"]
     }
   },
   "include": ["src/**/*"]

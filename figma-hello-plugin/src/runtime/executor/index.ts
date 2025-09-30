@@ -144,7 +144,11 @@ export async function runSchemaDocument(
     notifySuccess(message);
   }
 
+  const summary = doc.meta?.title ?? `${createdNodes.length}개 요소 생성 완료`;
+
   sendDryRunResult({
+    intent: context.intent,
+    summary,
     page: normalized.page,
     frameName: normalized.frameName,
     sections: doc.meta?.section ? [doc.meta.section] : [],
