@@ -1,7 +1,4 @@
-export interface ExecutionPanelProps {
-  readonly status: unknown;
-}
+// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
 
-export const renderExecutionPanel = (_props: ExecutionPanelProps) => {
-  throw new Error('renderExecutionPanel not implemented');
-};
+export { GuardrailSummary } from './GuardrailSummary';
+export { TargetSelect } from './TargetSelect';

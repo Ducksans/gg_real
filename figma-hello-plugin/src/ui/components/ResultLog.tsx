@@ -1,10 +1,15 @@
 // doc_refs: ["admin/plan/figmaplugin-refactor.md"]
 
-import type { LogStore, LogEntry } from '../store';
+import type { LogEntry, LogStore } from '../store';
 
 interface ResultLogProps {
   logStore: LogStore;
 }
+
+const formatTimestamp = (timestamp: number) => {
+  const date = new Date(timestamp);
+  return date.toLocaleString();
+};
 
 export const ResultLog = ({ logStore }: ResultLogProps) => {
   const entries: LogEntry[] = logStore.state.value;
@@ -28,32 +33,96 @@ export const ResultLog = ({ logStore }: ResultLogProps) => {
         <h2>Result Log</h2>
       </header>
       <div class="panel__content panel__content--scroll">
-        {entries.map((entry: LogEntry) => (
+        {entries.map((entry) => (
           <article key={entry.id} class="log-entry">
             <header class="log-entry__header">
               <span class="log-entry__intent">{entry.intent.toUpperCase()}</span>
               <time dateTime={new Date(entry.timestamp).toISOString()}>
-                {new Date(entry.timestamp).toLocaleString()}
+                {formatTimestamp(entry.timestamp)}
               </time>
             </header>
             <p class="log-entry__summary">{entry.summary}</p>
-            {entry.warnings.length > 0 && (
-              <ul class="log-entry__warnings">
-                {entry.warnings.map((warn: string, index: number) => (
-                  <li key={index}>⚠️ {warn}</li>
-                ))}
-              </ul>
-            )}
-            {entry.errors.length > 0 && (
-              <ul class="log-entry__errors">
-                {entry.errors.map((error: string, index: number) => (
-                  <li key={index}>❌ {error}</li>
-                ))}
-              </ul>
-            )}
+            <GuardrailDetails entry={entry} />
           </article>
         ))}
       </div>
     </section>
+  );
+};
+
+interface GuardrailDetailsProps {
+  entry: LogEntry;
+}
+
+const GuardrailDetails = ({ entry }: GuardrailDetailsProps) => {
+  const metrics = entry.guardrail.metrics;
+  const groups = [
+    {
+      label: 'Errors',
+      items: entry.guardrail.errors,
+      className: 'log-entry__issue--error',
+      icon: '❌',
+    },
+    {
+      label: 'Warnings',
+      items: entry.guardrail.warnings,
+      className: 'log-entry__issue--warning',
+      icon: '⚠️',
+    },
+  ];
+
+  const hasIssues = groups.some((group) => group.items.length > 0);
+
+  return (
+    <div class="log-entry__guardrail">
+      {metrics && (
+        <dl class="log-entry__metric-grid">
+          <div>
+            <dt>생성 노드</dt>
+            <dd>{metrics.created ?? 0}</dd>
+          </div>
+          <div>
+            <dt>경고</dt>
+            <dd>{metrics.warnings ?? entry.guardrail.warnings.length}</dd>
+          </div>
+          <div>
+            <dt>오류</dt>
+            <dd>{metrics.errors ?? entry.guardrail.errors.length}</dd>
+          </div>
+          {typeof metrics.nodeCount === 'number' && (
+            <div>
+              <dt>노드 수</dt>
+              <dd>{metrics.nodeCount}</dd>
+            </div>
+          )}
+          {typeof metrics.depth === 'number' && (
+            <div>
+              <dt>중첩 깊이</dt>
+              <dd>{metrics.depth}</dd>
+            </div>
+          )}
+        </dl>
+      )}
+      {hasIssues ? (
+        <div class="log-entry__issues">
+          {groups.map((group) =>
+            group.items.length ? (
+              <section key={group.label}>
+                <header>{group.label}</header>
+                <ul>
+                  {group.items.map((issue) => (
+                    <li key={issue.id} class={`log-entry__issue ${group.className}`}>
+                      {group.icon} {issue.message}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null,
+          )}
+        </div>
+      ) : (
+        <p class="log-entry__guardrail-empty">Guardrail 경고/오류가 없습니다.</p>
+      )}
+    </div>
   );
 };

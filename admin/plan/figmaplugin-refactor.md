@@ -3,7 +3,7 @@ file: admin/plan/figmaplugin-refactor.md
 title: Figma Plugin 컴포넌트화 리팩터링 계획
 owner: duksan
 created: 2025-09-30 06:10 UTC / 2025-09-30 15:10 KST
-updated: 2025-09-30 13:13 UTC / 2025-09-30 22:13 KST
+updated: 2025-09-30 13:34 UTC / 2025-09-30 22:34 KST
 status: draft
 tags: [plan, figma, refactor]
 schemaVersion: 1
@@ -18,7 +18,13 @@ code_refs:
     'figma-hello-plugin/src/ui/app.tsx',
     'figma-hello-plugin/src/ui/main.tsx',
     'figma-hello-plugin/src/ui/components/ExecutionPanel.tsx',
+    'figma-hello-plugin/src/ui/components/ExecutionPanel/GuardrailSummary.tsx',
+    'figma-hello-plugin/src/ui/components/ExecutionPanel/TargetSelect.tsx',
+    'figma-hello-plugin/src/ui/components/ExecutionPanel/index.ts',
     'figma-hello-plugin/src/ui/components/ResultLog.tsx',
+    'figma-hello-plugin/src/ui/components/PreviewControls/index.tsx',
+    'figma-hello-plugin/src/ui/components/PreviewControls/BeforeAfter.tsx',
+    'figma-hello-plugin/src/ui/components/PreviewControls/SlotHighlight.tsx',
     'figma-hello-plugin/src/ui/components/index.ts',
     'figma-hello-plugin/src/ui/index.ts',
     'figma-hello-plugin/src/ui/index.html',
@@ -28,8 +34,12 @@ code_refs:
     'figma-hello-plugin/src/ui/services/io-listener.ts',
     'figma-hello-plugin/src/ui/store/executionStore.ts',
     'figma-hello-plugin/src/ui/store/index.ts',
+    'figma-hello-plugin/src/ui/store/guardrailStore.ts',
     'figma-hello-plugin/src/ui/store/logStore.ts',
+    'figma-hello-plugin/src/ui/store/previewStore.ts',
+    'figma-hello-plugin/src/ui/store/sectionStore.ts',
     'figma-hello-plugin/src/ui/styles/app.css',
+    '.github/workflows/build.yml',
   ]
 ---
 
@@ -290,6 +300,7 @@ code_refs:
   4. **최소 구현** — ExecutionPanel에서 Dry-run/Apply 버튼이 `services/execution`을 호출하고, ResultLog는 최근 로그 배열을 렌더링한다. `services/io-listener`는 `useEffect`로 postMessage를 구독.
   5. **번들/엔트리 연결** — `scripts/build-ui.ts`에서 esbuild를 호출해 `src/ui/main.tsx`를 `dist/ui.js`와 `dist/ui.css`로 번들하고, `index.html`을 `ui.html`로 복사하도록 구성(`pnpm exec tsx scripts/build-ui.ts`).
   6. **테스트/검증** — `pnpm --filter gg-figma-plugin build && test && typecheck` 실행. WebView에서 Dry-run 버튼 클릭 시 ResultLog가 즉시 갱신되는지 수동 확인.
+  7. **CI 통합** — `.github/workflows/build.yml`에 `gg-figma-plugin build/test/typecheck` 잡을 추가해 Preact UI 회귀 검증을 자동화한다.
 - **가드레일**: postMessage DTO, `runSchema*` API, Runtime/Manifest 코드는 변경하지 않는다. WebView 로딩 시 `dist/ui.js`만 교체. 회귀 방지를 위해 기존 구조 테스트(`tests/structure.test.ts`)에 Preact 엔트리 검증 추가.
 - **향후 확장**: ExecutionPanel/ResultLog 이후 GuardrailSummary → PreviewControls → RouteTree → Before/After 비교 순으로 이관하며, 각 단계에서 store slice와 components를 분할한다.
 - **현황**: 2025-09-30 13:05 UTC / 2025-09-30 22:05 KST — ExecutionPanel/ResultLog Preact 스캐폴드와 Signals 기반 store/services를 정리했고, `pnpm --filter gg-figma-plugin build`, `test`, `typecheck`를 실행해 UI 번들(`ui.js/ui.css`)과 런타임 검증이 모두 통과했다.

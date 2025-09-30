@@ -145,6 +145,7 @@ export async function runSchemaDocument(
   }
 
   const summary = doc.meta?.title ?? `${createdNodes.length}개 요소 생성 완료`;
+  const guardMetrics = 'metrics' in guard ? guard.metrics : undefined;
 
   sendDryRunResult({
     intent: context.intent,
@@ -159,6 +160,9 @@ export async function runSchemaDocument(
     },
     warnings: guard.warnings,
     errors: guard.errors,
+    guardrail: {
+      metrics: guardMetrics,
+    },
   });
 
   return createdNodes;

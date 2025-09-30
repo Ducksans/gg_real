@@ -52,3 +52,34 @@ jobs:
       - name: Run task (default)
         if: ${{ matrix.task != 'build:web' }}
         run: pnpm run ${{ matrix.task }}
+
+  plugin-ui:
+    name: gg-figma-plugin build/test/typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build plugin UI bundle
+        run: pnpm --filter gg-figma-plugin build
+
+      - name: Run plugin UI tests
+        run: pnpm --filter gg-figma-plugin test
+
+      - name: Typecheck plugin package
+        run: pnpm --filter gg-figma-plugin typecheck
