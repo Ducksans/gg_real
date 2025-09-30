@@ -3,7 +3,7 @@ file: admin/plan/figmapluginmake.md
 title: Figma Plugin 자동화 구축 계획
 owner: duksan
 created: 2025-09-27 06:03 UTC / 2025-09-27 15:03 KST
-updated: 2025-09-30 11:27 UTC / 2025-09-30 20:27 KST
+updated: 2025-09-30 12:02 UTC / 2025-09-30 21:02 KST
 status: draft
 tags: [plan, figma, automation, plugin]
 schemaVersion: 1
@@ -100,7 +100,7 @@ code_refs: []
 ### 작업 항목
 
 - Surface/Slot 정의 스키마 확장: 폭·높이·padding·gap·layoutGrow·허용 컴포넌트 리스트를 `admin/specs/figmaplugin-p1-design.md`, `figma-hello-plugin/src/schema.ts`에 반영한다.
-- 프리셋 계층(Design Surface → Route → Slot → Section) 메타를 `admin/specs/ui-archetypes/...`에 추가하고, `scripts/build-archetype-manifest.js`가 확장된 DSL을 출력하도록 수정한다.
+- 프리셋 계층(Design Surface → Route → Slot → Section) 메타를 `admin/specs/ui-archetypes/...`에 추가하고, `scripts/manifest/index.ts`가 확장된 DSL을 출력하도록 유지한다.
 - `runtime.ts`를 Surface → Slot → Component 순회 구조로 재작성해 AutoLayout 속성(`primaryAxisSizingMode`, `counterAxisSizingMode`, `layoutAlign`, `layoutGrow`)을 JSON에 맞춰 적용한다.
 - SlotManager를 `strategies/`(dry-run/apply/preview), `auditor/`(writer/snapshot/diff-formatter), `transformers/` 구조로 분할하고, Executor는 `commands/`와 `hooks/` 디렉터리를 도입해 1파일 1책임을 강제한다.
 - Token Registry는 `providers/`(figma/variables/remote), `resolvers/`(color/typography/radius/spacing/shadow), `cache/`(bootstrap/evict) 폴더로 나눠 확장성과 성능 튜닝 지점을 명확히 한다.

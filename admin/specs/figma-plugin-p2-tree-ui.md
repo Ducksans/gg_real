@@ -3,7 +3,7 @@ file: admin/specs/figma-plugin-p2-tree-ui.md
 title: Figma 플러그인 P2 — 프리셋 트리 UI 설계
 owner: duksan
 created: 2025-09-29 09:20 UTC / 2025-09-29 18:20 KST
-updated: 2025-09-29 18:41 UTC / 2025-09-30 03:41 KST
+updated: 2025-09-30 12:02 UTC / 2025-09-30 21:02 KST
 status: draft
 tags: [spec, figma, plugin, ui]
 schemaVersion: 1
@@ -53,7 +53,7 @@ description: 섹션 단위 JSON 템플릿을 트리 형태로 탐색·선택·�
   }
   ```
 - 순차 실행 시 각 섹션의 결과를 배열로 수집해 최종 리포트 생성
-- 현재 구현: `scripts/build-archetype-manifest.js`가 아키타입 디렉터리를 스캔해 `src/lib/archetype-manifest.ts`를 생성하고, UI는 해당 데이터를 사용해 트리를 렌더링한다.
+- 현재 구현: `scripts/manifest/index.ts`가 아키타입 디렉터리를 스캔해 `src/lib/archetype-manifest.ts`를 생성하고, UI는 해당 데이터를 사용해 트리를 렌더링한다.
 
 ## 5.1 섹션 병합 전략
 

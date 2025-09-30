@@ -1,8 +1,12 @@
-export { createSlotContainer } from './container-factory';
-export { diffSlotChildren } from './diff-engine';
+export { findTargetPage, removeExistingFrame, prepareTargetFrame } from './container-factory';
+export { syncSlotChildren } from './diff-engine';
 export { decorateWithMetadata } from './metadata';
 export { buildSlotReport } from './reporter';
-export { runDryRunStrategy, runApplyStrategy, runPreviewStrategy } from './strategies';
-export { writeAuditMetadata, captureSlotSnapshot, formatSlotDiff } from './auditor';
-export { applyAutoLayoutTransform, transformComponentInstance } from './transformers';
+export { ensureSlotContainer, resolveSlotContainer } from './strategies';
+export {
+  applySurfaceLayout,
+  applySlotLayout,
+  ensureAutoLayout,
+  calculateNextY,
+} from './transformers/auto-layout';
 export { profileSlotManager } from './profiling';

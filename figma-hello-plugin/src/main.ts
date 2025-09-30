@@ -1,6 +1,7 @@
 import { archetypeManifest } from './lib/archetype-manifest';
 import { notifyError } from './lib/notifier';
-import { runHelloFrame, runSchemaBatch, runSchemaFromString, SAMPLE_SCHEMA } from './runtime';
+import { runHelloFrame, runSchemaBatch, runSchemaFromString } from './runtime';
+import { glossaryLayoutSample } from './samples/glossary';
 
 const UI_WIDTH = 960;
 const UI_HEIGHT = 700;
@@ -68,7 +69,7 @@ figma.on('run', () => {
 });
 
 function createSampleForCurrentPage() {
-  const cloned = JSON.parse(JSON.stringify(SAMPLE_SCHEMA));
+  const cloned = JSON.parse(JSON.stringify(glossaryLayoutSample));
   if (!cloned.target) {
     cloned.target = { frameName: 'GeneratedFrame', mode: 'append' };
   }

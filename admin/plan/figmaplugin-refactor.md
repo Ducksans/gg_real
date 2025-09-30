@@ -3,17 +3,17 @@ file: admin/plan/figmaplugin-refactor.md
 title: Figma Plugin 컴포넌트화 리팩터링 계획
 owner: duksan
 created: 2025-09-30 06:10 UTC / 2025-09-30 15:10 KST
-updated: 2025-09-30 11:27 UTC / 2025-09-30 20:27 KST
+updated: 2025-09-30 12:02 UTC / 2025-09-30 21:02 KST
 status: draft
 tags: [plan, figma, refactor]
 schemaVersion: 1
 description: 플러그인 런타임·UILayer·Manifest 빌더를 기능 단위 모듈로 분리하고 테스트/품질 게이트를 정비하기 위한 리팩터링 로드맵
 code_refs:
   [
-    'figma-hello-plugin/src/runtime.ts',
-    'figma-hello-plugin/src/lib',
-    'figma-hello-plugin/src/ui/index.html',
-    'figma-hello-plugin/scripts/build-archetype-manifest.js',
+    'figma-hello-plugin/scripts/manifest/index.ts',
+    'figma-hello-plugin/scripts/manifest/builder.ts',
+    'figma-hello-plugin/src/runtime/executor/index.ts',
+    'figma-hello-plugin/src/runtime/slot-manager',
   ]
 ---
 
@@ -23,7 +23,7 @@ code_refs:
 - **노드/토큰 처리 병목**: 노드 생성은 `figma-hello-plugin/src/lib/nodeFactory.ts:20-124`에 집중돼 있고, 현재 Text/Frame/Stack/Spacer만 지원한다. 스키마에 정의된 Component/Image 타입은 런타임에서 바로 `figma.notify` 경고를 띄우고 무시하기 때문에 UX 확장이 막혀 있다. 토큰 해석(`tokenRegistry.ts:1-110`)과 스타일 캐시는 전역 함수로 얽혀 있어 Slot 단위 검증이나 스타일 대체 전략을 독립적으로 테스트할 방법이 없다.
 - **UI 상태 및 UX 한계**: 플러그인 패널은 단일 HTML 파일(`figma-hello-plugin/src/ui/index.html:320-720`) 안에 스타일, DOM 템플릿, 상태, 이벤트가 뒤섞여 있다. Surface → Route → Slot 트리, 섹션 선택, Dry-run 실행, 로그/경고 표시는 모두 전역 배열과 Map을 공유하며 즉시 DOM을 조작한다. 프리뷰 프레임, Before/After 슬라이더, 체크포인트 초안 등 새로운 UX를 붙이려면 상태 구조부터 갈아엎어야 하므로 실험이 멈춰 있는 상황이다.
 - **입력→출력→전달→보고→감사 흐름의 단절**: 입력(JSON 스키마)은 Manifest와 섹션 파일에서 읽어 오지만, 출력된 노드/로그가 어디에 저장되고 누가 검증하는지 명확하지 않다. Dry-run 결과는 UI 로그에만 남고(`notifier.ts:1-20`), 체크포인트 초안 버튼은 더미 경고만 띄운다. 감사(LOT 기록)를 위해 필요한 pluginData는 붙지만, 현재 구조에서는 어떤 슬롯이 언제 어떤 의도로 갱신됐는지 추적 로그를 남길 모듈이 따로 없다. 결국 “입력→실행→상태 보고→검증→감사” 사이클이 연결되지 않아 프리뷰 UX나 승인 플로우가 중간에서 끊긴다.
-- **기술 부채 요약**: Manifest 빌더(`scripts/build-archetype-manifest.js`)는 Node 스크립트 한 파일로, Surface/Route/Slot을 읽어서 바로 TS 파일을 생성한다. 런타임/빌더/UITree가 모두 단일 책임을 벗어나 있는 탓에 테스트를 붙이거나, 특정 레이어만 교체하는 작업이 불가능하다. 이 상태에서 P1 기능을 마저 완성해도 리팩터링 라운드에서 다시 해체해야 하므로, 우선 기능 단위 모듈화를 선행하고 나서 P1 수용 기준을 재검증하려는 것이 이번 리팩터링의 의도다.
+- **기술 부채 요약**: 기존 Manifest 빌더(`scripts/build-archetype-manifest.js`)는 Node 스크립트 한 파일로 Surface/Route/Slot을 읽어서 바로 TS 파일을 생성했다. 런타임/빌더/UITree가 단일 책임을 벗어나 있는 탓에 테스트를 붙이거나 특정 레이어만 교체하는 작업이 어려워, 이를 TS 기반 `scripts/manifest/` 모듈로 분리한 뒤 P1 수용 기준을 재검증하려는 것이 이번 리팩터링의 의도다.
 
 # 2. 리팩터링 목표
 
@@ -201,41 +201,29 @@ code_refs:
 
 # 3-8. 병목 제거형 서브모듈 설계
 
-- **Slot Manager 분기**
-  - `strategies/` 디렉터리를 두고 `dryRun.ts`, `apply.ts`, `preview.ts`를 분리해 목적별 파이프라인을 정의한다.
-  - `auditor/`에 `writer.ts`(pluginData 기록), `snapshot.ts`(이전 상태 캡처), `diff-formatter.ts`(UI 전송용 요약)를 쪼개 넣어 감사/리포트 책임을 명확히 한다.
-  - `registry.ts`는 읽기 전용 캐시만 담당하게 하고, Slot 변환 로직은 `transformers/` 하위 파일(예: `autoLayout.ts`, `componentInstance.ts`)로 옮긴다.
-  - 고빈도 호출 구간은 `profiling.ts`로 계측해 Guardrails/CI 테스트에서 병목이 없는지 주기적으로 점검한다.
-- **Executor 커맨드 패턴**
-  - `commands/`에 `DryRunCommand.ts`, `ApplyCommand.ts`, `PreviewCommand.ts`를 두고, 각 명령이 `execute(context)` 메서드 하나만 노출한다.
-  - 명령별 후속 처리(프리뷰 프레임 이동, 체크포인트 트리거, notifier 호출)는 `hooks/`에서 `afterDryRun.ts`, `afterApply.ts`로 분리해 확장 시 영향 범위를 최소화한다.
-  - `pipeline.ts`에서 Guardrails→SlotManager→Notifier 순서를 미리 선언하고, 테스트에서 배열 비교로 회귀를 감지한다.
-- **Token Registry 확장 대비**
-  - `providers/` 디렉터리에 `figma.ts`, `variables.ts`, `remote.ts`를 두어 소스별 해결 전략을 독립 파일로 유지한다.
-  - `resolvers/`에는 `color.ts`, `typography.ts`, `radius.ts`, `spacing.ts`, `shadow.ts` 등 토큰 타입별로 쪼개고, 각 파일은 오직 1개의 switch/if만 허용한다.
-  - 캐시 무효화는 `cache/evict.ts`, 초기화는 `cache/bootstrap.ts`로 분리해 재사용성과 테스트 용이성을 확보한다.
-- **UI Store/Service 가드레일**
-  - Store는 최대 150줄, selector는 `selectors/` 폴더에서만 정의하고, Store 파일에는 상태 초기값과 액션만 둔다.
-  - 긴 생애주기를 갖는 작업(프리뷰 히스토리, Dry-run 로그)은 `history/` 폴더로 뽑아 `history/persistor.ts`, `history/replayer.ts`로 나눈다.
-  - 서비스 계층은 `facade/index.ts`에서만 외부로 노출하고, 실제 구현은 `steps/` 폴더의 작은 함수(예: `buildSchemaDocument.ts`, `enqueuePreview.ts`)로 분리해 재사용한다.
-- **ResultLog/PreviewControls 세분화**
-  - `ResultLog`는 `aggregator.ts`(스토어 구독 및 정규화), `timeline.tsx`(시간순 렌더), `details/`(경고/오류 패널)로 쪼갠다.
-  - `PreviewControls`는 `targets.tsx`(프레임 이동), `comparisons/`(Before/After, 히트맵), `overlays/`(슬롯 하이라이트)로 나눠 UX 실험 시 교체 비용을 낮춘다.
-- **계측·디버깅 파이프라인**
-  - 공통 로거는 `src/runtime/instrumentation/logger.ts`, UI 측 로거는 `src/ui/instrumentation/logger.ts`로 분리한다.
-  - `diagnostics/metrics.ts`에서 실행 시간, Guardrail 카운터, 에러 비율을 수집해 향후 대시보드/테스트와 연계한다.
-  - 모든 고빈도 함수에 JSDoc으로 예상 입력/출력/복잡도를 명시하고, CI에서 `pnpm run lint:bottleneck`(추가 예정)으로 순환 의존과 파일 길이를 검사한다.
+- **Slot Manager 실구현**
+  - `container-factory.ts`, `strategies/index.ts`, `diff-engine.ts`, `metadata.ts`, `transformers/auto-layout.ts`로 책임을 분리해 컨테이너 생성·Slot 레이아웃·Diff 동기화·pluginData 주입을 모듈화했다.
+  - `profiling.ts`와 `reporter.ts`는 후속 계측/리포트 확장 포인트로 남겨두고, 현재 단계에서는 기본 래퍼(측정/요약)만 구현했다.
+- **Executor 오케스트레이션**
+  - `context-factory.ts`에서 Target/Intent/Surface 컨텍스트를 구성하고, `index.ts`에서 Guardrails→SlotManager→Notifier 순으로 실행 흐름을 조립한다.
+  - Dry-run/Apply 래퍼(`dry-run.ts`, `apply.ts`)는 intent에 따른 프레임명 조정과 후속 파이프라인 교체를 위한 훅 지점으로 마련했다.
+- **Token Registry 구조화**
+  - `providers/`, `resolvers/`, `cache/`, `registry.ts`로 토큰 소스·해석·캐시 무효화를 나누고, Runtime/SlotManager가 공통 파사드를 통해 호출하도록 정리했다.
+- **UI Store/Service/Component 베이스**
+  - Store/Service/Component 디렉터리에 생성한 스텁은 각 책임(선택 상태, 실행 파이프라인, 프리뷰/Result UI)을 개별 파일로 유지해 추후 구현 시 경계가 겹치지 않게 했다.
+- **Guardrails/SurfaceConfig 재사용성 확보**
+  - Guardrails는 `counters.ts`, `validators.ts`, `thresholds.ts`로 노드 수/깊이/JSON 크기/슬롯 허용 여부 검사를 분리했고, SurfaceConfig는 `normalizer.ts`, `registry.ts`, `hash.ts`로 Manifest→Runtime 변환과 캐시/해시 계산을 담당한다.
 
 # 4. 작업 순서
 
 1. **준비(P0)**: 현재 manifest/런타임/UITree 사용 패턴 점검, 상호 의존성 정리, 테스트 샘플(json/expected)을 확보한다. _(완료 2025-09-30 11:24 UTC / 2025-09-30 20:24 KST — 런타임 의존 관계 분석, manifest 스냅샷, 샘플/테스트 목록화 완료)_
 2. **Manifest 모듈화(P1)**
-   - `scripts/build-archetype-manifest.js`를 TS 기반 `scripts/manifest/`로 분리(Loader/Builder/Emitter).
+   - `scripts/build-archetype-manifest.js`를 TS 기반 `scripts/manifest/`로 분리(Loader/Builder/Emitter). _(완료 — `scripts/manifest/{loader,builder,emitter,index}.ts` 도입, `pnpm exec tsx scripts/manifest/index.ts`로 재생성)_
    - Surface/Route/Slot 구조 검증 및 JSON Schema 초안 작성.
 3. **런타임 분리(P1)**
-   - `runtime.ts`를 위에서 정의한 SurfaceConfig/SlotManager/Guardrails/Executor 모듈로 쪼개고, `index.ts`에서 조립.
+   - `runtime.ts`를 위에서 정의한 SurfaceConfig/SlotManager/Guardrails/Executor 모듈로 쪼개고, `index.ts`에서 조립. _(진행 — 실행 오케스트레이션을 `runtime/executor`로 이동하고, `surface-config`, `guardrails`, `slot-manager` 서브모듈에 실 구현 배치)_
    - 기존 API(`runSchemaFromString`, `runSchemaBatch`, `runSchemaDocument`)와 메시지 포맷 유지.
-   - SlotManager `strategies/`, Executor `commands/`, Token Registry `providers/` 등 서브폴더를 동시에 생성해 후속 확장 시 파일 이동이 필요 없도록 한다.
+   - SlotManager `strategies/`, `transformers/`, `metadata/` 모듈을 활성화해 컨테이너 생성·레이아웃·Diff 동기화를 분리하고 Token Registry `providers/`, `resolvers/`, `cache/` 구조를 호출 경계로 활용한다.
 4. **UI 분리(P2)**
    - manifest 로더와 상태 관리, 컴포넌트 렌더링 로직을 파일 단위로 나눠 Webpack/esbuild 번들을 적용.
    - Route/Slot 트리 컴포넌트에서 manifest 타입 정의를 재사용.

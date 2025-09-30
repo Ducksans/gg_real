@@ -1,6 +1,14 @@
-/**
- * 슬롯 매니저 주요 단계의 실행 시간을 측정한다.
- */
-export const profileSlotManager = () => {
-  throw new Error('profileSlotManager not implemented');
+export interface ProfilingSample {
+  readonly phase: string;
+  readonly durationMs: number;
+}
+
+export const profileSlotManager = <T>(
+  phase: string,
+  fn: () => T,
+): { result: T; samples: ProfilingSample[] } => {
+  const start = Date.now();
+  const result = fn();
+  const duration = Date.now() - start;
+  return { result, samples: [{ phase, durationMs: duration }] };
 };
