@@ -9,8 +9,8 @@
     "designSurfaceLabel": "Plugin UI",
     "route": "/plugin/ui",
     "routeLabel": "Plugin Shell",
-    "slot": "footer",
-    "slotLabel": "Logs & Secondary Actions"
+    "slot": "log",
+    "slotLabel": "Execution Panel"
   },
   "target": {
     "frameName": "PluginUIMock",

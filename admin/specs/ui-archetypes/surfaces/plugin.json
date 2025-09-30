@@ -1,0 +1,84 @@
+{
+  "id": "plugin",
+  "label": "Plugin UI",
+  "layout": {
+    "width": 900,
+    "height": 600,
+    "padding": { "top": 24, "right": 24, "bottom": 24, "left": 24 },
+    "spacing": 20,
+    "background": "color.surface.base"
+  },
+  "slots": [
+    {
+      "id": "header",
+      "label": "Header",
+      "parent": null,
+      "layout": "HORIZONTAL",
+      "spacing": 16,
+      "padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }
+    },
+    {
+      "id": "body",
+      "label": "Body Columns",
+      "parent": null,
+      "layout": "HORIZONTAL",
+      "spacing": 20,
+      "padding": { "top": 8, "right": 0, "bottom": 0, "left": 0 },
+      "width": "fill",
+      "grow": 1
+    },
+    {
+      "id": "nav",
+      "label": "Route / Slot Tree",
+      "parent": "body",
+      "layout": "VERTICAL",
+      "spacing": 16,
+      "padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
+      "width": 280
+    },
+    {
+      "id": "surface-tabs",
+      "label": "Surface Tabs",
+      "parent": "nav",
+      "layout": "HORIZONTAL",
+      "spacing": 8,
+      "padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }
+    },
+    {
+      "id": "tree",
+      "label": "Section Tree",
+      "parent": "nav",
+      "layout": "VERTICAL",
+      "spacing": 12,
+      "padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
+      "grow": 1
+    },
+    {
+      "id": "detail",
+      "label": "Detail Panel",
+      "parent": "body",
+      "layout": "VERTICAL",
+      "spacing": 16,
+      "padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
+      "grow": 1
+    },
+    {
+      "id": "log",
+      "label": "Execution Panel",
+      "parent": "body",
+      "layout": "VERTICAL",
+      "spacing": 12,
+      "padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
+      "width": 240
+    },
+    {
+      "id": "footer",
+      "label": "Footer Actions",
+      "parent": null,
+      "layout": "VERTICAL",
+      "spacing": 12,
+      "padding": { "top": 16, "right": 0, "bottom": 0, "left": 0 }
+    }
+  ],
+  "requiredSlots": ["header", "surface-tabs", "tree", "detail", "log"]
+}

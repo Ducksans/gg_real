@@ -3,7 +3,7 @@ file: admin/plan/figmapluginmake.md
 title: Figma Plugin 자동화 구축 계획
 owner: duksan
 created: 2025-09-27 06:03 UTC / 2025-09-27 15:03 KST
-updated: 2025-09-29 18:41 UTC / 2025-09-30 03:41 KST
+updated: 2025-09-30 09:13 UTC / 2025-09-30 18:13 KST
 status: draft
 tags: [plan, figma, automation, plugin]
 schemaVersion: 1
@@ -87,70 +87,69 @@ code_refs: []
 - 대형 화면 생성 시 배치 처리, 프리패브 템플릿, 지연 스타일 적용 등 성능 전략을 사전에 정의한다.
 - 배포는 Private → 조직 → 커뮤니티 순으로 확대하며, 변경 로그와 롤백 전략을 체크포인트와 동기화한다.
 
-# 6. TODO
+# 6. 실행 단계와 수용 기준
 
-## 6.1 완료됨
+## 6.1 완료 이력
 
-- [x] JSON 스키마 초안 작성 (레이아웃/스타일/컴포넌트) 후 devworkspace와 연동.
-- [x] 플러그인 boilerplate 생성 (manifest, UI, controller).
-- [x] 토큰 매핑 전략 설계: Figma 스타일 네이밍 규칙 정리.
-- [x] 샘플 JSON → Figma 생성 PoC (단순 3단 레이아웃).
+- [x] JSON 스키마 초안 작성(레이아웃/스타일/컴포넌트) 및 Dev Workspace 연동.
+- [x] 플러그인 보일러플레이트 구축(manifest, main/controller, UI shell).
+- [x] 토큰 매핑 전략 설계(Figma 스타일 네이밍 규칙)와 샘플 JSON → Figma 생성 PoC.
 
-## 6.2 남은 작업
+## 6.2 P1 — 레이아웃 DSL 확정 및 런타임 정렬
 
-- [x] [P1] 컴포넌트 레지스트리와 명명 규칙을 문서화하고 플러그인 검증 로직에 연동한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/automation-plugins-research.md`, `admin/references/figmaplugin/figma-plugin-api.md`)
-- [x] [P1] 레이아웃 DSL 초안을 작성해 스택/그리드/슬롯 규칙과 반응형 오버라이드 문법을 정의한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-samples.md`)
-- [x] [P1] 증분 갱신 프로토콜(dry-run, op 세트, ROOT 프레임 정책)을 확정하고 Undo/Redo 테스트 절차를 마련한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-api.md`)
-- [x] [P1] 오류/검증 로직을 강화해 미지원 타입·토큰 누락을 사전에 차단하고 사용자용 메시지를 개선한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-ui-guide.md`)
-- [ ] [P2] 프리셋 계층 구조(Route → Slot → Section)와 메타필드를 정의하고 manifest 생성 스크립트를 갱신한다. (참고: `admin/specs/ui-archetypes/devworkspace/sections/*.json`, `figma-hello-plugin/scripts/build-archetype-manifest.js`)
-- [ ] [P2] 플러그인 트리 UI를 3단계 계층/슬롯 요약으로 개편하고, 선택 요약·경고 표기를 개선한다. (참고: `figma-hello-plugin/src/ui/index.html`)
-- [ ] [P2] Slot 기반 실행 파이프라인을 구축해 루트 그리드·영역별 프레임을 생성하고 섹션을 지정 슬롯에 배치한다. (참고: `figma-hello-plugin/src/runtime.ts`, `figma-hello-plugin/src/lib/nodeFactory.ts`)
-- [ ] [P2] 슬롯별 가드레일과 검증 로직을 추가해 1920×1080 기준 레이아웃/노드 제한을 enforce한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/specs/figmaplugin-p2-variables.md`)
-- [ ] [P2] 관찰성 메타데이터(로그 채널, pluginData, Dev Resources 링크) 스펙을 확정한다. (Dry-run 결과를 Dev Workspace/체크포인트와 연결, `admin/specs/figma-plugin-p2-telemetry.md` 참고)
-- [ ] [P2] Codex ↔ 플러그인 인터페이스(상태 질의, 패치 계약, 승인 플로)를 문서화하고 샌드박스를 구축한다. (참고: `admin/references/figmaplugin/figma-manifest-v2.md`, `admin/references/figmaplugin/figma-developer-api.md`)
-- [ ] [P2] 드라이런 → 변경 요약 → 승인 적용 UX를 Dev Workspace와 맞물리도록 설계한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-ui-guide.md`)
-- [x] [P2] Variables/Styles 우선 순서를 구현하고 다크/라이트 토큰 자동 전환 규칙을 적용한다. (참고: `admin/references/figmaplugin/design-token-tools.md`)
+### 작업 항목
 
-- [x] [P2] JSON 섹션의 크기/중첩 한도를 정의하고, 임계치 초과 시 경고/실패 규칙을 구현한다.
+- Surface/Slot 정의 스키마 확장: 폭·높이·padding·gap·layoutGrow·허용 컴포넌트 리스트를 `admin/specs/figmaplugin-p1-design.md`, `figma-hello-plugin/src/schema.ts`에 반영한다.
+- 프리셋 계층(Design Surface → Route → Slot → Section) 메타를 `admin/specs/ui-archetypes/...`에 추가하고, `scripts/build-archetype-manifest.js`가 확장된 DSL을 출력하도록 수정한다.
+- `runtime.ts`를 Surface → Slot → Component 순회 구조로 재작성해 AutoLayout 속성(`primaryAxisSizingMode`, `counterAxisSizingMode`, `layoutAlign`, `layoutGrow`)을 JSON에 맞춰 적용한다.
+- 증분 갱신 프로토콜 구현: 각 노드에 `idempotentKey`를 부여하고 `op: add/update/remove` 패치를 지원하며, `pluginData`에 `slotId`, `layoutHash`, `schemaVersion`을 저장한다.
+- Dry-run 사전 검증 강화: 필수 필드 누락, 슬롯 중복, 허용되지 않은 컴포넌트/토큰을 감지하고 사용자 메시지를 표준화한다.
 
-# 6.3 P2 실행 순서 (재정비)
+### 수용 기준
 
-※ 우선순위는 1 → 4를 모두 마친 뒤 5 ~ 7을 진행한다.
+- 확장된 스키마·manifest·런타임이 동일 DSL을 참조하며 문서와 코드의 필드 정의가 일치한다.
+- Dry-run 실행 시 AutoLayout/slot 배치가 JSON 값과 동일하게 생성되어 겹침/불필요한 여백이 재발하지 않는다.
+- 재실행 시 `idempotentKey`와 `pluginData`를 이용해 기존 노드가 안전하게 업데이트/삭제되며 중복 생성이 발생하지 않는다.
+- 유효성 검증 실패 시 Dry-run이 중단되고 명확한 오류/경고 메시지가 표시된다.
+- _(현 시점 메모)_ 프리뷰 UX 실험으로 인해 Dry-run이 실제 프레임을 생성하는 상태이므로, 리팩터링 라운드에서 구조 재정비 후 본 수용 기준을 다시 검증한다.
 
-1. **프리셋 계층 구조 재설계 (Design Surface → Route → Slot → Section)**
-   - 최상위 카테고리를 `designSurface`(예: `admin`, `user`, `shared`)로 정의하고, 각 surface 아래에 실제 라우트와 슬롯을 배치한다.
-   - `admin/specs/ui-archetypes/` JSON에 `designSurface`, `route`, `slot`, `section` 메타를 추가하고, manifest 생성 스크립트가 4단계 계층을 출력하도록 수정한다.
-   - 구현 절차
-     1. 섹션 JSON 메타 업데이트 (`designSurface`, `routeLabel`, `slotLabel` 포함)
-     2. manifest 스크립트에 surface→route→slot→section 계층 및 타입 정의 추가
-     3. CI 전 `npm run build:manifest`로 산출물 갱신, 변경 내용 캡처
-   - 산출물: 업데이트된 섹션 JSON, `archetypeManifest` 4레벨 구조, 문서화(이 섹션 포함).
+## 6.3 P2 — Dry-run 관찰성 및 실행 플로 강화
 
-2. **트리 UI 3단계 표현 및 요약 패널 개선**
-   - 플러그인 UI에 Route/Slot/Section 접기·펼치기, 선택 요약(슬롯별 칩), 경고 배지를 추가해 가독성을 높인다.
-   - 산출물: `figma-hello-plugin/src/ui/index.html` 및 관련 스크립트 개편, UX 캡처.
+### 작업 항목
 
-3. **Slot 기반 레이아웃 컨테이너/실행 파이프라인 구축**
-   - 루트 프레임을 1920×1080 기준 Grid/AutoLayout으로 생성하고, TopNav·LeftRail·MainPane·RightRail·Footer 등 슬롯 전용 프레임을 자동 배치한다.
-   - 섹션 실행 시 slot 정보에 맞춰 해당 프레임에 append/replace 하도록 런타임을 확장한다.
+- Dry-run 결과 패널을 슬롯별 메트릭(폭·높이·컴포넌트 수·경고)을 표 형식으로 출력하고 직전 실행과 Diff를 비교할 수 있게 한다.
+- 플러그인 트리 UI를 3단계 계층/슬롯 요약·경고 배지로 개편하고, 선택 상태를 칩/요약 패널로 노출한다(`figma-hello-plugin/src/ui/index.html`).
+- 실행 모드 토글과 버튼을 확장: Dry-run 성공 시 `Apply`, `Checkpoint Draft`, append vs replace 모드를 선택할 수 있게 한다.
+- 체크포인트 메타 입력 필드를 추가하고 승인 시 `admin/checkpoints/` 초안 생성 스크립트와 연동한다.
+- 로그 스택을 최대 20개까지 유지하고, 특정 기록에 대해 재실행/Undo/Redo를 지원한다.
+- Dry-run/Apply 결과를 Dev Workspace·체크포인트 파이프라인에 전달하는 관찰성 메타데이터(`pluginData`, Dev Resource 링크)를 확정한다.
 
-4. **슬롯 검증 & 가드레일 고도화**
-   - 허용되지 않은 슬롯 배치, 과도한 노드/높이, 슬롯 간 순서 위반 등을 사전에 차단하고 Dry-run 경고를 표준 메시지로 노출한다.
-   - 필요 시 `pluginData`에 slot 메타를 저장해 Apply/Undo에서도 추적한다.
+### 수용 기준
 
-5. **관찰성/승인 UX 연동** (착수 전)
-   - Dry-run 결과 JSON을 Dev Workspace 패널과 체크포인트 자동화에 전달하는 포맷/파이프를 확정한다.
+- Dry-run 패널이 슬롯별 데이터와 Diff를 제공하고, 경고/오류가 시각적으로 구분된다.
+- 실행 모드/버튼이 Dry-run 성공 후에만 활성화되며, 선택한 모드에 맞춰 실제 배치/체크포인트 초안이 생성된다.
+- 로그 히스토리에서 항목 재실행·되돌리기가 동작하고 기록이 20개 이내로 관리된다.
+- 관찰성 메타데이터가 Dev Workspace·체크포인트 흐름과 연결되어 승인 기록을 추적할 수 있다.
 
-6. **Variables/Styles 자동 매핑** ✅
-   - Design Contract 토큰을 기반으로 Variables/Styles를 불러와 자동 적용하거나 누락 시 경고 — 스타일 ID 자동 매핑 및 가드레일 도입.
+## 6.4 P3 — 문서·테스트·자동화 정비
 
-7. **통합 테스트 & 문서 갱신** (진행 중)
-   - 샘플 섹션 조합(대시보드 전체)을 실행해 검증.
-   - `admin/specs/ui-archetypes/README.md`, Design Contract, figmapluginmake 계획서를 업데이트하고 체크포인트 기록.
+### 작업 항목
 
-- [ ] [P3] 접근성 필드(a11yRole, ariaLabel 등)와 스키마 검증 규칙을 추가한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-api.md`)
-- [ ] [P3] 성능 대응 전략(배치 처리, 프리패브, 지연 스타일 적용)을 실험하고 기준치를 정의한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-samples.md`, `admin/references/figmaplugin/automation-plugins-research.md`)
-- [ ] [P3] 배포/공유 방식 결정(Private → Team → Community) 및 변경 로그·롤백 정책을 확정한다. (참고: `admin/references/figmaplugin/figma-manifest-v2.md`, `admin/references/figmaplugin/figma-developer-api.md`)
+- 본 계획서와 `admin/specs/figmaplugin-p1-design.md` 등 관련 문서를 확장된 DSL/동작으로 업데이트하고 code_refs/doc_refs를 동기화한다.
+- 대시보드·폼·테이블 등 샘플 JSON 세트를 마련해 Dry-run → Apply → 체크포인트 시나리오를 캡처하고 `admin/checkpoints/`에 기록한다.
+- `scripts/validate_docs.sh`, `scripts/validate_refs.sh`에 새 필드 검증을 추가하고, 플러그인 빌드 파이프라인에 UI/런타임 smoke 테스트(추후 `npm run test:ui`)를 연결한다.
+- Dev Workspace/승인 UX 문서(`admin/plan/devworkspace.md`)와의 연동 상태를 점검하고 필요 시 보완한다.
+- 접근성 필드(a11yRole, ariaLabel 등)와 스키마 검증 규칙을 추가한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-api.md`)
+- 성능 대응 전략(배치 처리, 프리패브, 지연 스타일 적용)을 실험하고 기준치를 정의한다. (참고: `admin/specs/figmaplugin-p1-design.md`, `admin/references/figmaplugin/figma-plugin-samples.md`, `admin/references/figmaplugin/automation-plugins-research.md`)
+- 배포/공유 방식 결정(Private → Team → Community) 및 변경 로그·롤백 정책을 확정한다. (참고: `admin/references/figmaplugin/figma-manifest-v2.md`, `admin/references/figmaplugin/figma-developer-api.md`)
+- 플러그인 런타임/UI/빌더를 기능 단위 모듈로 분리하는 리팩터링 계획을 별도 문서(`admin/plan/figmaplugin-refactor.md`)로 수립하고, P1 안정화 후 착수한다.
+- Dry-run 실행 시 프리뷰 전용 프레임을 생성해 실물 레이아웃과 요약 브리프를 동시에 보여주는 UX 실험을 진행하며, 확정 플로우는 리팩터링 계획서에서 정의한 실행/체크포인트 흐름을 따른다.
+
+### 수용 기준
+
+- 문서와 코드의 상호 참조가 어긋나지 않고 lint/validate 스크립트를 통과한다.
+- 샘플 JSON 실행 결과가 체크포인트로 남으며 Dry-run → Apply → 체크포인트 흐름이 재현 가능한 절차로 정리된다.
+- 빌드/검증 스크립트가 성공적으로 실행되고, UI/런타임 smoke 테스트가 실패 없이 통과한다.
 
 # 7. 참고 자료 & API 레퍼런스
 
@@ -186,10 +185,11 @@ code_refs: []
 - 샘플 JSON(`samples/glossary.ts`)을 UI와 연동하여 2분할 레이아웃 생성 기능 구현.
 - 토큰 레지스트리(`tokenRegistry`)로 기본 색상/타이포/라운드 매핑 제공.
 - 대상 페이지 선택 드롭다운 및 현재 페이지 기본값 연동, 실행 시 즉시 append 방식으로 안정화.
-- 다음 작업
-  1. Variables/Styles 우선 순위와 토큰 자동 전환 규칙 설계(P2).
-  2. 관찰성/승인 UX를 Dev Workspace와 연결하는 인터페이스 문서화(P2).
-  3. P3 범위(접근성·성능·배포) 대비를 위해 테스트 환경 요구 사항을 정리.
+- 다음 작업 (P1 선행)
+  1. Surface/Slot 확장 스키마 정의와 manifest 계층(Design Surface → Route → Slot → Section) 업데이트.
+  2. `runtime.ts` 재구성으로 AutoLayout/slot 배치 로직을 적용하고, idempotentKey 기반 증분 갱신을 구현한다.
+  3. Dry-run 사전 검증 로직을 강화해 필수 필드·슬롯 중복·토큰 누락을 차단하고 사용자 메시지를 정비한다.
+  4. P1 산출물(스키마/manifest/런타임/검증)을 체크포인트로 남기고 Dev Workspace 문서와 연결한다.
 
 # 9. 리스크 및 대응
 
@@ -206,3 +206,7 @@ code_refs: []
 - PoC 결과와 학습 내용은 `admin/docs/` 아래에 별도 문서화.
 - Dev Workspace 계획(`admin/plan/devworkspace.md`)과 연동하여 시각화 자동화 단계 업데이트.
 - 플러그인 저장소/코드 구조 준비 후 Git 연동.
+
+# 11. 변경 로그
+
+- 2025-09-30: 실행 계획과 수용 기준을 6장에 통합하고, 8장의 다음 작업을 P1 우선 순서로 재정렬했다. (향후 변경 사항은 본 섹션에 누적 기록)

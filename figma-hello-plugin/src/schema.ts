@@ -1,11 +1,15 @@
 export type NodeType = 'frame' | 'stack' | 'text' | 'component' | 'vector' | 'image' | 'spacer';
 
+export type NodeOperation = 'add' | 'update' | 'remove';
+
 export interface BaseNodeSpec {
   type: NodeType;
   name: string;
   tokens?: Record<string, string>;
   constraints?: Partial<Constraints>;
   pluginData?: Record<string, string | number | boolean>;
+  idempotentKey?: string;
+  operation?: NodeOperation;
 }
 
 export interface Size {
@@ -88,6 +92,42 @@ export type NodeSpec =
   | ComponentNodeSpec
   | ImageNodeSpec
   | SpacerNodeSpec;
+
+export interface BoxPadding {
+  top?: number;
+  right?: number;
+  bottom?: number;
+  left?: number;
+}
+
+export interface SurfaceSlotSpec {
+  id: string;
+  label: string;
+  parent: string | null;
+  layout?: 'VERTICAL' | 'HORIZONTAL';
+  spacing?: number;
+  padding?: BoxPadding;
+  width?: number | 'hug' | 'fill';
+  height?: number | 'hug';
+  grow?: number;
+  allowedSections?: string[];
+}
+
+export interface SurfaceLayoutSpec {
+  width: number;
+  height?: number | null;
+  padding?: BoxPadding;
+  spacing?: number;
+  background?: string | null;
+}
+
+export interface SurfaceSpec {
+  id: string;
+  label: string;
+  layout: SurfaceLayoutSpec;
+  slots: SurfaceSlotSpec[];
+  requiredSlots?: string[];
+}
 
 export interface SchemaDocument {
   schemaVersion: string;

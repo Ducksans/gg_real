@@ -6,56 +6,132 @@
     <style>
       body {
         margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
         font-family: 'Inter', sans-serif;
         color: #111827;
-        background: #f3f4f6;
+        background: #e2e8f0;
       }
 
       main {
         display: flex;
         flex-direction: column;
-        gap: 16px;
-        padding: 18px 22px;
-        width: 440px;
+        gap: 24px;
+        padding: 24px;
+        width: 900px;
+        min-height: 600px;
+        background: #f8fafc;
+        border: 1px solid #cbd5f5;
+        border-radius: 16px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
       }
 
-      h1 {
-        font-size: 18px;
+      .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .heading h1 {
+        font-size: 20px;
         margin: 0;
       }
 
+      .heading-meta {
+        margin-top: 4px;
+        font-size: 12px;
+        color: #475569;
+      }
+
+      .schema-chip {
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: #e0f2fe;
+        color: #0369a1;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
       .workspace {
-        display: flex;
-        gap: 16px;
+        display: grid;
+        grid-template-columns: 280px 1fr 240px;
+        gap: 20px;
         align-items: stretch;
+      }
+
+      .column {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
       }
 
       .panel {
         background: #ffffff;
         border: 1px solid #d1d5db;
-        border-radius: 10px;
-        padding: 14px;
+        border-radius: 12px;
+        padding: 16px;
         display: flex;
         flex-direction: column;
         gap: 12px;
+        height: 100%;
       }
 
-      .panel-tree {
-        flex: 0 0 220px;
-      }
-
-      .panel-editor {
-        flex: 1;
+      .panel-title {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 600;
+        color: #0f172a;
       }
 
       .panel-log {
-        background: #ffffff;
-        border: 1px solid #d1d5db;
-        border-radius: 10px;
-        padding: 12px;
+        gap: 12px;
+      }
+
+      .panel-controls {
+        gap: 16px;
+      }
+
+      .button-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .quick-actions {
         display: flex;
         flex-direction: column;
         gap: 8px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 12px;
+        color: #475569;
+      }
+
+      .surface-tabs {
+        display: flex;
+        gap: 8px;
+      }
+
+      .surface-tabs button {
+        flex: 1;
+        padding: 8px 10px;
+        border-radius: 999px;
+        border: 1px solid #cbd5f5;
+        background: #e0f2fe;
+        color: #0c4a6e;
+        font-weight: 600;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .surface-tabs button.active {
+        background: #38bdf8;
+        color: #0f172a;
       }
 
       .tree {
@@ -139,7 +215,7 @@
 
       textarea {
         width: 100%;
-        min-height: 220px;
+        min-height: 260px;
         resize: vertical;
         border: 1px solid #d1d5db;
         border-radius: 8px;
@@ -174,9 +250,13 @@
         cursor: not-allowed;
       }
 
-      .actions {
-        display: flex;
-        gap: 8px;
+      .button-row button {
+        flex: 1;
+        min-width: 140px;
+      }
+
+      .quick-actions button {
+        width: 100%;
       }
 
       footer {
@@ -228,43 +308,88 @@
   </head>
   <body>
     <main>
-      <h1>JSON 스키마 실행</h1>
+      <header class="heading">
+        <div>
+          <h1>JSON 스키마 실행</h1>
+          <p class="heading-meta">Surface · Route · Slot · Component 컨트롤 패널</p>
+        </div>
+        <span class="schema-chip">schema v0.1</span>
+      </header>
+
       <section class="workspace">
-        <div class="panel panel-tree">
-          <h2 style="font-size: 14px; margin: 0">섹션 템플릿</h2>
-          <div id="presetTree" class="tree"></div>
-          <div id="selectionSummary" class="selection-summary"></div>
+        <div class="column column-tree">
+          <div class="panel panel-tree">
+            <h2 class="panel-title">Route / Slot Tree</h2>
+            <div class="surface-tabs">
+              <button type="button" class="active">admin</button>
+              <button type="button">user</button>
+              <button type="button">common</button>
+            </div>
+            <div id="presetTree" class="tree"></div>
+            <div id="selectionSummary" class="selection-summary"></div>
+          </div>
         </div>
-        <div class="panel panel-editor">
-          <label
-            style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #4b5563"
-          >
-            결합된 JSON
-            <textarea id="schema" placeholder="선택한 섹션의 JSON이 여기에 표시됩니다."></textarea>
-          </label>
-          <label
-            style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #4b5563"
-          >
-            대상 페이지
-            <select id="targetPage"></select>
-          </label>
+
+        <div class="column column-dryrun">
+          <div class="panel panel-editor">
+            <h2 class="panel-title">결합된 JSON</h2>
+            <label class="field" for="schema">
+              <span>선택한 섹션의 JSON</span>
+              <textarea
+                id="schema"
+                placeholder="선택한 섹션의 JSON이 여기에 표시됩니다."
+              ></textarea>
+            </label>
+          </div>
+          <div class="panel panel-controls">
+            <h2 class="panel-title">Dry-run & 설정</h2>
+            <label class="field" for="targetPage">
+              <span>실행 대상 페이지</span>
+              <select id="targetPage"></select>
+            </label>
+            <div class="button-row">
+              <button id="run" type="button">Dry-run 실행</button>
+            </div>
+            <p style="font-size: 12px; color: #64748b; margin: 0">
+              트리에서 Surface → Route → Slot을 선택한 뒤 Dry-run으로 구조를 검토한 후 실제 적용
+              또는 체크포인트를 진행합니다.
+            </p>
+          </div>
+        </div>
+
+        <div class="column column-execution">
+          <div class="panel panel-log">
+            <h2 class="panel-title">Dry-run 결과 로그</h2>
+            <div id="resultLog" class="log-list"></div>
+          </div>
+          <div class="panel">
+            <h2 class="panel-title">실행</h2>
+            <div class="button-row">
+              <button id="apply" type="button">실행 반영</button>
+              <button id="checkpointDraft" type="button" class="secondary" disabled>체크포인트 초안</button>
+            </div>
+            <p style="font-size: 12px; color: #64748b; margin: 0">
+              Dry-run으로 구조를 검토한 뒤 실행을 반영하세요. 체크포인트 초안 기능은 후속 단계에서 활성화됩니다.
+            </p>
+          </div>
+          <div class="panel">
+            <h2 class="panel-title">퀵 액션</h2>
+            <div class="quick-actions">
+              <button id="loadSample" type="button">샘플 불러오기</button>
+              <button id="createHello" type="button" class="secondary">Hello 박스</button>
+            </div>
+          </div>
         </div>
       </section>
-      <section class="panel-log">
-        <h2 style="font-size: 14px; margin: 0">Dry-run 결과 로그</h2>
-        <div id="resultLog" class="log-list"></div>
-      </section>
-      <div class="actions">
-        <button id="loadSample" type="button">샘플 불러오기</button>
-        <button id="createHello" type="button" class="secondary">Hello 박스</button>
-      </div>
-      <button id="run" type="button">JSON 실행</button>
-      <footer>Codex 자동화 PoC · schema v0.1</footer>
+
+      <footer>Codex 자동화 PoC · Surface/Route/Slot/Component 흐름</footer>
     </main>
 
     <script>
       const schemaInput = document.getElementById('schema');
       const runButton = document.getElementById('run');
+      const applyButton = document.getElementById('apply');
+      const checkpointButton = document.getElementById('checkpointDraft');
       const loadSampleButton = document.getElementById('loadSample');
       const helloButton = document.getElementById('createHello');
       const pageSelect = document.getElementById('targetPage');
@@ -281,20 +406,21 @@
       let logEntries = [];
 
       runButton.addEventListener('click', () => {
-        const documents = selectedSections.map((meta) => meta.raw);
-        parent.postMessage(
-          {
-            pluginMessage: {
-              type: 'execute-schema',
-              payload: {
-                documents,
-              },
-              targetPage: pageSelect.value,
-            },
-          },
-          '*',
-        );
+        executeSelectedSections({ intent: 'dry-run', targetMode: 'replace' });
       });
+
+      applyButton.addEventListener('click', () => {
+        executeSelectedSections({ intent: 'apply', targetMode: 'replace' });
+      });
+
+      if (checkpointButton) {
+        checkpointButton.addEventListener('click', () => {
+          appendLogEntry({
+            type: 'warning',
+            message: '체크포인트 초안 기능은 리팩터링 이후 활성화 예정입니다.',
+          });
+        });
+      }
 
       loadSampleButton.addEventListener('click', () => {
         parent.postMessage(
@@ -373,6 +499,28 @@
         }
       }
 
+      function executeSelectedSections({ intent = 'dry-run', targetMode = 'append' } = {}) {
+        if (!selectedSections.length) {
+          appendLogEntry({ type: 'warning', message: '선택한 섹션이 없습니다.' });
+          return;
+        }
+        const documents = selectedSections.map((meta) => meta.raw);
+        parent.postMessage(
+          {
+            pluginMessage: {
+              type: 'execute-schema',
+              payload: {
+                documents,
+              },
+              targetPage: pageSelect.value,
+              targetMode,
+              intent,
+            },
+          },
+          '*',
+        );
+      }
+
       function renderPresetTree(manifest) {
         if (!presetTree) return;
         presetTree.innerHTML = '';
@@ -383,6 +531,7 @@
         selectedSections = [];
         updateSelectedSummary();
         updateSchemaInput();
+        updateActionButtons();
 
         const surfaces = manifest?.surfaces;
         if (surfaces && Object.keys(surfaces).length > 0) {
@@ -589,6 +738,7 @@
           hint.textContent = '선택된 섹션 없음';
           hint.style.background = '#f3f4f6';
           selectionSummary.appendChild(hint);
+          updateActionButtons();
           return;
         }
 
@@ -597,6 +747,13 @@
           chip.textContent = `${meta.routeLabel} · ${meta.slotLabel} · ${meta.label}`;
           selectionSummary.appendChild(chip);
         });
+        updateActionButtons();
+      }
+
+      function updateActionButtons() {
+        const disabled = selectedSections.length === 0;
+        if (runButton) runButton.disabled = disabled;
+        if (applyButton) applyButton.disabled = disabled;
       }
 
       function updateSchemaInput() {

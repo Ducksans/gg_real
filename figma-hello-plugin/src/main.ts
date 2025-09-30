@@ -2,8 +2,8 @@ import { archetypeManifest } from './lib/archetype-manifest';
 import { notifyError } from './lib/notifier';
 import { runHelloFrame, runSchemaBatch, runSchemaFromString, SAMPLE_SCHEMA } from './runtime';
 
-const UI_WIDTH = 500;
-const UI_HEIGHT = 620;
+const UI_WIDTH = 960;
+const UI_HEIGHT = 700;
 
 figma.on('run', () => {
   figma.showUI(__html__, { width: UI_WIDTH, height: UI_HEIGHT });
@@ -27,10 +27,13 @@ figma.on('run', () => {
           if (payload && typeof payload === 'object' && Array.isArray(payload.documents)) {
             await runSchemaBatch(payload.documents, {
               targetPage: message.targetPage ?? payload.targetPage,
+              targetMode: message.targetMode ?? payload.targetMode,
+              intent: message.intent ?? payload.intent,
             });
           } else {
             await runSchemaFromString((payload as string) ?? '', {
               targetPage: message.targetPage,
+              targetMode: message.targetMode ?? payload?.targetMode,
             });
           }
           break;
