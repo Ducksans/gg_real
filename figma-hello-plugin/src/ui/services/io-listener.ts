@@ -5,7 +5,9 @@ import type { ExecutionStore } from '../store/executionStore';
 import type { GuardrailIssue, GuardrailMetrics, GuardrailStore } from '../store/guardrailStore';
 import type { LogStore } from '../store/logStore';
 import type { PreviewStore } from '../store/previewStore';
+import type { RouteStore } from '../store/routeStore';
 import type { SectionStore } from '../store/sectionStore';
+import type { TargetStore } from '../store/targetStore';
 import { getAvailableSections, registerArchetypeManifest } from './schema-builder';
 
 interface ListenerDeps {
@@ -13,7 +15,9 @@ interface ListenerDeps {
   guardrailStore: GuardrailStore;
   logStore: LogStore;
   previewStore: PreviewStore;
+  routeStore: RouteStore;
   sectionStore: SectionStore;
+  targetStore: TargetStore;
 }
 
 interface RuntimeGuardrailPayload {
@@ -41,6 +45,14 @@ interface RuntimeResultPayload {
   page?: string;
   frameName?: string;
   sections?: string[];
+  slotId?: string;
+  slotReport?: {
+    slotId?: string;
+    createdNodes?: Array<{ id: string; name: string; type?: string }>;
+    warnings?: string[];
+    executedSections?: string[];
+  };
+  targetFrameName?: string;
 }
 
 type RuntimeMessage =
@@ -69,7 +81,15 @@ const toIssues = (
   }));
 
 const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
-  const { executionStore, guardrailStore, logStore, previewStore, sectionStore } = deps;
+  const {
+    executionStore,
+    guardrailStore,
+    logStore,
+    previewStore,
+    routeStore,
+    sectionStore,
+    targetStore,
+  } = deps;
   switch (message.type) {
     case 'init': {
       const manifest = message.payload.manifest as
@@ -80,12 +100,16 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
       }
       const sections = getAvailableSections();
       sectionStore.setAvailableSections(sections);
+      sectionStore.selectSections(sections.map((section) => section.id));
+      if (Array.isArray(message.payload.pages)) {
+        targetStore.setPages(message.payload.pages, message.payload.currentPage);
+      }
       previewStore.reset();
       previewStore.setPreview({ page: message.payload.currentPage, sections: [] });
+      routeStore.load();
       break;
     }
     case 'dry-run-result': {
-      executionStore.setIdle();
       const {
         intent = 'dry-run',
         summary,
@@ -96,6 +120,9 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
         frameName,
         page,
         sections,
+        slotReport,
+        slotId,
+        targetFrameName,
       } = message.payload;
 
       const summaryText = summary ?? `${intent === 'apply' ? 'Apply' : 'Dry-run'} 완료`;
@@ -108,6 +135,14 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
         errors: metrics?.errors,
       };
 
+      const normalizedSlotReport = {
+        slotId: slotReport?.slotId ?? slotId,
+        createdNodeIds: slotReport?.createdNodes?.map((node) => node.id) ?? [],
+        createdNodeNames: slotReport?.createdNodes?.map((node) => node.name) ?? [],
+        warnings: slotReport?.warnings ?? [],
+        executedSections: slotReport?.executedSections ?? sections ?? [],
+      };
+
       logStore.addEntry({
         intent,
         summary: summaryText,
@@ -115,6 +150,12 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
           warnings: warningIssues,
           errors: errorIssues,
           metrics: guardrailMetrics,
+        },
+        page,
+        frameName: frameName ?? targetFrameName,
+        slotReport: {
+          ...normalizedSlotReport,
+          count: normalizedSlotReport.createdNodeIds.length,
         },
       });
 
@@ -126,15 +167,33 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
       });
 
       previewStore.setPreview({
-        frameName,
+        frameName: frameName ?? targetFrameName,
         page,
         sections: sections ?? [],
         lastIntent: intent,
+        slotId: normalizedSlotReport.slotId,
+        createdCount: normalizedSlotReport.createdNodeIds.length,
+        createdNodeNames: normalizedSlotReport.createdNodeNames,
       });
 
       if (sections && sections.length) {
         sectionStore.selectSections(sections);
       }
+
+      executionStore.setResult({
+        intent,
+        summary: summaryText,
+        page,
+        frameName: frameName ?? targetFrameName,
+        sections: sections ?? [],
+        metrics: {
+          created: metrics?.created ?? normalizedSlotReport.createdNodeIds.length,
+          warnings: metrics?.warnings ?? warningIssues.length,
+          errors: metrics?.errors ?? errorIssues.length,
+        },
+        slotReport: normalizedSlotReport,
+        timestamp: Date.now(),
+      });
       break;
     }
     case 'dry-run-warning':
@@ -165,7 +224,15 @@ const addListener = (deps: ListenerDeps) => {
 export const useRuntimeListener = (deps: ListenerDeps) => {
   useEffect(
     () => addListener(deps),
-    [deps.executionStore, deps.guardrailStore, deps.logStore, deps.previewStore, deps.sectionStore],
+    [
+      deps.executionStore,
+      deps.guardrailStore,
+      deps.logStore,
+      deps.previewStore,
+      deps.routeStore,
+      deps.sectionStore,
+      deps.targetStore,
+    ],
   );
 };
 

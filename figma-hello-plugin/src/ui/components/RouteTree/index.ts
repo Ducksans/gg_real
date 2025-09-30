@@ -1,7 +1,3 @@
-export interface RouteTreeProps {
-  readonly routes: unknown[];
-}
+// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
 
-export const renderRouteTree = (_props: RouteTreeProps) => {
-  throw new Error('renderRouteTree not implemented');
-};
+export { RouteTree } from './RouteTree';

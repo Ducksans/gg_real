@@ -8,6 +8,9 @@ export interface PreviewState {
   readonly page?: string;
   readonly sections: string[];
   readonly lastIntent?: 'dry-run' | 'apply';
+  readonly slotId?: string;
+  readonly createdCount: number;
+  readonly createdNodeNames: string[];
 }
 
 export interface PreviewStore {
@@ -18,6 +21,8 @@ export interface PreviewStore {
 
 const createInitialState = (): PreviewState => ({
   sections: [],
+  createdCount: 0,
+  createdNodeNames: [],
 });
 
 export const createPreviewStore = (): PreviewStore => {
@@ -34,6 +39,11 @@ export const createPreviewStore = (): PreviewStore => {
         page: snapshot.page ?? current.page,
         sections: snapshot.sections ? [...snapshot.sections] : [...(current.sections ?? [])],
         lastIntent: snapshot.lastIntent ?? current.lastIntent,
+        slotId: snapshot.slotId ?? current.slotId,
+        createdCount: snapshot.createdCount ?? current.createdCount ?? 0,
+        createdNodeNames: snapshot.createdNodeNames
+          ? [...snapshot.createdNodeNames]
+          : [...(current.createdNodeNames ?? [])],
       };
     },
     reset() {

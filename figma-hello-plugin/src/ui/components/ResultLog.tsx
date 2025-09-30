@@ -42,6 +42,7 @@ export const ResultLog = ({ logStore }: ResultLogProps) => {
               </time>
             </header>
             <p class="log-entry__summary">{entry.summary}</p>
+            <SlotReport entry={entry} />
             <GuardrailDetails entry={entry} />
           </article>
         ))}
@@ -132,6 +133,48 @@ const GuardrailDetails = ({ entry }: GuardrailDetailsProps) => {
       ) : (
         <p class="log-entry__guardrail-empty">Guardrail 경고/오류가 없습니다.</p>
       )}
+    </div>
+  );
+};
+
+interface SlotReportProps {
+  entry: LogEntry;
+}
+
+const SlotReport = ({ entry }: SlotReportProps) => {
+  const { slotReport } = entry;
+  const hasSlotReport = Boolean(slotReport);
+
+  return (
+    <div class="log-entry__slot-report">
+      <dl class="log-entry__slot-meta">
+        <div>
+          <dt>페이지</dt>
+          <dd>{entry.page ?? '현재 페이지'}</dd>
+        </div>
+        <div>
+          <dt>프레임</dt>
+          <dd>{entry.frameName ?? 'GeneratedFrame'}</dd>
+        </div>
+        <div>
+          <dt>슬롯</dt>
+          <dd>{slotReport?.slotId ?? '미지정'}</dd>
+        </div>
+        <div>
+          <dt>생성 개수</dt>
+          <dd>{slotReport?.count ?? slotReport?.createdNodeIds.length ?? 0}</dd>
+        </div>
+      </dl>
+      {hasSlotReport && slotReport?.createdNodeNames.length ? (
+        <div class="log-entry__slot-nodes">
+          <header>생성된 노드</header>
+          <ul>
+            {slotReport.createdNodeNames.map((name, index) => (
+              <li key={`${slotReport.createdNodeIds[index] ?? name}-${index}`}>{name}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </div>
   );
 };

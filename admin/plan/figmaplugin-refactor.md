@@ -3,7 +3,7 @@ file: admin/plan/figmaplugin-refactor.md
 title: Figma Plugin 컴포넌트화 리팩터링 계획
 owner: duksan
 created: 2025-09-30 06:10 UTC / 2025-09-30 15:10 KST
-updated: 2025-09-30 16:45 UTC / 2025-10-01 01:45 KST
+updated: 2025-09-30 18:47 UTC / 2025-10-01 03:47 KST
 status: draft
 tags: [plan, figma, refactor]
 schemaVersion: 1
@@ -21,6 +21,12 @@ code_refs:
     'figma-hello-plugin/src/ui/components/ExecutionPanel.tsx',
     'figma-hello-plugin/src/ui/components/ExecutionPanel/GuardrailSummary.tsx',
     'figma-hello-plugin/src/ui/components/ExecutionPanel/index.ts',
+    'figma-hello-plugin/src/ui/components/ExecutionPanel/TargetSelect.tsx',
+    'figma-hello-plugin/src/ui/components/RouteTree/index.ts',
+    'figma-hello-plugin/src/ui/components/RouteTree/RouteTree.tsx',
+    'figma-hello-plugin/src/ui/components/RouteTree/RouteNode.tsx',
+    'figma-hello-plugin/src/ui/components/RouteTree/SlotNode.tsx',
+    'figma-hello-plugin/src/ui/components/RouteTree/SlotSummary.tsx',
     'figma-hello-plugin/src/ui/components/SectionList/index.tsx',
     'figma-hello-plugin/src/ui/components/SectionList/SectionFilter.tsx',
     'figma-hello-plugin/src/ui/components/SectionList/SectionItem.tsx',
@@ -31,6 +37,10 @@ code_refs:
     'figma-hello-plugin/src/ui/components/PreviewControls/index.tsx',
     'figma-hello-plugin/src/ui/components/PreviewControls/BeforeAfter.tsx',
     'figma-hello-plugin/src/ui/components/PreviewControls/SlotHighlight.tsx',
+    'figma-hello-plugin/src/ui/components/QuickActions/index.tsx',
+    'figma-hello-plugin/src/ui/components/QuickActions/SampleLoader.tsx',
+    'figma-hello-plugin/src/ui/components/QuickActions/HelloAction.tsx',
+    'figma-hello-plugin/src/ui/components/QuickActions/CheckpointAction.tsx',
     'figma-hello-plugin/src/ui/components/index.ts',
     'figma-hello-plugin/src/ui/index.ts',
     'figma-hello-plugin/src/ui/index.html',
@@ -39,6 +49,8 @@ code_refs:
     'figma-hello-plugin/src/ui/services/index.ts',
     'figma-hello-plugin/src/ui/services/preview.ts',
     'figma-hello-plugin/src/ui/services/io-listener.ts',
+    'figma-hello-plugin/src/ui/services/checkpoint.ts',
+    'figma-hello-plugin/src/ui/services/quick-actions.ts',
     'figma-hello-plugin/src/ui/services/schema-builder.ts',
     'figma-hello-plugin/src/ui/store/executionStore.ts',
     'figma-hello-plugin/src/ui/store/index.ts',
@@ -46,6 +58,8 @@ code_refs:
     'figma-hello-plugin/src/ui/store/logStore.ts',
     'figma-hello-plugin/src/ui/store/previewStore.ts',
     'figma-hello-plugin/src/ui/store/sectionStore.ts',
+    'figma-hello-plugin/src/ui/store/targetStore.ts',
+    'figma-hello-plugin/src/ui/store/routeStore.ts',
     'figma-hello-plugin/src/ui/styles/app.css',
     '.github/workflows/build.yml',
     'figma-hello-plugin/tsconfig.json',
@@ -176,6 +190,7 @@ code_refs:
   - `executionStore.ts`: 실행 로딩/결과 요약.
   - `previewStore.ts`: 프리뷰 프레임/히스토리 상태.
   - `logStore.ts`: Dry-run/경고 로그 이력.
+  - `targetStore.ts`: 페이지/프레임/모드 선택 상태.
   - `index.ts`: Store 조합과 Provider 설정만 담당.
 - **services/**
   - `execution.ts`: Dry-run/Apply 파이프라인 조립.
@@ -183,6 +198,7 @@ code_refs:
   - `preview.ts`: 프리뷰 프레임 이동/히스토리/슬라이더.
   - `checkpoint.ts`: 체크포인트 초안 생성.
   - `io-listener.ts`: 런타임 메시지 수신 후 Store로 분배.
+  - `quick-actions.ts`: 플러그인 샘플/헬로 실행/체크포인트 생성 요청을 래핑.
   - `analytics.ts`: 실행/선택 이벤트를 로깅(선택 사항).
 - 각 Store/Service 파일의 책임을 명확히 분리해 디버깅 시 영향 범위를 즉시 파악 가능하도록 한다.
 
@@ -192,47 +208,55 @@ code_refs:
   - `index.tsx`: Surface 탭 렌더링.
   - `SurfaceBadge.tsx`: 필수 슬롯/경고 뱃지.
   - `SurfaceStats.tsx`: 선택 Surface 통계.
+  - 상태: 미구현 — Surface 탭 UI는 후속 이관 대상이며 현 코드에는 아직 작성되지 않았다.
 - `RouteTree/`
   - `index.tsx`: Route/Slot 트리 루트.
   - `RouteNode.tsx`: Route 레벨 렌더링.
   - `SlotNode.tsx`: Slot 레벨 렌더링 및 전체 선택.
   - `SlotSummary.tsx`: 슬롯 설명/허용 섹션 표시.
+  - 상태: 완료 2025-09-30 18:06 UTC / 2025-10-01 03:06 KST — RouteTree 시리즈를 Preact로 구현하고 routeStore와 연동했다.
 - `SectionList/`
   - `index.tsx`: 슬롯별 섹션 목록.
   - `SectionItem.tsx`: 개별 섹션 항목.
   - `SectionFilter.tsx`: 검색/필터 UI.
+  - 상태: 완료 2025-09-30 18:06 UTC / 2025-10-01 03:06 KST — Signals 기반 필터·다중 선택을 구현해 sectionStore와 동기화했다.
 - `SchemaEditor/`
   - `index.tsx`: JSON 뷰/편집 탭 전환.
   - `ReadonlyPanel.tsx`: 읽기 전용 프리뷰.
   - `EditorPanel.tsx`: 코드 편집기 래퍼.
+  - 상태: 완료 2025-09-30 18:06 UTC / 2025-10-01 03:06 KST — 선택 섹션 JSON 미리보기/편집 탭 전환을 Preact 컴포넌트로 마이그레이션했다.
 - `ExecutionPanel/`
   - `index.tsx`: 버튼/설정 묶음.
   - `TargetSelect.tsx`: 페이지/프레임 선택.
   - `GuardrailSummary.tsx`: 경고 요약.
+  - 상태: 완료 2025-09-30 18:17 UTC / 2025-10-01 03:17 KST — TargetSelect를 Signals 기반 Preact 컴포넌트로 구현하고 execution 파이프라인에 페이지/모드/프레임 오버라이드를 연결했다.
 - `ResultLog/`
   - `index.tsx`: 로그 리스트 컨테이너.
   - `LogEntry.tsx`: 로그 항목.
   - `MetricsBar.tsx`: 생성/경고/오류 수치.
+  - 상태: 완료 2025-09-30 18:06 UTC / 2025-10-01 03:06 KST — Guardrail 메트릭과 경고/오류 배지를 포함한 로그 UI를 구현했다.
 - `PreviewControls/`
   - `index.tsx`: 프리뷰 제어 허브.
   - `BeforeAfter.tsx`: 슬라이더 전용.
   - `SlotHighlight.tsx`: 슬롯 토글.
+  - 상태: 완료 2025-09-30 18:06 UTC / 2025-10-01 03:06 KST — 프레임 포커스, 섹션 하이라이트, Before/After 뷰를 동작시키도록 연동했다.
 - `QuickActions/`
   - `index.tsx`: 단축 액션 묶음.
   - `SampleLoader.tsx`: 샘플 로드 버튼.
   - `HelloAction.tsx`: Hello 프레임 생성.
-  - `CheckpointAction.tsx`: 체크포인트 내보내기.
+  - `CheckpointAction.tsx`: 체크포인트 초안 다운로드.
+  - 상태: 완료 2025-09-30 18:32 UTC / 2025-10-01 03:33 KST — Preact UI, 런타임 메시지, 체크포인트 초안 다운로드 흐름을 구현했다.
 - 모든 컴포넌트는 Props 타입을 별도 `types.ts`에 정의하고, 스타일은 `styles.css` 또는 모듈 CSS로 분리한다. 1파일 1UI 책임을 지켜 재사용과 디버깅을 단순화한다.
 
 # 3-7. 상호 작용 흐름
 
-1. 사용자가 Surface/Slot을 선택 → Store가 선택 상태를 업데이트하고 `SectionList`/`SchemaEditor`가 즉시 반응한다.
-2. `ExecutionPanel`에서 Dry-run을 트리거 → `services/execution`이 SchemaDocument 배열을 구성하고 io-channel로 `execute-schema` 메시지를 보낸다.
-3. Executor는 surface-config → guardrails → slot-manager → notifier 순으로 호출하고, 결과 DTO를 io-channel에 실어 UI로 보낸다.
-4. UI의 `io-listener`가 결과를 수신 → Store에 Dry-run 결과/경고/프리뷰 정보 반영 → `ResultLog`와 `PreviewControls`가 즉시 갱신된다.
-5. 사용자가 Apply를 선택하면 Executor가 같은 파이프라인을 intent `apply`로 실행하고, SlotManager가 생성/갱신 결과를 보고한다.
-6. `services/checkpoint`가 Dry-run/Apply 결과를 바탕으로 체크포인트 초안을 생성하고, 필요 시 UI에서 바로 파일로 저장하도록 안내한다.
-7. 모든 실행 이벤트는 Store에 축적돼 Undo/Redo·감사 로그·세션 요약에 재사용된다.
+1. 사용자가 Surface/Slot을 선택 → Store가 선택 상태를 업데이트하고 `SectionList`/`SchemaEditor`가 즉시 반응한다. — 완료 2025-09-30 18:06 UTC / 2025-10-01 03:06 KST (`routeStore`, `ExecutionPanel` 의존성 연동)
+2. `ExecutionPanel`에서 Dry-run을 트리거 → `services/execution`이 SchemaDocument 배열을 구성하고 io-channel로 `execute-schema` 메시지를 보낸다. — 완료 2025-09-30 18:06 UTC / 2025-10-01 03:06 KST (`createExecutionService` 패이로드 구성)
+3. Executor는 surface-config → guardrails → slot-manager → notifier 순으로 호출하고, 결과 DTO를 io-channel에 실어 UI로 보낸다. — 진행 (런타임 서브모듈 분리는 지속 작업 중)
+4. UI의 `io-listener`가 결과를 수신 → Store에 Dry-run 결과/경고/프리뷰 정보 반영 → `ResultLog`와 `PreviewControls`가 즉시 갱신된다. — 완료 2025-09-30 18:06 UTC / 2025-10-01 03:06 KST (`io-listener.ts`, `previewStore` 갱신)
+5. 사용자가 Apply를 선택하면 Executor가 같은 파이프라인을 intent `apply`로 실행하고, SlotManager가 생성/갱신 결과를 보고한다. — 완료 2025-09-30 18:28 UTC / 2025-10-01 03:28 KST (slotReport 페이로드를 확장해 execution/log/preview 스토어에 생성 노드/슬롯 정보를 기록)
+6. 체크포인트 서비스가 Dry-run/Apply 결과를 바탕으로 초안을 생성하고, 필요 시 UI에서 바로 파일로 저장하도록 안내한다. — 완료 2025-09-30 18:32 UTC / 2025-10-01 03:33 KST (execution/log/preview/target 상태를 조합해 Markdown 초안과 다운로드 흐름을 제공)
+7. 모든 실행 이벤트는 Store에 축적돼 Undo/Redo·감사 로그·세션 요약에 재사용된다. — 미구현 (이력 저장/재활용 로직 미도입)
 
 # 3-8. 병목 제거형 서브모듈 설계
 
@@ -259,7 +283,7 @@ code_refs:
    - `runtime.ts`를 위에서 정의한 SurfaceConfig/SlotManager/Guardrails/Executor 모듈로 쪼개고, `index.ts`에서 조립. _(진행 — 실행 오케스트레이션을 `runtime/executor`로 이동하고, `surface-config`, `guardrails`, `slot-manager` 서브모듈에 실 구현 배치)_
    - 기존 API(`runSchemaFromString`, `runSchemaBatch`, `runSchemaDocument`)와 메시지 포맷 유지.
    - SlotManager `strategies/`, `transformers/`, `metadata/` 모듈을 활성화해 컨테이너 생성·레이아웃·Diff 동기화를 분리하고 Token Registry `providers/`, `resolvers/`, `cache/` 구조를 호출 경계로 활용한다.
-4. **UI 분리(P2)**
+4. **UI 분리(P2)** _(진행 2025-09-30 18:06 UTC / 2025-10-01 03:06 KST — SectionList·SchemaEditor·RouteTree·PreviewControls·ResultLog 이관 완료, TargetSelect·QuickActions 대기)_
    - manifest 로더와 상태 관리, 컴포넌트 렌더링 로직을 파일 단위로 나눠 Webpack/esbuild 번들을 적용.
    - Route/Slot 트리 컴포넌트에서 manifest 타입 정의를 재사용.
 5. **테스트/품질 게이트 정비(P2)**
@@ -312,5 +336,5 @@ code_refs:
   7. **CI 통합** — `.github/workflows/build.yml`에 `gg-figma-plugin build/test/typecheck` 잡을 추가해 Preact UI 회귀 검증을 자동화한다.
 - **가드레일**: postMessage DTO, `runSchema*` API, Runtime/Manifest 코드는 변경하지 않는다. WebView 로딩 시 `dist/ui.js`만 교체. 회귀 방지를 위해 기존 구조 테스트(`tests/structure.test.ts`)에 Preact 엔트리 검증 추가.
 - **향후 확장**: ExecutionPanel/ResultLog 이후 GuardrailSummary → PreviewControls → RouteTree → Before/After 비교 순으로 이관하며, 각 단계에서 store slice와 components를 분할한다.
-- **현황**: 2025-09-30 13:48 UTC / 2025-09-30 22:48 KST — GuardrailSummary·ResultLog에 메트릭 배지/추세 히스토리를 추가하고, PreviewControls에서 프레임 포커스·섹션 하이라이트 postMessage를 연결했으며 guardrail/preview/section 스토어와 CI `gg-figma-plugin build/test/typecheck` 잡으로 자동 검증 루프를 구축했다.
+- **현황**: 2025-09-30 18:06 UTC / 2025-10-01 03:06 KST — SectionList·SchemaEditor·ExecutionPanel·PreviewControls·ResultLog를 Signals/Preact 구조로 전환하고 RouteTree·routeStore를 추가해 Surface/Slot 선택→Schema 빌드를 연결했다. QuickActions·TargetSelect·Apply 결과 처리·체크포인트 연동은 후속 작업으로 남겨두었다.
 - **검증 노트**: ES2017 + inline HTML 번들 방식은 `scripts/build-ui.ts`에서 번들·CSS를 `ui.html`에 삽입하고, CI `plugin-ui` 잡에서 `pnpm --filter gg-figma-plugin build/test/typecheck`로 매 실행 시 검증한다. 로컬 격리 환경에서는 `pnpm --filter gg-figma-plugin build`만으로 동일한 산출물을 생산해야 한다.

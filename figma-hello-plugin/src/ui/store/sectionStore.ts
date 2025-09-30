@@ -1,15 +1,7 @@
 // doc_refs: ["admin/plan/figmaplugin-refactor.md"]
 
 import { signal, type Signal } from '@preact/signals';
-
-export interface SectionInfo {
-  readonly id: string;
-  readonly label: string;
-  readonly slotId?: string;
-  readonly slotLabel?: string;
-  readonly order?: number;
-  readonly description?: string;
-}
+import type { SectionInfo } from '../services/schema-builder';
 
 export interface SectionState {
   readonly availableSections: SectionInfo[];

@@ -16,6 +16,7 @@ import {
   ensureSlotContainer,
   resolveSlotContainer,
   syncSlotChildren,
+  buildSlotReport,
 } from '../slot-manager';
 import { evaluateGuardrails } from '../guardrails';
 import { normalizeSlotName, PLUGINDATA_KEYS } from '../utils';
@@ -133,6 +134,8 @@ export async function runSchemaDocument(
     isPreview ? 'replace' : options.targetMode === 'replace' ? 'replace' : 'append',
   );
 
+  const slotReport = buildSlotReport(createdNodes, doc.meta?.section ? [doc.meta.section] : [], []);
+
   if (!options?.intent || options.intent !== 'dry-run') {
     figma.currentPage = page;
     if (createdNodes.length) {
@@ -153,6 +156,17 @@ export async function runSchemaDocument(
     page: normalized.page,
     frameName: normalized.frameName,
     sections: doc.meta?.section ? [doc.meta.section] : [],
+    slotId,
+    slotReport: {
+      slotId,
+      executedSections: slotReport.executedSections,
+      warnings: slotReport.warnings,
+      createdNodes: slotReport.createdNodes.map((node) => ({
+        id: node.id,
+        name: node.name,
+        type: node.type,
+      })),
+    },
     metrics: {
       created: createdNodes.length,
       warnings: guard.warnings.length,

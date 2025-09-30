@@ -7,6 +7,8 @@ import {
   createGuardrailStore,
   createLogStore,
   createPreviewStore,
+  createTargetStore,
+  createRouteStore,
   createSectionStore,
 } from './store';
 
@@ -21,7 +23,9 @@ const mount = () => {
   const logStore = createLogStore();
   const guardrailStore = createGuardrailStore();
   const previewStore = createPreviewStore();
+  const routeStore = createRouteStore();
   const sectionStore = createSectionStore();
+  const targetStore = createTargetStore();
 
   console.info('[plugin-ui] mounting UI');
   render(
@@ -30,7 +34,9 @@ const mount = () => {
       logStore={logStore}
       guardrailStore={guardrailStore}
       previewStore={previewStore}
+      routeStore={routeStore}
       sectionStore={sectionStore}
+      targetStore={targetStore}
     />,
     root,
   );

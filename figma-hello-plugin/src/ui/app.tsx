@@ -1,9 +1,17 @@
 // doc_refs: ["admin/plan/figmaplugin-refactor.md"]
 
 import { useEffect } from 'preact/hooks';
-import { ExecutionPanel, PreviewControls, ResultLog } from './components';
+import { ExecutionPanel, PreviewControls, QuickActions, ResultLog } from './components';
 import { useRuntimeListener } from './services';
-import type { ExecutionStore, GuardrailStore, LogStore, PreviewStore, SectionStore } from './store';
+import type {
+  ExecutionStore,
+  GuardrailStore,
+  LogStore,
+  PreviewStore,
+  RouteStore,
+  SectionStore,
+  TargetStore,
+} from './store';
 import { getAvailableSections } from './services/schema-builder';
 
 import './styles/app.css';
@@ -14,6 +22,8 @@ interface AppProps {
   logStore: LogStore;
   previewStore: PreviewStore;
   sectionStore: SectionStore;
+  routeStore: RouteStore;
+  targetStore: TargetStore;
 }
 
 export const App = (props: AppProps) => <Shell {...props} />;
@@ -23,15 +33,26 @@ const Shell = ({
   guardrailStore,
   logStore,
   previewStore,
+  routeStore,
   sectionStore,
+  targetStore,
 }: AppProps) => {
   useRuntimeListener({
     executionStore,
     guardrailStore,
     logStore,
     previewStore,
+    routeStore,
     sectionStore,
+    targetStore,
   });
+
+  useEffect(() => {
+    routeStore.load();
+    const sections = getAvailableSections();
+    sectionStore.setAvailableSections(sections);
+    sectionStore.selectSections(sections.map((section) => section.id));
+  }, []);
 
   useEffect(() => {
     if (!sectionStore.state.value.availableSections.length) {
@@ -49,8 +70,18 @@ const Shell = ({
           executionStore={executionStore}
           guardrailStore={guardrailStore}
           sectionStore={sectionStore}
+          routeStore={routeStore}
+          targetStore={targetStore}
         />
         <div class="plugin-shell__side">
+          <QuickActions
+            guardrailStore={guardrailStore}
+            logStore={logStore}
+            previewStore={previewStore}
+            sectionStore={sectionStore}
+            targetStore={targetStore}
+            executionStore={executionStore}
+          />
           <PreviewControls previewStore={previewStore} guardrailStore={guardrailStore} />
           <ResultLog logStore={logStore} />
         </div>

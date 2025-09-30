@@ -55,7 +55,11 @@ export const PreviewControls = ({ previewStore, guardrailStore }: PreviewControl
           </div>
           <div>
             <dt>생성 노드</dt>
-            <dd>{guardrailMetrics?.created ?? 0}</dd>
+            <dd>{previewState.createdCount ?? guardrailMetrics?.created ?? 0}</dd>
+          </div>
+          <div>
+            <dt>슬롯</dt>
+            <dd>{previewState.slotId ?? '미지정'}</dd>
           </div>
         </dl>
       </div>

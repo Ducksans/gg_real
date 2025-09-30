@@ -79,7 +79,7 @@ export interface ArchetypeManifest {
 }
 
 export const archetypeManifest: ArchetypeManifest = {
-  generatedAt: '2025-09-30T13:04:49.494Z',
+  generatedAt: '2025-09-30T17:40:29.703Z',
   surfaces: {
     plugin: {
       id: 'plugin',

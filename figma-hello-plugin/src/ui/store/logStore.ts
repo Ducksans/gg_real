@@ -15,12 +15,27 @@ export interface LogEntry {
   readonly intent: 'dry-run' | 'apply';
   readonly summary: string;
   readonly guardrail: LogGuardrailSnapshot;
+  readonly page?: string;
+  readonly frameName?: string;
+  readonly slotReport?: LogSlotReport;
 }
 
 interface AddEntryPayload {
   readonly intent: 'dry-run' | 'apply';
   readonly summary?: string;
   readonly guardrail?: Partial<LogGuardrailSnapshot>;
+  readonly page?: string;
+  readonly frameName?: string;
+  readonly slotReport?: Partial<LogSlotReport>;
+}
+
+export interface LogSlotReport {
+  readonly slotId?: string;
+  readonly createdNodeIds: string[];
+  readonly createdNodeNames: string[];
+  readonly count: number;
+  readonly warnings: string[];
+  readonly executedSections: string[];
 }
 
 export interface LogStore {
@@ -48,6 +63,18 @@ export const createLogStore = (): LogStore => {
         intent: entry.intent,
         summary: entry.summary ?? `${entry.intent === 'apply' ? 'Apply' : 'Dry-run'} 완료`,
         guardrail,
+        page: entry.page,
+        frameName: entry.frameName,
+        slotReport: entry.slotReport
+          ? {
+              slotId: entry.slotReport.slotId,
+              createdNodeIds: entry.slotReport.createdNodeIds ?? [],
+              createdNodeNames: entry.slotReport.createdNodeNames ?? [],
+              count: entry.slotReport.count ?? entry.slotReport.createdNodeIds?.length ?? 0,
+              warnings: entry.slotReport.warnings ?? [],
+              executedSections: entry.slotReport.executedSections ?? [],
+            }
+          : undefined,
       };
       state.value = [payload, ...state.value].slice(0, MAX_LOGS);
     },

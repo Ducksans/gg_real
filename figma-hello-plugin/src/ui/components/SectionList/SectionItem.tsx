@@ -1,6 +1,6 @@
 // doc_refs: ["admin/plan/figmaplugin-refactor.md"]
 
-import type { SectionInfo } from '../../store/sectionStore';
+import type { SectionInfo } from '../../services/schema-builder';
 
 export interface SectionItemProps {
   readonly section: SectionInfo;
