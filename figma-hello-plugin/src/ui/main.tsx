@@ -10,15 +10,20 @@ import {
   createSectionStore,
 } from './store';
 
-const root = document.getElementById('root');
+const mount = () => {
+  const root = document.getElementById('root');
+  if (!root) {
+    console.error('[plugin-ui] root element not found.');
+    return;
+  }
 
-if (root) {
   const executionStore = createExecutionStore();
   const logStore = createLogStore();
   const guardrailStore = createGuardrailStore();
   const previewStore = createPreviewStore();
   const sectionStore = createSectionStore();
 
+  console.info('[plugin-ui] mounting UI');
   render(
     <App
       executionStore={executionStore}
@@ -29,4 +34,10 @@ if (root) {
     />,
     root,
   );
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', mount, { once: true });
+} else {
+  mount();
 }

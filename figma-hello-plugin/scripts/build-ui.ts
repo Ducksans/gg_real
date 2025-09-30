@@ -1,7 +1,7 @@
 // doc_refs: ["admin/plan/figmaplugin-refactor.md"]
 
 import { build } from 'esbuild';
-import { copyFileSync, mkdirSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const rootDir = path.resolve(__dirname, '..');
@@ -32,7 +32,31 @@ const distDir = path.join(rootDir, 'dist');
       logLevel: 'info',
     });
 
-    copyFileSync(path.join(srcDir, 'index.html'), path.join(distDir, 'ui.html'));
+    const jsPath = path.join(distDir, 'ui.js');
+    const cssPath = path.join(distDir, 'ui.css');
+    const script = readFileSync(jsPath, 'utf8');
+    let styles = '';
+    try {
+      styles = readFileSync(cssPath, 'utf8');
+    } catch (readError) {
+      styles = '';
+    }
+
+    const html = `<!doctype html>
+<!-- doc_refs: ["admin/plan/figmaplugin-refactor.md"] -->
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>GG Plugin UI</title>
+    <style>${styles}</style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>${script}\n//# sourceURL=ui.bundle.js</script>
+  </body>
+</html>`;
+
+    writeFileSync(path.join(distDir, 'ui.html'), html, 'utf8');
   } catch (error) {
     console.error('[build:ui] 번들 생성에 실패했습니다.', error);
     process.exit(1);
