@@ -16,7 +16,7 @@ const distDir = path.join(rootDir, 'dist');
       entryPoints: [path.join(srcDir, 'main.tsx')],
       bundle: true,
       format: 'iife',
-      target: 'es2018',
+      target: 'es2017',
       outdir: distDir,
       entryNames: 'ui',
       loader: {

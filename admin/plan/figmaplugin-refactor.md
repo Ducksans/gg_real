@@ -3,7 +3,7 @@ file: admin/plan/figmaplugin-refactor.md
 title: Figma Plugin 컴포넌트화 리팩터링 계획
 owner: duksan
 created: 2025-09-30 06:10 UTC / 2025-09-30 15:10 KST
-updated: 2025-09-30 13:52 UTC / 2025-09-30 22:52 KST
+updated: 2025-09-30 14:14 UTC / 2025-09-30 23:14 KST
 status: draft
 tags: [plan, figma, refactor]
 schemaVersion: 1
@@ -12,6 +12,7 @@ code_refs:
   [
     'figma-hello-plugin/scripts/manifest/index.ts',
     'figma-hello-plugin/scripts/manifest/builder.ts',
+    'figma-hello-plugin/package.json',
     'figma-hello-plugin/scripts/build-ui.ts',
     'figma-hello-plugin/src/runtime/executor/index.ts',
     'figma-hello-plugin/src/runtime/slot-manager',
@@ -41,6 +42,7 @@ code_refs:
     'figma-hello-plugin/src/ui/store/sectionStore.ts',
     'figma-hello-plugin/src/ui/styles/app.css',
     '.github/workflows/build.yml',
+    'figma-hello-plugin/tsconfig.json',
   ]
 ---
 

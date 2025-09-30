@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:manifest && npm run build:main && npm run build:ui",
     "build:manifest": "pnpm exec tsx scripts/manifest/index.ts",
-    "build:main": "esbuild src/main.ts --bundle --platform=node --target=es2018 --outfile=dist/main.js",
+    "build:main": "esbuild src/main.ts --bundle --platform=node --target=es2017 --outfile=dist/main.js",
     "build:ui": "pnpm exec tsx scripts/build-ui.ts",
     "watch": "npm run build:main -- --watch",
     "typecheck": "tsc --noEmit",
