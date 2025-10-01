@@ -1,9 +1,9 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import { useMemo } from 'preact/hooks';
 import type { SchemaDocument } from '../../../schema';
 import { EditorPanel } from './EditorPanel';
 import { ReadonlyPanel } from './ReadonlyPanel';
+
+import './schema-editor.css';
 
 interface SchemaEditorProps {
   readonly documents: SchemaDocument[];

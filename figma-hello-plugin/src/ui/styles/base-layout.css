@@ -1,0 +1,62 @@
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #f3f4f6;
+}
+
+.plugin-root {
+  display: flex;
+  height: 100%;
+}
+
+.plugin-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  min-width: 720px;
+  height: 100%;
+}
+
+.plugin-shell__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.plugin-shell__main {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(320px, 2fr);
+  gap: 16px;
+}
+
+.plugin-shell__side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  height: 100%;
+  min-height: 0;
+}
+
+.workspace__sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.workspace__content {
+  min-height: 0;
+}

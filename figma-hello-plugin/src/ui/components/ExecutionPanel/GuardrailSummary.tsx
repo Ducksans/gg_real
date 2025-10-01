@@ -1,6 +1,6 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import type { GuardrailHistoryEntry, GuardrailMetrics, GuardrailStore } from '../../store';
+
+import './execution-panel.css';
 
 interface GuardrailSummaryProps {
   guardrailStore: GuardrailStore;
@@ -32,8 +32,10 @@ export const GuardrailSummary = ({ guardrailStore }: GuardrailSummaryProps) => {
   const createdDelta = computeDelta(history, 'created');
 
   return (
-    <div class="guardrail-summary">
-      <h3 class="guardrail-summary__title">Guardrail 상태</h3>
+    <section class="card guardrail-summary">
+      <header class="guardrail-summary__header">
+        <span>Guardrail 상태</span>
+      </header>
       <div class="guardrail-summary__badges">
         <span class="guardrail-badge guardrail-badge--created">
           생성 {metrics?.created ?? 0}
@@ -127,6 +129,6 @@ export const GuardrailSummary = ({ guardrailStore }: GuardrailSummaryProps) => {
           </ul>
         </div>
       )}
-    </div>
+    </section>
   );
 };

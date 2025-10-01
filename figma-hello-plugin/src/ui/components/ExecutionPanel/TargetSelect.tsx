@@ -1,6 +1,6 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import type { TargetMode, TargetStore } from '../../store/targetStore';
+
+import './execution-panel.css';
 
 interface TargetSelectProps {
   readonly targetStore: TargetStore;

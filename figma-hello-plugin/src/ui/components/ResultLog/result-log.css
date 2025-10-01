@@ -1,0 +1,209 @@
+.result-log {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.result-log__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.result-log__entries {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.result-log__empty {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.log-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 8px;
+  background: #f9fafb;
+}
+
+.log-entry__badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.log-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.log-badge--created {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.log-badge--warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.log-badge--error {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.log-entry__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.log-entry__intent {
+  font-weight: 700;
+}
+
+.log-entry__guardrail {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.log-entry__guardrail-empty {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.log-entry__slot-report {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.log-entry__slot-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.log-entry__slot-meta div {
+  background: #eef2ff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.log-entry__slot-meta dt {
+  font-size: 11px;
+  color: #4338ca;
+}
+
+.log-entry__slot-meta dd {
+  margin: 0;
+  font-weight: 600;
+  color: #1e1b4b;
+}
+
+.log-entry__slot-nodes {
+  background: #ecfeff;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.log-entry__slot-nodes header {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #0f172a;
+}
+
+.log-entry__slot-nodes ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: #0f172a;
+}
+
+.log-entry__metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.log-entry__metric-grid div {
+  background: #e0f2fe;
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.log-entry__metric-grid dt {
+  font-size: 11px;
+  color: #0369a1;
+}
+
+.log-entry__metric-grid dd {
+  margin: 0;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.log-entry__issues {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.log-entry__issues section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.log-entry__issues header {
+  font-size: 12px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.log-entry__issues ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.log-entry__issue {
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.log-entry__issue--error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.log-entry__issue--warning {
+  background: #fef3c7;
+  color: #92400e;
+}

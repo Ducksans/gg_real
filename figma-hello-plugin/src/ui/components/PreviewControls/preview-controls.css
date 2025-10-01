@@ -1,0 +1,169 @@
+.preview-controls__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.preview-controls__button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  color: #1f2937;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.preview-controls__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.preview-controls__meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.preview-controls__meta div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #ecfeff;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.preview-controls__meta dt {
+  font-size: 12px;
+  color: #0f172a;
+}
+
+.preview-controls__meta dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.preview-before-after {
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.preview-before-after__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.preview-before-after__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.preview-before-after__label {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.preview-before-after__value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.slot-highlight {
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.slot-highlight__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.slot-highlight__list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.slot-highlight__list li {
+  display: inline-flex;
+}
+
+.slot-highlight__list li {
+  display: inline-flex;
+}
+
+.slot-highlight__button {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: none;
+  background: #ede9fe;
+  font-size: 12px;
+  color: #4c1d95;
+  cursor: pointer;
+}
+
+.slot-highlight__empty {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+.preview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.preview-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview-card__meta {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.preview-card__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.preview-card__button {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.preview-card__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.preview-card__meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}

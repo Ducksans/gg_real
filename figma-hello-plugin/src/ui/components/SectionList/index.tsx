@@ -1,10 +1,10 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import { useMemo } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import type { SectionStore } from '../../store/sectionStore';
 import { SectionFilter } from './SectionFilter';
 import { SectionItem } from './SectionItem';
+
+import './section-list.css';
 
 interface SectionListProps {
   sectionStore: SectionStore;

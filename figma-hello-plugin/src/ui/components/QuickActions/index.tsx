@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import { useMemo } from 'preact/hooks';
 import type {
   ExecutionStore,
@@ -13,6 +11,8 @@ import { createQuickActionsService } from '../../services/quick-actions';
 import { SampleLoader } from './SampleLoader';
 import { HelloAction } from './HelloAction';
 import { CheckpointAction } from './CheckpointAction';
+
+import './quick-actions.css';
 
 interface QuickActionsProps {
   guardrailStore: GuardrailStore;
@@ -69,21 +69,18 @@ export const QuickActions = ({
   };
 
   return (
-    <section class="panel">
-      <header class="panel__header">
-        <h2>빠른 실행</h2>
+    <section class="card quick-actions">
+      <header class="quick-actions__header">
+        <span>빠른 실행</span>
       </header>
-      <div class="panel__content quick-actions">
+      <div class="quick-actions__grid">
         <SampleLoader onLoadSample={service.requestSample} />
         <HelloAction onCreateHello={service.createHello} />
         <CheckpointAction
           onCreateCheckpoint={handleCheckpoint}
           hasExecutionLog={hasExecutionRecord}
         />
-        <button
-          class="quick-actions__button quick-actions__button--secondary"
-          onClick={service.closePlugin}
-        >
+        <button class="quick-actions__button" onClick={service.closePlugin}>
           플러그인 닫기
         </button>
       </div>

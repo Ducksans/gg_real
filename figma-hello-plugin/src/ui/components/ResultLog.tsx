@@ -1,6 +1,6 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import type { LogEntry, LogStore } from '../store';
+
+import './ResultLog/result-log.css';
 
 interface ResultLogProps {
   logStore: LogStore;
@@ -16,23 +16,21 @@ export const ResultLog = ({ logStore }: ResultLogProps) => {
 
   if (entries.length === 0) {
     return (
-      <section class="panel">
-        <header class="panel__header">
-          <h2>Result Log</h2>
+      <section class="card result-log">
+        <header class="result-log__header">
+          <span>Result Log</span>
         </header>
-        <div class="panel__content">
-          <p class="panel__empty">아직 실행 기록이 없습니다.</p>
-        </div>
+        <p class="result-log__empty">아직 실행 기록이 없습니다.</p>
       </section>
     );
   }
 
   return (
-    <section class="panel">
-      <header class="panel__header">
-        <h2>Result Log</h2>
+    <section class="card result-log">
+      <header class="result-log__header">
+        <span>Result Log</span>
       </header>
-      <div class="panel__content panel__content--scroll">
+      <div class="result-log__entries">
         {entries.map((entry) => (
           <article key={entry.id} class="log-entry">
             <header class="log-entry__header">
@@ -44,6 +42,7 @@ export const ResultLog = ({ logStore }: ResultLogProps) => {
             <p class="log-entry__summary">{entry.summary}</p>
             <SlotReport entry={entry} />
             <GuardrailDetails entry={entry} />
+            <DebugCapture entry={entry} />
           </article>
         ))}
       </div>
@@ -176,5 +175,56 @@ const SlotReport = ({ entry }: SlotReportProps) => {
         </div>
       ) : null}
     </div>
+  );
+};
+
+interface DebugCaptureProps {
+  entry: LogEntry;
+}
+
+const DebugCapture = ({ entry }: DebugCaptureProps) => {
+  const debug = entry.debug;
+  if (!debug || (!debug.captureId && !debug.rawPreview)) {
+    return null;
+  }
+
+  const commandId = debug.captureId ?? 'dry-run-sample';
+  const command = `pnpm --filter gg-figma-plugin save:runtime-sample --id ${commandId}`;
+
+  return (
+    <section class="log-entry__debug">
+      <header class="log-entry__debug-header">
+        <h3>디버그 캡처</h3>
+        {debug.captureId ? <code>{debug.captureId}</code> : null}
+      </header>
+      <dl class="log-entry__debug-meta">
+        <div>
+          <dt>길이</dt>
+          <dd>{debug.rawLength ?? 0}</dd>
+        </div>
+        <div>
+          <dt>정규화</dt>
+          <dd>{debug.sanitized ? '적용' : '원본 그대로'}</dd>
+        </div>
+        <div>
+          <dt>BOM 제거</dt>
+          <dd>{debug.removedBom ? '예' : '아니오'}</dd>
+        </div>
+        <div>
+          <dt>제어문자 제거</dt>
+          <dd>{debug.controlCharsRemoved ? '예' : '아니오'}</dd>
+        </div>
+      </dl>
+      {debug.rawPreview ? (
+        <div class="log-entry__debug-preview">
+          <header>앞부분 미리보기</header>
+          <pre>{debug.rawPreview}</pre>
+        </div>
+      ) : null}
+      <footer class="log-entry__debug-footer">
+        <span>샘플 저장 명령</span>
+        <code>{command}</code>
+      </footer>
+    </section>
   );
 };
