@@ -38,7 +38,7 @@ export const createSectionStore = (): SectionStore => {
         uniqueSections.some((section) => section.id === id),
       );
       const selectableSections = uniqueSections.filter((section) => section.guardrail !== 'fail');
-      const defaultSelection = selectableSections.map((section) => section.id);
+      const defaultSelection: string[] = [];
       state.value = {
         availableSections: uniqueSections,
         selectedSectionIds:

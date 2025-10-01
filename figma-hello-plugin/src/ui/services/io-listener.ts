@@ -120,7 +120,6 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
       }
       const sections = getAvailableSections();
       sectionStore.setAvailableSections(sections);
-      sectionStore.selectSections(sections.map((section) => section.id));
       if (Array.isArray(message.payload.pages)) {
         registerSurfacePages(message.payload.pages);
         targetStore.setPages(
@@ -205,14 +204,14 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
       previewStore.setPreview({
         frameName: frameName ?? targetFrameName,
         page,
-        sections: sections ?? [],
+        sections: errorIssues.length ? [] : (sections ?? []),
         lastIntent: intent,
         slotId: normalizedSlotReport.slotId,
         createdCount: normalizedSlotReport.createdNodeIds.length,
         createdNodeNames: normalizedSlotReport.createdNodeNames,
       });
 
-      if (sections && sections.length) {
+      if (!errorIssues.length && sections && sections.length) {
         sectionStore.selectSections(sections);
       }
 

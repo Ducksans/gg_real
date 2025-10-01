@@ -200,11 +200,11 @@ export async function runSchemaDocument(
       summary: doc.meta?.title ?? 'Guardrail 검증 실패',
       page: doc.target?.page ?? options.targetPage,
       frameName: doc.target?.frameName,
-      sections: doc.meta?.section ? [doc.meta.section] : [],
+      sections: [],
       slotId,
       slotReport: {
         slotId,
-        executedSections: doc.meta?.section ? [doc.meta.section] : [],
+        executedSections: [],
         warnings: [],
         createdNodes: [],
       },

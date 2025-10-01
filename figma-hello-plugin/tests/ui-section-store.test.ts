@@ -17,7 +17,7 @@ describe('sectionStore guardrail handling', () => {
         : undefined,
   });
 
-  it('excludes guardrail FAIL sections from default selection while keeping WARN', () => {
+  it('starts with no selection while exposing available sections', () => {
     const store = createSectionStore();
     store.setAvailableSections([
       buildSection('safe'),
@@ -25,7 +25,12 @@ describe('sectionStore guardrail handling', () => {
       buildSection('fail', 'fail'),
     ]);
 
-    expect(store.state.value.selectedSectionIds).toEqual(['safe', 'warn']);
+    expect(store.state.value.availableSections.map((section) => section.id)).toEqual([
+      'safe',
+      'warn',
+      'fail',
+    ]);
+    expect(store.state.value.selectedSectionIds).toEqual([]);
   });
 
   it('allows manual opt-in for FAIL sections when the user toggles them explicitly', () => {
