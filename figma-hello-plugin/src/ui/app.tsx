@@ -58,7 +58,6 @@ const Shell = ({
     routeStore.load();
     const sections = getAvailableSections();
     sectionStore.setAvailableSections(sections);
-    sectionStore.selectSections(sections.map((section) => section.id));
   }, []);
   const { documents, selectionCount, hasSelection, run } = useExecutionModel({
     executionStore,
