@@ -3,7 +3,7 @@ file: admin/plan/legacy/figmaplugin-refactor.md
 title: Figma Plugin 컴포넌트화 리팩터링 계획
 owner: duksan
 created: 2025-09-30 06:10 UTC / 2025-09-30 15:10 KST
-updated: 2025-10-01 16:11 UTC / 2025-10-02 01:11 KST
+updated: 2025-10-01 16:15 UTC / 2025-10-02 01:15 KST
 status: draft
 tags: [plan, figma, refactor]
 schemaVersion: 1
@@ -244,6 +244,7 @@ code_refs:
 4. **테스트 & 문서화**
    - UI 단위 테스트: DTO 변환이 문자열 배열을 반환하는지, 유효성 검증이 실패 시 중단되는지 확인.
    - 런타임 테스트: 객체 배열 등 잘못된 입력을 주면 친절한 오류를 던지고 실행이 중단되는지 검사.
+   - Section Store 테스트: Guardrail FAIL 섹션이 기본 선택에서 제외되고, 사용자가 명시적으로 토글하면 포함되는지 `tests/ui-section-store.test.ts`로 검증.
    - `execution-contract.md` 문서를 신설해 DTO 스펙, 검증 규칙, 예시 페이로드를 문서화한다.
 
 5. **수용 기준**
