@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 import { PreviewControls, QuickActions, ResultLog } from './components';
 import { RouteTree } from './components/RouteTree';
 import { SchemaEditor } from './components/SchemaEditor';
@@ -14,8 +14,8 @@ import type {
   SectionStore,
   TargetStore,
 } from './store';
-import { createExecutionService } from './services';
-import { buildSchemaDocuments, getAvailableSections } from './services/schema-builder';
+import { getAvailableSections } from './services/schema-builder';
+import { useExecutionModel } from './hooks/useExecutionModel';
 
 import './styles/tokens.css';
 import './styles/base-layout.css';
@@ -52,10 +52,7 @@ const Shell = ({
     targetStore,
   });
 
-  const executionService = useMemo(() => createExecutionService(executionStore), [executionStore]);
   const { isRunning, lastIntent } = executionStore.state.value;
-  const { selectedSectionIds } = sectionStore.state.value;
-  const targetState = targetStore.state.value;
 
   useEffect(() => {
     routeStore.load();
@@ -63,64 +60,12 @@ const Shell = ({
     sectionStore.setAvailableSections(sections);
     sectionStore.selectSections(sections.map((section) => section.id));
   }, []);
-
-  const documents = useMemo(() => buildSchemaDocuments(selectedSectionIds), [selectedSectionIds]);
-
-  const documentsWithTarget = useMemo(() => {
-    if (!documents.length) return documents;
-    const overridePage = targetState.selectedPage;
-    const overrideMode = targetState.mode;
-    const overrideFrame = targetState.frameName?.trim();
-
-    return documents.map((document) => {
-      const target = {
-        ...(document.target ?? {}),
-      } as NonNullable<typeof document.target>;
-      if (overridePage) {
-        target.page = overridePage;
-      }
-      if (overrideFrame) {
-        target.frameName = overrideFrame;
-      }
-      if (overrideMode) {
-        target.mode = overrideMode;
-      }
-      return {
-        ...document,
-        target,
-      };
-    });
-  }, [documents, targetState.frameName, targetState.mode, targetState.selectedPage]);
-
-  const hasSelection = selectedSectionIds.length > 0 && documents.length > 0;
-
-  const handleRun = (intent: 'dry-run' | 'apply') => {
-    if (!hasSelection) {
-      console.warn('[plugin-ui] 실행할 섹션이 없습니다.');
-      return;
-    }
-    guardrailStore.reset();
-    const payload: Record<string, unknown> = {
-      documents: documentsWithTarget,
-      sections: selectedSectionIds,
-    };
-    if (targetState.selectedPage) {
-      payload.targetPage = targetState.selectedPage;
-    }
-    if (targetState.mode) {
-      payload.targetMode = targetState.mode;
-    }
-    if (targetState.frameName?.trim()) {
-      payload.targetFrameName = targetState.frameName.trim();
-    }
-    if (intent === 'dry-run') {
-      executionService.runDryRun(payload);
-    } else {
-      executionService.runApply(payload);
-    }
-  };
-
-  const selectionCount = selectedSectionIds.length;
+  const { documents, selectionCount, hasSelection, run } = useExecutionModel({
+    executionStore,
+    guardrailStore,
+    sectionStore,
+    targetStore,
+  });
 
   return (
     <div class="plugin-root">
@@ -135,8 +80,8 @@ const Shell = ({
                 isRunning={isRunning}
                 lastIntent={lastIntent}
                 hasSelection={hasSelection}
-                onRun={handleRun}
                 selectionCount={selectionCount}
+                onRun={run}
                 targetStore={targetStore}
               />
               <GuardrailSummary guardrailStore={guardrailStore} />

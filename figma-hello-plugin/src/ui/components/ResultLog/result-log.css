@@ -31,6 +31,12 @@
   background: #f9fafb;
 }
 
+.log-entry__summary {
+  margin: 0;
+  font-size: 13px;
+  color: #111827;
+}
+
 .log-entry__badge-row {
   display: flex;
   flex-wrap: wrap;
@@ -206,4 +212,60 @@
 .log-entry__issue--warning {
   background: #fef3c7;
   color: #92400e;
+}
+
+.log-entry__debug {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.log-entry__debug header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.log-entry__debug-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.log-entry__debug-meta dt {
+  font-size: 12px;
+  color: #475569;
+}
+
+.log-entry__debug-meta dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.log-entry__debug-preview {
+  background: #111827;
+  color: #f8fafc;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.log-entry__debug-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.log-entry__debug-footer code {
+  background: #111827;
+  color: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
 }
