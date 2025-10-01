@@ -3,7 +3,7 @@ file: admin/plan/figmaplugin-roadmap.md
 title: Figma Plugin 실행 로드맵 & 진행 기록
 owner: duksan
 created: 2025-09-27 06:10 UTC / 2025-09-27 15:10 KST
-updated: 2025-10-01 12:43 UTC / 2025-10-01 21:43 KST
+updated: 2025-10-01 13:08 UTC / 2025-10-01 22:08 KST
 status: in_progress
 tags: [plan, figma, roadmap]
 schemaVersion: 1
@@ -30,16 +30,16 @@ code_refs: []
 
 # 3. 실행 TODO & 진행 기록
 
-| ID         | 범주                 | 상세 설명                                                                  | 선행       | 상태 | 시작 (UTC / KST)                    | 종료 (UTC / KST)                    | 비고                                                                                                                           |
-| ---------- | -------------------- | -------------------------------------------------------------------------- | ---------- | ---- | ----------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| TODO-P1-01 | Manifest             | Validator/Normalizer/Emitter 분리, AJV 스키마 업데이트                     | P0         | 완료 | 2025-09-30 18:10 / 2025-10-01 03:10 | 2025-10-01 06:24 / 2025-10-01 15:24 | 완료 – loader/normalizer/validator 분리, AJV 스키마 적용                                                                       |
-| TODO-P1-02 | Runtime              | SurfaceConfig/SlotManager/Executor/Guardrails 모듈화 및 단위 테스트        | TODO-P1-01 | 완료 | 2025-10-01 04:30 / 2025-10-01 13:30 | 2025-10-01 06:41 / 2025-10-01 15:41 | 완료 – surface/guardrail/executor 메타 테스트 추가                                                                             |
-| TODO-P1-03 | 증분 갱신            | `pluginData` 표준키 적용, diff-engine 개선, ResultLog/Checkpoint diff 포함 | TODO-P1-02 | 대기 | —                                   | —                                   | 대기 – diff-engine 개선 착수 전                                                                                                |
-| TODO-P2-01 | RouteTree UX         | 계층별 펼침/체크, Manifest 라벨/카운트 연동, 선택 스냅샷                   | TODO-P1-02 | 진행 | 2025-10-01 04:45 / 2025-10-01 13:45 | —                                   | 진행 중 – Surface 탭(페이지 동기화)·Route/Slot 일괄 선택 정비, 선택 스냅샷 저장·복원 및 테스트 작성 완료, 스크롤 컨테이너 추가 |
-| TODO-P2-02 | ExecutionControls    | Dry-run/Apply 활성화 조건, TargetSelect 동기화, 실패 메시지                | TODO-P1-02 | 진행 | 2025-10-01 04:50 / 2025-10-01 13:50 | —                                   | 진행 중 – 활성화 조건 검증                                                                                                     |
-| TODO-P2-03 | QuickActions/Preview | 선행 조건 검증, 관찰성 메타 기록, 실패 핸들링                              | TODO-P1-02 | 대기 | —                                   | —                                   | 대기 – QuickActions 선행 조건 정의 필요                                                                                        |
-| TODO-P2-04 | ResultLog/Guardrail  | Slot diff, payload 해시, Undo/Redo 20개 유지                               | TODO-P1-03 | 대기 | —                                   | —                                   | 대기 – diff-engine 개선 후 착수                                                                                                |
-| TODO-P3-01 | 문서/테스트          | 공통 규칙 링크 점검, CI에 UI/Runtime smoke 테스트 추가                     | P2 완료    | 대기 | —                                   | —                                   | 대기 – P2 종료 후 실행                                                                                                         |
+| ID         | 범주                 | 상세 설명                                                                             | 선행       | 상태 | 시작 (UTC / KST)                    | 종료 (UTC / KST)                    | 비고                                                                                                            |
+| ---------- | -------------------- | ------------------------------------------------------------------------------------- | ---------- | ---- | ----------------------------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| TODO-P1-01 | Manifest             | Validator/Normalizer/Emitter 분리, AJV 스키마 업데이트                                | P0         | 완료 | 2025-09-30 18:10 / 2025-10-01 03:10 | 2025-10-01 06:24 / 2025-10-01 15:24 | 완료 – loader/normalizer/validator 분리, AJV 스키마 적용                                                        |
+| TODO-P1-02 | Runtime              | SurfaceConfig/SlotManager/Executor/Guardrails 모듈화 및 단위 테스트                   | TODO-P1-01 | 완료 | 2025-10-01 04:30 / 2025-10-01 13:30 | 2025-10-01 06:41 / 2025-10-01 15:41 | 완료 – surface/guardrail/executor 메타 테스트 추가                                                              |
+| TODO-P1-03 | 증분 갱신            | `pluginData` 표준키 적용, diff-engine 개선, ResultLog/Checkpoint diff 포함            | TODO-P1-02 | 대기 | —                                   | —                                   | 대기 – diff-engine 개선 착수 전                                                                                 |
+| TODO-P2-01 | RouteTree UX         | 스타일 모듈화·레이아웃 수선, 계층별 펼침/체크, Manifest 라벨/카운트 연동, 선택 스냅샷 | TODO-P1-02 | 진행 | 2025-10-01 04:45 / 2025-10-01 13:45 | —                                   | 진행 중 – Base/Component 스타일 분리 착수, Route/Slot 일괄 선택 정비, 선택 스냅샷 저장·복원 및 테스트 작성 완료 |
+| TODO-P2-02 | ExecutionControls    | Dry-run/Apply 활성화 조건, TargetSelect 동기화, 실패 메시지                           | TODO-P1-02 | 진행 | 2025-10-01 04:50 / 2025-10-01 13:50 | —                                   | 진행 중 – 활성화 조건 검증                                                                                      |
+| TODO-P2-03 | QuickActions/Preview | 선행 조건 검증, 관찰성 메타 기록, 실패 핸들링                                         | TODO-P1-02 | 대기 | —                                   | —                                   | 대기 – QuickActions 선행 조건 정의 필요                                                                         |
+| TODO-P2-04 | ResultLog/Guardrail  | Slot diff, payload 해시, Undo/Redo 20개 유지                                          | TODO-P1-03 | 대기 | —                                   | —                                   | 대기 – diff-engine 개선 후 착수                                                                                 |
+| TODO-P3-01 | 문서/테스트          | 공통 규칙 링크 점검, CI에 UI/Runtime smoke 테스트 추가                                | P2 완료    | 대기 | —                                   | —                                   | 대기 – P2 종료 후 실행                                                                                          |
 
 ## 실행 루프 복원 (Dry Run → Preview → Apply)
 
