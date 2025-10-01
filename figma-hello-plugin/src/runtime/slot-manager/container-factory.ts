@@ -2,6 +2,7 @@ import type { SurfaceConfig } from '../surface-config';
 import type { SchemaDocument } from '../../schema';
 
 import { calculateNextY, ensureAutoLayout } from './transformers/auto-layout';
+import { ensurePreviewTemplate } from './preview-template';
 
 export const findTargetPage = (pageName: string): PageNode => {
   const match = figma.root.findOne(
@@ -32,12 +33,12 @@ const PREVIEW_FRAME_FILL = {
   },
 };
 
-export const prepareTargetFrame = (
+export const prepareTargetFrame = async (
   page: PageNode,
   target: Required<SchemaDocument['target']>,
   surface: SurfaceConfig,
   intent?: 'dry-run' | 'apply',
-): FrameNode => {
+): Promise<FrameNode> => {
   let frame = page.findOne(
     (node) => node.type === 'FRAME' && node.name === target.frameName,
   ) as FrameNode | null;
@@ -79,6 +80,10 @@ export const prepareTargetFrame = (
       frame.y = PREVIEW_FRAME_POSITION.y;
       frame.fills = [PREVIEW_FRAME_FILL];
     }
+  }
+
+  if (previewFrame) {
+    await ensurePreviewTemplate(frame, intent);
   }
 
   return frame;

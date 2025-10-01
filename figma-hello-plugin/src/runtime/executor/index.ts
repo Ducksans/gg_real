@@ -19,6 +19,8 @@ import {
   resolveSlotContainer,
   syncSlotChildren,
   buildSlotReport,
+  getPreviewCanvas,
+  updatePreviewSummary,
 } from '../slot-manager';
 import { evaluateGuardrails } from '../guardrails';
 import { normalizeSlotName, PLUGINDATA_KEYS } from '../utils';
@@ -247,13 +249,20 @@ export async function runSchemaDocument(
   }
 
   const baseContainer =
-    containerOverride ?? prepareTargetFrame(page, normalized, surface, context.intent);
+    containerOverride ?? (await prepareTargetFrame(page, normalized, surface, context.intent));
+
+  const previewRoot = context.intent === 'dry-run' ? getPreviewCanvas(baseContainer) : null;
+
   if (!containerOverride) {
-    applySurfaceLayout(baseContainer, surface);
+    if (previewRoot) {
+      applySurfaceLayout(previewRoot, surface);
+    } else {
+      applySurfaceLayout(baseContainer, surface);
+    }
   }
 
   const slotId = slotOverride ?? normalizeSlotName(doc.meta?.slot);
-  const slotTarget = resolveSlotContainer(baseContainer, slotId, surface);
+  const slotTarget = resolveSlotContainer(previewRoot ?? baseContainer, slotId, surface);
 
   const createdNodes = await syncSlotChildren(
     slotTarget,
@@ -270,6 +279,19 @@ export async function runSchemaDocument(
   );
 
   const slotReport = buildSlotReport(createdNodes, doc.meta?.section ? [doc.meta.section] : [], []);
+
+  if (isPreview) {
+    await updatePreviewSummary(baseContainer, {
+      timestamp: Date.now(),
+      sectionLabel: doc.meta?.title ?? doc.meta?.section ?? '선택된 섹션',
+      slotId,
+      pageName: normalized.page,
+      frameName: normalized.frameName,
+      createdCount: createdNodes.length,
+      warningMessages: guard.warnings,
+      errorMessages: guard.errors,
+    });
+  }
 
   if (!options?.intent || options.intent !== 'dry-run') {
     figma.currentPage = page;
