@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 export { createExecutionStore } from './executionStore';
 export { createLogStore } from './logStore';
 export { createGuardrailStore } from './guardrailStore';
@@ -8,7 +6,7 @@ export { createSectionStore } from './sectionStore';
 export { createTargetStore } from './targetStore';
 export { createRouteStore } from './routeStore';
 export type { ExecutionStore } from './executionStore';
-export type { LogStore, LogEntry, LogGuardrailSnapshot } from './logStore';
+export type { LogStore, LogEntry, LogGuardrailSnapshot, LogDebugSnapshot } from './logStore';
 export type {
   GuardrailStore,
   GuardrailState,

@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import type { SectionInfo } from '../../services/schema-builder';
 
 export interface SectionItemProps {
@@ -21,6 +19,12 @@ export const SectionItem = ({ section, selected, onToggle }: SectionItemProps) =
         <strong>{section.label}</strong>
         {section.slotLabel && <span class="section-item__slot">{section.slotLabel}</span>}
         {section.description && <span class="section-item__desc">{section.description}</span>}
+        {section.guardrail && section.guardrail !== 'normal' && (
+          <span class={`section-item__guardrail section-item__guardrail--${section.guardrail}`}>
+            {section.guardrail === 'fail' ? 'FAIL' : 'WARN'} · 노드{' '}
+            {section.guardrailMetrics?.nodeCount ?? '–'}
+          </span>
+        )}
       </span>
     </label>
   </li>

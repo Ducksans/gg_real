@@ -37,6 +37,8 @@ export const createSectionStore = (): SectionStore => {
       const currentSelection = state.value.selectedSectionIds.filter((id) =>
         uniqueSections.some((section) => section.id === id),
       );
+      const selectableSections = uniqueSections.filter((section) => section.guardrail !== 'fail');
+      const defaultSelection = selectableSections.map((section) => section.id);
       state.value = {
         availableSections: uniqueSections,
         selectedSectionIds:
@@ -44,7 +46,7 @@ export const createSectionStore = (): SectionStore => {
             ? []
             : currentSelection.length
               ? currentSelection
-              : uniqueSections.map((section) => section.id),
+              : defaultSelection,
       };
     },
     selectSections(sectionIds) {

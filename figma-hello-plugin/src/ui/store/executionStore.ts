@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import { signal, type Signal } from '@preact/signals';
 
 export interface ExecutionState {
@@ -29,6 +27,7 @@ export interface ExecutionResult {
   };
   readonly slotReport?: ExecutionSlotReport;
   readonly timestamp: number;
+  readonly debug?: ExecutionDebugInfo;
 }
 
 export interface ExecutionSlotReport {
@@ -37,6 +36,16 @@ export interface ExecutionSlotReport {
   readonly createdNodeNames: string[];
   readonly warnings: string[];
   readonly executedSections: string[];
+}
+
+export interface ExecutionDebugInfo {
+  readonly captureId?: string;
+  readonly stage?: string;
+  readonly rawPreview?: string;
+  readonly rawLength?: number;
+  readonly sanitized?: boolean;
+  readonly removedBom?: boolean;
+  readonly controlCharsRemoved?: boolean;
 }
 
 export const createExecutionStore = (): ExecutionStore => {

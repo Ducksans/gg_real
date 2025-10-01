@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import type { SchemaDocument } from '../../../schema';
 
 interface ReadonlyPanelProps {

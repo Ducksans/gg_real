@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import { signal, type Signal } from '@preact/signals';
 
 export interface PreviewState {

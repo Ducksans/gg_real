@@ -1,4 +1,4 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
+// doc_refs: ["admin/plan/figmapluginmake.md"]
 
 import { build } from 'esbuild';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -43,7 +43,7 @@ const distDir = path.join(rootDir, 'dist');
     }
 
     const html = `<!doctype html>
-<!-- doc_refs: ["admin/plan/figmaplugin-refactor.md"] -->
+<!-- doc_refs: ["admin/plan/figmapluginmake.md"] -->
 <html lang="ko">
   <head>
     <meta charset="utf-8" />

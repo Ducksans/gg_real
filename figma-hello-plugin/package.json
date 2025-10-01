@@ -11,10 +11,13 @@
     "watch": "npm run build:main -- --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --config vitest.config.ts",
-    "test:watch": "vitest watch --config vitest.config.ts"
+    "test:watch": "vitest watch --config vitest.config.ts",
+    "save:runtime-sample": "pnpm exec tsx scripts/runtime/save-sample.ts"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.84.0",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "esbuild": "^0.23.0",
     "tsx": "^4.19.2",
     "typescript": "^5.4.0",

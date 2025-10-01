@@ -1,6 +1,11 @@
 import { archetypeManifest } from './lib/archetype-manifest';
 import { notifyError } from './lib/notifier';
 import { runHelloFrame, runSchemaBatch, runSchemaFromString } from './runtime';
+import {
+  isExecutionPayload,
+  sanitizeExecutionPayload,
+  type ExecutionPayload,
+} from './shared/execution-contract';
 import { normalizeSlotName, PLUGINDATA_KEYS } from './runtime/utils';
 import { glossaryLayoutSample } from './samples/glossary';
 
@@ -13,7 +18,7 @@ figma.on('run', () => {
     type: 'init',
     payload: {
       sample: JSON.stringify(createSampleForCurrentPage(), null, 2),
-      pages: listPageNames(),
+      pages: listPageInfo(),
       currentPage: figma.currentPage.name,
       manifest: archetypeManifest,
     },
@@ -25,18 +30,29 @@ figma.on('run', () => {
     try {
       switch (message.type) {
         case 'execute-schema': {
-          const payload = message.payload;
-          if (payload && typeof payload === 'object' && Array.isArray(payload.documents)) {
-            await runSchemaBatch(payload.documents, {
-              targetPage: message.targetPage ?? payload.targetPage,
-              targetMode: message.targetMode ?? payload.targetMode,
-              intent: message.intent ?? payload.intent,
+          const payload = message.payload as ExecutionPayload | undefined;
+          if (!isExecutionPayload(payload)) {
+            notifyError(
+              new Error('Execution payload 형식이 올바르지 않습니다.'),
+              '실행 페이로드 오류',
+            );
+            break;
+          }
+
+          try {
+            const sanitized = sanitizeExecutionPayload(payload);
+
+            await runSchemaBatch(sanitized.documents, {
+              targetPage: sanitized.targetPage ?? message.targetPage,
+              targetMode: sanitized.targetMode ?? message.targetMode,
+              intent: sanitized.intent,
             });
-          } else {
-            await runSchemaFromString((payload as string) ?? '', {
-              targetPage: message.targetPage,
-              targetMode: message.targetMode ?? payload?.targetMode,
-            });
+          } catch (error) {
+            const messageText =
+              error instanceof Error
+                ? error.message
+                : 'Execution payload 처리 중 오류가 발생했습니다.';
+            notifyError(error, messageText);
           }
           break;
         }
@@ -45,7 +61,7 @@ figma.on('run', () => {
             type: 'load-sample',
             payload: {
               sample: JSON.stringify(createSampleForCurrentPage(), null, 2),
-              pages: listPageNames(),
+              pages: listPageInfo(),
               currentPage: figma.currentPage.name,
               manifest: archetypeManifest,
             },
@@ -93,10 +109,42 @@ function createSampleForCurrentPage() {
   return cloned;
 }
 
-function listPageNames() {
+interface PageInfo {
+  id: string;
+  name: string;
+  surfaceId: string;
+  label: string;
+}
+
+const surfaceNameMap: Record<string, { surfaceId: string; label: string }> = {
+  admin: { surfaceId: 'admin', label: 'Admin' },
+  user: { surfaceId: 'plugin', label: 'User' },
+  plugin: { surfaceId: 'plugin', label: 'User' },
+  common: { surfaceId: 'shared', label: 'Common' },
+  shared: { surfaceId: 'shared', label: 'Common' },
+};
+
+function resolveSurfaceId(pageName: string) {
+  const normalized = pageName.toLowerCase();
+  const entry = Object.entries(surfaceNameMap).find(([key]) => normalized.includes(key));
+  if (entry) {
+    return { surfaceId: entry[1].surfaceId, label: entry[1].label };
+  }
+  return { label: pageName, surfaceId: normalized.replace(/\s+/g, '-') || 'unknown' };
+}
+
+function listPageInfo(): PageInfo[] {
   return figma.root.children
     .filter((node): node is PageNode => node.type === 'PAGE')
-    .map((page) => page.name);
+    .map((page) => {
+      const mapping = resolveSurfaceId(page.name);
+      return {
+        id: page.id,
+        name: page.name,
+        surfaceId: mapping.surfaceId,
+        label: mapping.label || page.name,
+      } satisfies PageInfo;
+    });
 }
 
 function focusFrameByName(frameName?: string) {

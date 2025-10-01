@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import type { PreviewStore } from '../store/previewStore';
 
 const postMessage = (type: string, payload: Record<string, unknown>) => {

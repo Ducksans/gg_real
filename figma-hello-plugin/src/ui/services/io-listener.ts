@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import { useEffect } from 'preact/hooks';
 import type { ExecutionStore } from '../store/executionStore';
 import type { GuardrailIssue, GuardrailMetrics, GuardrailStore } from '../store/guardrailStore';
@@ -8,7 +6,11 @@ import type { PreviewStore } from '../store/previewStore';
 import type { RouteStore } from '../store/routeStore';
 import type { SectionStore } from '../store/sectionStore';
 import type { TargetStore } from '../store/targetStore';
-import { getAvailableSections, registerArchetypeManifest } from './schema-builder';
+import {
+  getAvailableSections,
+  registerArchetypeManifest,
+  registerSurfacePages,
+} from './schema-builder';
 
 interface ListenerDeps {
   executionStore: ExecutionStore;
@@ -24,9 +26,26 @@ interface RuntimeGuardrailPayload {
   metrics?: GuardrailMetrics;
 }
 
+interface RuntimeDebugPayload {
+  captureId?: string;
+  stage?: 'parse';
+  rawPreview?: string;
+  rawLength?: number;
+  sanitized?: boolean;
+  removedBom?: boolean;
+  controlCharsRemoved?: boolean;
+}
+
+interface InitPageInfoPayload {
+  id: string;
+  name: string;
+  surfaceId: string;
+  label: string;
+}
+
 interface InitPayload {
   sample?: string;
-  pages?: string[];
+  pages?: InitPageInfoPayload[];
   currentPage?: string;
   manifest?: unknown;
 }
@@ -53,6 +72,7 @@ interface RuntimeResultPayload {
     executedSections?: string[];
   };
   targetFrameName?: string;
+  debug?: RuntimeDebugPayload;
 }
 
 type RuntimeMessage =
@@ -102,7 +122,11 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
       sectionStore.setAvailableSections(sections);
       sectionStore.selectSections(sections.map((section) => section.id));
       if (Array.isArray(message.payload.pages)) {
-        targetStore.setPages(message.payload.pages, message.payload.currentPage);
+        registerSurfacePages(message.payload.pages);
+        targetStore.setPages(
+          message.payload.pages.map((page) => page.name),
+          message.payload.currentPage,
+        );
       }
       previewStore.reset();
       previewStore.setPreview({ page: message.payload.currentPage, sections: [] });
@@ -123,6 +147,7 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
         slotReport,
         slotId,
         targetFrameName,
+        debug,
       } = message.payload;
 
       const summaryText = summary ?? `${intent === 'apply' ? 'Apply' : 'Dry-run'} 완료`;
@@ -157,6 +182,17 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
           ...normalizedSlotReport,
           count: normalizedSlotReport.createdNodeIds.length,
         },
+        debug: debug
+          ? {
+              captureId: debug.captureId,
+              stage: debug.stage,
+              rawPreview: debug.rawPreview,
+              rawLength: debug.rawLength,
+              sanitized: debug.sanitized,
+              removedBom: debug.removedBom,
+              controlCharsRemoved: debug.controlCharsRemoved,
+            }
+          : undefined,
       });
 
       guardrailStore.setSnapshot({
@@ -193,6 +229,17 @@ const handleRuntimeMessage = (message: RuntimeMessage, deps: ListenerDeps) => {
         },
         slotReport: normalizedSlotReport,
         timestamp: Date.now(),
+        debug: debug
+          ? {
+              captureId: debug.captureId,
+              stage: debug.stage,
+              rawPreview: debug.rawPreview,
+              rawLength: debug.rawLength,
+              sanitized: debug.sanitized,
+              removedBom: debug.removedBom,
+              controlCharsRemoved: debug.controlCharsRemoved,
+            }
+          : undefined,
       });
       break;
     }

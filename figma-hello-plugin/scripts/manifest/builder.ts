@@ -1,6 +1,9 @@
+// doc_refs: ["admin/plan/figmapluginmake.md"]
+
+import { normalizePageSections, normalizeSurfaces } from './normalizer';
+import { loadSectionFiles, loadSurfaceFiles } from './loader';
 import { normalizePadding, titleCase } from './utils';
-import { loadPageSections, loadSurfaceDefinitions } from './loader';
-import type { RawSurfaceDefinition, SectionFile } from './types';
+import type { PageSectionsResult, RawSurfaceDefinition, SectionFile, SurfaceMap } from './types';
 
 interface SlotSummary {
   label: string;
@@ -140,8 +143,10 @@ const toSectionSummary = (section: SectionFile) => ({
 });
 
 export const buildManifest = (): ArchetypeManifest => {
-  const surfaceDefinitions = loadSurfaceDefinitions();
-  const pages = loadPageSections();
+  const surfaceEntries = loadSurfaceFiles();
+  const sectionEntries = loadSectionFiles();
+  const surfaceDefinitions: SurfaceMap = normalizeSurfaces(surfaceEntries);
+  const pages: PageSectionsResult[] = normalizePageSections(sectionEntries);
 
   const manifest: ArchetypeManifest = {
     generatedAt: new Date().toISOString(),

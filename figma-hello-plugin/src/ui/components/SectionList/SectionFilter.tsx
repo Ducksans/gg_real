@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import { useSignal } from '@preact/signals';
 import { useEffect } from 'preact/hooks';
 

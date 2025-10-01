@@ -113,8 +113,8 @@ describe('ui scaffolding', () => {
 
   it('exposes key UI components', async () => {
     const module = await import('@ui/components');
-    const { ExecutionPanel, ResultLog } = module as Record<string, unknown>;
-    expect(typeof ExecutionPanel).toBe('function');
+    const { ExecutionControls, ResultLog } = module as Record<string, unknown>;
+    expect(typeof ExecutionControls).toBe('function');
     expect(typeof ResultLog).toBe('function');
   });
 });

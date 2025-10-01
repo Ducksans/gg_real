@@ -1,4 +1,4 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
+// doc_refs: ["admin/plan/figmapluginmake.md"]
 
 import type { ExecutionStore } from '../store/executionStore';
 import type { GuardrailStore } from '../store/guardrailStore';

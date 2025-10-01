@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 interface CheckpointActionProps {
   readonly onCreateCheckpoint: () => void;
   readonly hasExecutionLog: boolean;

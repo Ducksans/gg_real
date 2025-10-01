@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import { render } from 'preact';
 import { App } from './app';
 import {

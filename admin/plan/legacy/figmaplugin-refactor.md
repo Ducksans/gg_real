@@ -3,13 +3,18 @@ file: admin/plan/legacy/figmaplugin-refactor.md
 title: Figma Plugin 컴포넌트화 리팩터링 계획
 owner: duksan
 created: 2025-09-30 06:10 UTC / 2025-09-30 15:10 KST
-updated: 2025-10-01 13:08 UTC / 2025-10-01 22:08 KST
+updated: 2025-10-01 16:11 UTC / 2025-10-02 01:11 KST
 status: draft
 tags: [plan, figma, refactor]
 schemaVersion: 1
 description: 플러그인 런타임·UILayer·Manifest 빌더를 기능 단위 모듈로 분리하고 테스트/품질 게이트를 정비하기 위한 리팩터링 로드맵
 doc_refs: ['admin/plan/figmapluginmake.md', 'admin/plan/figmaplugin-roadmap.md']
-code_refs: []
+code_refs:
+  [
+    'figma-hello-plugin/src/ui/hooks/useExecutionModel.ts',
+    'figma-hello-plugin/src/ui/services/guardrail-preflight.ts',
+    'figma-hello-plugin/src/ui/services/schema-builder.ts',
+  ]
 ---
 
 # 1. 배경
@@ -192,6 +197,62 @@ code_refs: []
    - (1) Base/Layout/Component 스타일 파일을 만든 뒤 `app.css`에서 블록을 이동시키고 import 경로를 업데이트한다.
    - (2) 상위 컨테이너의 높이/플렉스 규칙을 Base Layout에서 정의한 뒤, RouteTree·ExecutionControls·Preview 영역의 스크롤 동작을 수동 검증한다.
    - (3) UI 빌드 및 테스트(`pnpm --filter gg-figma-plugin build:ui`, `pnpm --filter gg-figma-plugin test`)를 실행해 스타일 분리 후 회귀가 없는지 확인한다.
+
+### 3-5-2. 컴포넌트화 & React(Preact) 대응 강화
+
+1. **컴포넌트 계층 정의**
+   - Layout 계층: `WorkspaceShell`, `Sidebar`, `ContentColumns` 등 레이아웃 전용 Preact 컴포넌트로 분리하고, Base Layout 스타일만 의존하도록 한다.
+   - Feature 컴포넌트: RouteTree, ExecutionControls, PreviewControls, QuickActions, ResultLog 등 각 기능을 독립 폴더(`components/FeatureName/`)로 재구성하고, 내부에 `index.tsx`, `styles.css`, `hooks.ts`, `types.ts`를 표준화한다.
+   - Primitive/Shared 컴포넌트: 버튼, 아이콘, 배지, 패널 카드 등은 `components/common/`에 모아 재사용성을 높인다.
+2. **상태/프리젠테이션 분리**
+   - Store/Service가 제공하는 데이터를 `useFeatureModel` 형태의 hook으로 캡슐화하고, 프리젠테이션 컴포넌트는 props만 받아 렌더링한다.
+   - 향후 React(또는 SSR) 도입 시 동일 hook을 재사용할 수 있도록 의존성 주입 패턴을 도입한다.
+3. **경계 명세**
+   - 각 Feature 컴포넌트는 "입력 props", "발생 이벤트", "의존 Store/Service"를 문서화하고, `admin/plan/figmapluginmake.md`의 공통 규칙과 연결한다.
+   - 컴포넌트 간 통신은 이벤트/스토어 업데이트를 통해서만 이루어지도록 하며, DOM 직접 접근을 금지한다.
+4. **마이그레이션 순서**
+   - (1) RouteTree → ExecutionControls → Preview → QuickActions → ResultLog 순으로 컴포넌트 구조를 재배치하며, 각 단계마다 스타일 모듈과 hook을 함께 적용한다.
+   - (2) 각 단계가 끝날 때마다 Storybook 또는 간단한 Preact render 테스트를 추가해 최소한의 UI 회귀를 감시한다.
+   - (3) 모든 Feature가 컴포넌트화되면 Base Layout과 공통 컴포넌트를 재검토해 불필요한 전역 클래스를 제거한다.
+5. **미래 대비**
+   - react/next 통합을 염두에 두고, CSS Modules 또는 scoped CSS-in-JS 도입 여부를 평가하며, 서버 렌더링 가능성을 가진 컴포넌트는 data-fetch/mock 용 어댑터를 준비한다.
+
+### 3-5-3. Execution 메시지 계약 확립(DTO/검증)
+
+**목표**: Dry Run/Apply 시 UI ↔ 런타임 전송 데이터 형식을 엄격히 고정해 JSON 파싱 오류를 근본적으로 제거하고, 추후 확장 시에도 재발하지 않도록 한다.
+
+1. **DTO 정의**
+   - `ExecutionPayload` 인터페이스를 `payloads/execution.ts`에 정의한다.
+     ```ts
+     export interface ExecutionPayload {
+       intent: 'dry-run' | 'apply';
+       documents: string[]; // SchemaDocument JSON 문자열 배열
+       targetPage?: string;
+       targetMode?: 'append' | 'replace' | 'update';
+     }
+     ```
+   - UI는 반드시 이 구조를 채워 `createExecutionService`로 전달한다.
+
+2. **UI 계층 강제**
+   - `useExecutionModel` 또는 `createExecutionService`에서 `SchemaDocument`를 `JSON.stringify`로 변환한 배열만을 `documents`에 넣는다.
+   - DTO 스키마(`zod`/`ajv`)를 도입해 UI에서 먼저 검증하고, 실패 시 런타임으로 메시지를 보내지 않는다.
+
+3. **런타임 계층 검증**
+   - `runSchemaBatch`에서 타입 검사: 문자열이 아니면 즉시 오류 메시지 반환(예: "ExecutionPayload.documents must be stringified JSON").
+   - 검사 통과 후에만 `JSON.parse` 실행.
+
+4. **테스트 & 문서화**
+   - UI 단위 테스트: DTO 변환이 문자열 배열을 반환하는지, 유효성 검증이 실패 시 중단되는지 확인.
+   - 런타임 테스트: 객체 배열 등 잘못된 입력을 주면 친절한 오류를 던지고 실행이 중단되는지 검사.
+   - `execution-contract.md` 문서를 신설해 DTO 스펙, 검증 규칙, 예시 페이로드를 문서화한다.
+
+5. **수용 기준**
+   - Dry Run 실행 시 선택한 페이지에 프리뷰 프레임이 생성되고, ResultLog/Guardrail Summary에 보고서가 정상 출력되어야 한다.
+   - JSON 파싱 오류가 발생하지 않을 것.
+6. **UI 프리플라이트 가드레일**
+   - Dry Run 직전 UI에서 대상 문서들의 노드 수/깊이/파일 크기를 측정해 임계치를 넘는 경우 즉시 차단 메시지를 출력한다.
+   - 프리플라이트 경고는 Guardrail Summary에 기록되고 런타임 실행과 동시에 히스토리에 남는다.
+   - Guardrail FAIL 등급(예: QA 스트레스 섹션)은 기본 선택에서 제외되고, 사용자가 명시적으로 선택했을 때만 프리플라이트 경고를 확인할 수 있다.
 
 # 3-6. UI 컴포넌트 매핑 (파일 단위 세분화)
 

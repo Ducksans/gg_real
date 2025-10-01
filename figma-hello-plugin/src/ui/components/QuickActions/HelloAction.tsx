@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 interface HelloActionProps {
   readonly onCreateHello: () => void;
 }

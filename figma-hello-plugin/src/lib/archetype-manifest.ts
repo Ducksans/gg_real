@@ -79,7 +79,7 @@ export interface ArchetypeManifest {
 }
 
 export const archetypeManifest: ArchetypeManifest = {
-  generatedAt: '2025-09-30T17:40:29.703Z',
+  generatedAt: '2025-10-01T07:47:39.098Z',
   surfaces: {
     plugin: {
       id: 'plugin',
@@ -1333,10 +1333,6 @@ export const archetypeManifest: ArchetypeManifest = {
           slotLabel: 'Execution Panel',
         },
       ],
-    },
-    surfaces: {
-      label: 'Surfaces',
-      sections: [],
     },
     'timeline-graph': {
       label: 'Timeline Graph',

@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 interface SlotHighlightProps {
   readonly sections: string[];
   readonly onHighlight?: (sectionId: string) => void;

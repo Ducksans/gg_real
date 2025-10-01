@@ -14,6 +14,11 @@ export const SectionList = ({ sectionStore }: SectionListProps) => {
   const { availableSections, selectedSectionIds } = sectionStore.state.value;
   const querySignal = useSignal('');
 
+  const failCount = useMemo(
+    () => availableSections.filter((section) => section.guardrail === 'fail').length,
+    [availableSections],
+  );
+
   const handleFilterChange = (value: string) => {
     querySignal.value = value.trim().toLowerCase();
   };
@@ -40,6 +45,11 @@ export const SectionList = ({ sectionStore }: SectionListProps) => {
           <p class="section-list__summary">
             {selectedSectionIds.length} 선택 / {availableSections.length} 전체
           </p>
+          {failCount > 0 && (
+            <p class="section-list__summary section-list__summary--fail">
+              FAIL {failCount}개는 기본 선택에서 제외됩니다.
+            </p>
+          )}
         </div>
         <button
           type="button"

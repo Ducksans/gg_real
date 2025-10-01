@@ -1,7 +1,8 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
+// doc_refs: ["admin/plan/figmapluginmake.md"]
 
 import { signal, type Signal } from '@preact/signals';
 import type { GuardrailIssue, GuardrailMetrics } from './guardrailStore';
+import type { ExecutionDebugInfo } from './executionStore';
 
 export interface LogGuardrailSnapshot {
   readonly warnings: GuardrailIssue[];
@@ -18,6 +19,7 @@ export interface LogEntry {
   readonly page?: string;
   readonly frameName?: string;
   readonly slotReport?: LogSlotReport;
+  readonly debug?: LogDebugSnapshot;
 }
 
 interface AddEntryPayload {
@@ -27,6 +29,7 @@ interface AddEntryPayload {
   readonly page?: string;
   readonly frameName?: string;
   readonly slotReport?: Partial<LogSlotReport>;
+  readonly debug?: ExecutionDebugInfo;
 }
 
 export interface LogSlotReport {
@@ -41,6 +44,10 @@ export interface LogSlotReport {
 export interface LogStore {
   readonly state: Signal<LogEntry[]>;
   addEntry: (entry: AddEntryPayload) => void;
+}
+
+export interface LogDebugSnapshot extends ExecutionDebugInfo {
+  readonly captureId?: string;
 }
 
 const MAX_LOGS = 20;
@@ -73,6 +80,17 @@ export const createLogStore = (): LogStore => {
               count: entry.slotReport.count ?? entry.slotReport.createdNodeIds?.length ?? 0,
               warnings: entry.slotReport.warnings ?? [],
               executedSections: entry.slotReport.executedSections ?? [],
+            }
+          : undefined,
+        debug: entry.debug
+          ? {
+              captureId: entry.debug.captureId,
+              stage: entry.debug.stage,
+              rawPreview: entry.debug.rawPreview,
+              rawLength: entry.debug.rawLength,
+              sanitized: entry.debug.sanitized,
+              removedBom: entry.debug.removedBom,
+              controlCharsRemoved: entry.debug.controlCharsRemoved,
             }
           : undefined,
       };
