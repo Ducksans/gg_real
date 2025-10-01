@@ -1,5 +1,3 @@
-// doc_refs: ["admin/plan/figmaplugin-refactor.md"]
-
 import { signal, type Signal } from '@preact/signals';
 import type { SectionInfo } from '../services/schema-builder';
 
@@ -14,6 +12,12 @@ export interface SectionStore {
   selectSections: (sectionIds: string[]) => void;
   toggleSelection: (sectionId: string) => void;
   clearSelection: () => void;
+  takeSnapshot: () => SectionSelectionSnapshot;
+  restoreSnapshot: (snapshot: SectionSelectionSnapshot) => void;
+}
+
+export interface SectionSelectionSnapshot {
+  readonly sectionIds: ReadonlyArray<string>;
 }
 
 const createInitialState = (): SectionState => ({
@@ -70,6 +74,21 @@ export const createSectionStore = (): SectionStore => {
       state.value = {
         availableSections: state.value.availableSections,
         selectedSectionIds: [],
+      };
+    },
+    takeSnapshot() {
+      return {
+        sectionIds: [...state.value.selectedSectionIds],
+      } satisfies SectionSelectionSnapshot;
+    },
+    restoreSnapshot(snapshot) {
+      const { availableSections } = state.value;
+      const validIds = snapshot.sectionIds.filter((id) =>
+        availableSections.some((section) => section.id === id),
+      );
+      state.value = {
+        availableSections,
+        selectedSectionIds: [...validIds],
       };
     },
   };
