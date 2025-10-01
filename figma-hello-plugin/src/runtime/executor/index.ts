@@ -246,7 +246,8 @@ export async function runSchemaDocument(
     removeExistingFrame(page, normalized.frameName);
   }
 
-  const baseContainer = containerOverride ?? prepareTargetFrame(page, normalized, surface);
+  const baseContainer =
+    containerOverride ?? prepareTargetFrame(page, normalized, surface, context.intent);
   if (!containerOverride) {
     applySurfaceLayout(baseContainer, surface);
   }
