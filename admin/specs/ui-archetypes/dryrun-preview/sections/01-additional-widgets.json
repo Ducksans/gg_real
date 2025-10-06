@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "dryrun-preview",
+    "section": "additional-widgets",
+    "order": 1,
+    "label": "추가 위젯 배치",
+    "description": "슬롯 추가/제거 테스트용 사각형과 텍스트",
+    "designSurface": "plugin",
+    "designSurfaceLabel": "Plugin UI",
+    "route": "/plugin/dryrun-preview",
+    "routeLabel": "Dry Run Preview",
+    "slot": "preview",
+    "slotLabel": "Preview Slot"
+  },
+  "target": {
+    "frameName": "GeneratedFrame",
+    "mode": "append"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "TestCard",
+      "tokens": { "fill": "#FF5F5F", "stroke": "#9F1D1D" },
+      "size": { "width": 320, "height": 200 },
+      "position": { "x": 1480, "y": 760 },
+      "children": [
+        {
+          "type": "text",
+          "name": "TestCardTitle",
+          "tokens": { "text": "#FFFFFF" },
+          "text": {
+            "content": "추가 카드",
+            "style": {
+              "font": { "family": "Inter", "style": "Bold" },
+              "fontSize": 28
+            }
+          },
+          "position": { "x": 16, "y": 16 }
+        },
+        {
+          "type": "text",
+          "name": "TestCardBody",
+          "tokens": { "text": "#FFFFFF" },
+          "text": {
+            "content": "증분 렌더 테스트",
+            "style": {
+              "font": { "family": "Inter", "style": "Bold" },
+              "fontSize": 18
+            }
+          },
+          "position": { "x": 16, "y": 56 }
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "name": "StatusBadge",
+      "tokens": { "fill": "#FF5F5F", "stroke": "#9F1D1D" },
+      "size": { "width": 200, "height": 60 },
+      "position": { "x": 1480, "y": 660 },
+      "children": [
+        {
+          "type": "text",
+          "name": "StatusLabel",
+          "tokens": { "text": "#FFFFFF" },
+          "text": {
+            "content": "DRY RUN SUCCESS",
+            "style": {
+              "font": { "family": "Inter", "style": "Bold" },
+              "fontSize": 20
+            }
+          },
+          "position": { "x": 24, "y": 16 }
+        }
+      ]
+    }
+  ]
+}

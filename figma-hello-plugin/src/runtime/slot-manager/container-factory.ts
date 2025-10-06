@@ -1,7 +1,7 @@
 import type { SurfaceConfig } from '../surface-config';
 import type { SchemaDocument } from '../../schema';
 
-import { calculateNextY, ensureAutoLayout } from './transformers/auto-layout';
+import { calculateNextY } from './transformers/auto-layout';
 import { ensurePreviewTemplate } from './preview-template';
 
 export const findTargetPage = (pageName: string): PageNode => {
@@ -53,7 +53,15 @@ export const prepareTargetFrame = async (
   if (!frame) {
     frame = figma.createFrame();
     frame.name = target.frameName;
-    ensureAutoLayout(frame);
+    frame.layoutMode = 'NONE';
+    frame.primaryAxisSizingMode = 'AUTO';
+    frame.counterAxisSizingMode = 'AUTO';
+    frame.itemSpacing = 0;
+    frame.paddingTop = 0;
+    frame.paddingRight = 0;
+    frame.paddingBottom = 0;
+    frame.paddingLeft = 0;
+    frame.strokes = [];
 
     if (previewFrame) {
       frame.resizeWithoutConstraints(PREVIEW_FRAME_WIDTH, PREVIEW_FRAME_HEIGHT);
@@ -71,8 +79,22 @@ export const prepareTargetFrame = async (
     }
 
     page.appendChild(frame);
+    console.log('[prepareTargetFrame:create]', {
+      frameName: frame.name,
+      layoutMode: frame.layoutMode,
+      primaryAxis: frame.primaryAxisSizingMode,
+      counterAxis: frame.counterAxisSizingMode,
+    });
   } else {
-    ensureAutoLayout(frame);
+    frame.layoutMode = 'NONE';
+    frame.primaryAxisSizingMode = 'AUTO';
+    frame.counterAxisSizingMode = 'AUTO';
+    frame.itemSpacing = 0;
+    frame.paddingTop = 0;
+    frame.paddingRight = 0;
+    frame.paddingBottom = 0;
+    frame.paddingLeft = 0;
+    frame.strokes = [];
 
     if (previewFrame) {
       frame.resizeWithoutConstraints(PREVIEW_FRAME_WIDTH, PREVIEW_FRAME_HEIGHT);
@@ -80,6 +102,12 @@ export const prepareTargetFrame = async (
       frame.y = PREVIEW_FRAME_POSITION.y;
       frame.fills = [PREVIEW_FRAME_FILL];
     }
+    console.log('[prepareTargetFrame:reuse]', {
+      frameName: frame.name,
+      layoutMode: frame.layoutMode,
+      primaryAxis: frame.primaryAxisSizingMode,
+      counterAxis: frame.counterAxisSizingMode,
+    });
   }
 
   if (previewFrame) {

@@ -9,6 +9,10 @@ export const decorateWithMetadata = (
   surfaceHash: string,
   slotHash: string,
   nodeKey?: string,
+  owner?: {
+    section?: string | null;
+    ownerId?: string | null;
+  },
 ) => {
   const baseData = spec.pluginData ? { ...spec.pluginData } : {};
   baseData[PLUGINDATA_KEYS.surfaceId] = surface.id;
@@ -18,11 +22,17 @@ export const decorateWithMetadata = (
   if (nodeKey) {
     baseData[PLUGINDATA_KEYS.nodeKey] = nodeKey;
   }
+  if (owner?.section) {
+    baseData[PLUGINDATA_KEYS.ownerSection] = owner.section;
+  }
+  if (owner?.ownerId) {
+    baseData[PLUGINDATA_KEYS.ownerId] = owner.ownerId;
+  }
   spec.pluginData = baseData;
 
   if ('children' in spec && Array.isArray((spec as FrameNodeSpec).children)) {
     ((spec as FrameNodeSpec).children ?? []).forEach((child: NodeSpec) => {
-      decorateWithMetadata(child, surface, slotId, surfaceHash, slotHash);
+      decorateWithMetadata(child, surface, slotId, surfaceHash, slotHash, undefined, owner);
     });
   }
 };

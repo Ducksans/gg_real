@@ -1,5 +1,5 @@
 export async function createHelloFrame() {
-  await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+  await figma.loadFontAsync({ family: 'Roboto', style: 'Regular' });
 
   const frame = figma.createFrame();
   frame.name = 'Hello Frame';
@@ -8,7 +8,7 @@ export async function createHelloFrame() {
   frame.cornerRadius = 16;
 
   const text = figma.createText();
-  text.fontName = { family: 'Inter', style: 'Regular' };
+  text.fontName = { family: 'Roboto', style: 'Regular' };
   text.fontSize = 24;
   text.characters = 'Hello World';
   text.fills = [{ type: 'SOLID', color: { r: 0.16, g: 0.2, b: 0.32 } }];

@@ -50,31 +50,31 @@ const RADIUS_TOKENS: Record<string, number> = {
 
 const TYPOGRAPHY_TOKENS: Record<string, TypographyToken> = {
   'typo.heading.lg': {
-    font: { family: 'Inter', style: 'Semi Bold' },
+    font: { family: 'Roboto', style: 'Bold' },
     fontSize: 28,
     lineHeight: 34,
     colorToken: 'color.text.primary',
   },
   'typo.heading.md': {
-    font: { family: 'Inter', style: 'Semi Bold' },
+    font: { family: 'Roboto', style: 'Bold' },
     fontSize: 20,
     lineHeight: 28,
     colorToken: 'color.text.primary',
   },
   'typo.heading.sm': {
-    font: { family: 'Inter', style: 'Semi Bold' },
+    font: { family: 'Roboto', style: 'Bold' },
     fontSize: 16,
     lineHeight: 24,
     colorToken: 'color.text.primary',
   },
   'typo.body.md': {
-    font: { family: 'Inter', style: 'Regular' },
+    font: { family: 'Roboto', style: 'Regular' },
     fontSize: 16,
     lineHeight: 24,
     colorToken: 'color.text.secondary',
   },
   'typo.caption': {
-    font: { family: 'Inter', style: 'Medium' },
+    font: { family: 'Roboto', style: 'Medium' },
     fontSize: 12,
     lineHeight: 18,
     colorToken: 'color.text.secondary',

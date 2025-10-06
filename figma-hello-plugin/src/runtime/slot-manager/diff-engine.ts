@@ -12,6 +12,10 @@ export const syncSlotChildren = async (
   surface: SurfaceConfig,
   slotId: string | null,
   mode: 'append' | 'replace' | 'update' = 'append',
+  owner?: {
+    section?: string | null;
+    ownerId?: string | null;
+  },
 ): Promise<SceneNode[]> => {
   if (!specs?.length) {
     return [];
@@ -57,7 +61,7 @@ export const syncSlotChildren = async (
         existingMap.delete(nodeKey);
       }
 
-      decorateWithMetadata(spec, surface, normalizedSlotId, surfaceHash, slotHash, nodeKey);
+      decorateWithMetadata(spec, surface, normalizedSlotId, surfaceHash, slotHash, nodeKey, owner);
       toCreate.push(spec);
     }
   });

@@ -78,17 +78,7 @@
       "layout": "VERTICAL",
       "spacing": 12,
       "padding": { "top": 16, "right": 0, "bottom": 0, "left": 0 }
-    },
-    {
-      "id": "preview",
-      "label": "Dry Run Preview Slot",
-      "parent": null,
-      "layout": "HORIZONTAL",
-      "spacing": 0,
-      "padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
-      "width": 1840,
-      "height": 1000
     }
   ],
-  "requiredSlots": ["header", "surface-tabs", "tree", "detail", "log", "preview"]
+  "requiredSlots": ["header", "surface-tabs", "tree", "detail", "log"]
 }

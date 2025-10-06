@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "current_mode": "active",
-  "last_checkpoint": "admin/checkpoints/20250926-0200-UTC_1100-KST.md",
-  "next_round": "[P1] 즉시 강화 항목",
+  "current_mode": "standby",
+  "last_checkpoint": "admin/checkpoints/20251002-0100-UTC_1000-KST.md",
+  "next_round": "프리뷰 슬롯에 콘텐츠/Apply 연동",
   "created": "2025-09-22 08:26 UTC / 2025-09-22 17:26 KST",
-  "updated": "2025-09-26 02:00 UTC / 2025-09-26 11:00 KST",
+  "updated": "2025-10-02 05:36 UTC / 2025-10-02 14:36 KST",
   "auto_followups": true
 }

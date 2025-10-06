@@ -20,12 +20,14 @@ import {
   syncSlotChildren,
   buildSlotReport,
   getPreviewCanvas,
+  getPreviewTemplateNodes,
   updatePreviewSummary,
 } from '../slot-manager';
 import { evaluateGuardrails } from '../guardrails';
 import { normalizeSlotName, PLUGINDATA_KEYS } from '../utils';
 
 import { createExecutionContext, type ExecutionOptions } from './context-factory';
+import { archetypeManifest } from '../../lib/archetype-manifest';
 
 const tokenResolver = (token: string) => resolvePaintToken(token);
 
@@ -168,17 +170,164 @@ export async function runSchemaBatch(raws: string[], options: ExecutionOptions =
     return trimmed;
   });
 
-  const parsed = sanitizedRaws.map((raw) => {
+  interface ParsedEntry {
+    doc: SchemaDocument;
+    index: number;
+    metaPage?: string;
+    slotId: string | null;
+    runtimePage: string;
+    key: string;
+  }
+
+  const resolveRuntimePage = (doc: SchemaDocument) =>
+    options.targetPage?.trim() || doc.target?.page?.trim() || figma.currentPage.name;
+
+  const buildKey = (runtimePage: string, slotId: string | null, metaPage?: string) =>
+    `${runtimePage}::${slotId ?? ''}::${metaPage ?? ''}`;
+
+  const baseTargets = new Map<string, { page: string; frameName: string }>();
+  const baseDocsByKey = new Map<string, ParsedEntry>();
+  const consumed = new Set<number>();
+  const injectedKeys = new Set<string>();
+  const ordered: SchemaDocument[] = [];
+
+  const parsedEntries: ParsedEntry[] = sanitizedRaws.map((raw, index) => {
     let doc: SchemaDocument;
     try {
       doc = JSON.parse(raw) as SchemaDocument;
     } catch (error) {
       throw new Error('JSON 파싱에 실패했습니다. 형식을 확인해 주세요.');
     }
-    return doc;
+
+    const slotId = normalizeSlotName(doc.meta?.slot);
+    const runtimePage = resolveRuntimePage(doc);
+    const metaPage = doc.meta?.page ?? undefined;
+    const key = buildKey(runtimePage, slotId, metaPage);
+
+    const entry: ParsedEntry = { doc, index, metaPage, slotId, runtimePage, key };
+
+    if (doc.meta?.section === 'minimal-preview' && !baseDocsByKey.has(key)) {
+      baseDocsByKey.set(key, entry);
+    }
+
+    return entry;
   });
 
-  for (const doc of parsed) {
+  const loadManifestBaseDoc = (metaPage: string | undefined, slotId: string | null) => {
+    if (!metaPage || !slotId) {
+      return null;
+    }
+
+    const pageEntry = archetypeManifest.pages[metaPage];
+    if (!pageEntry) {
+      return null;
+    }
+
+    const section = pageEntry.sections.find(
+      (candidate) =>
+        candidate.sectionId === 'minimal-preview' && normalizeSlotName(candidate.slot) === slotId,
+    );
+
+    if (!section) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(section.raw) as SchemaDocument;
+    } catch (error) {
+      console.warn('[plugin] minimal-preview 섹션 파싱에 실패했습니다.', error);
+      return null;
+    }
+  };
+
+  const prepareBaseDoc = (doc: SchemaDocument, runtimePage: string, key: string) => {
+    const frameName = doc.target?.frameName?.trim() || doc.meta?.title || 'GeneratedFrame';
+    doc.target = {
+      page: runtimePage,
+      frameName,
+      mode: 'replace',
+    };
+    baseTargets.set(key, { page: runtimePage, frameName });
+    return doc;
+  };
+
+  const ensureBaseDoc = (entry: ParsedEntry) => {
+    const { key, metaPage, slotId, runtimePage } = entry;
+    if (!slotId || injectedKeys.has(key)) {
+      return;
+    }
+
+    const baseEntry = baseDocsByKey.get(key);
+    if (baseEntry && !consumed.has(baseEntry.index)) {
+      injectedKeys.add(key);
+      consumed.add(baseEntry.index);
+      ordered.push(prepareBaseDoc(baseEntry.doc, runtimePage, key));
+      return;
+    }
+
+    const manifestDoc = loadManifestBaseDoc(metaPage, slotId);
+    if (manifestDoc) {
+      injectedKeys.add(key);
+      ordered.push(prepareBaseDoc(manifestDoc, runtimePage, key));
+    }
+  };
+
+  parsedEntries
+    .sort((a, b) => a.index - b.index)
+    .forEach((entry) => {
+      const { doc, key, slotId, runtimePage } = entry;
+
+      if (doc.meta?.section !== 'minimal-preview') {
+        ensureBaseDoc(entry);
+      }
+
+      if (doc.meta?.section === 'minimal-preview') {
+        if (injectedKeys.has(key)) {
+          consumed.add(entry.index);
+          return;
+        }
+        injectedKeys.add(key);
+        consumed.add(entry.index);
+        ordered.push(prepareBaseDoc(doc, runtimePage, key));
+        return;
+      }
+
+      const baseTarget = baseTargets.get(key);
+      const frameName =
+        doc.target?.frameName?.trim() ||
+        baseTarget?.frameName ||
+        doc.meta?.title ||
+        'GeneratedFrame';
+      const pageName = baseTarget?.page || runtimePage;
+
+      doc.target = {
+        page: pageName,
+        frameName,
+        mode: doc.target?.mode ?? 'append',
+      };
+
+      ordered.push(doc);
+    });
+
+  // 사용자가 최소 프리뷰만 선택했을 때도 실행되도록 보장한다.
+  parsedEntries.forEach((entry) => {
+    if (entry.doc.meta?.section !== 'minimal-preview') {
+      return;
+    }
+    if (consumed.has(entry.index)) {
+      return;
+    }
+
+    const { key, runtimePage } = entry;
+    if (injectedKeys.has(key)) {
+      return;
+    }
+
+    injectedKeys.add(key);
+    ordered.push(prepareBaseDoc(entry.doc, runtimePage, key));
+  });
+
+  for (const doc of ordered) {
     await runSchemaDocument(doc, options);
   }
 }
@@ -244,7 +393,7 @@ export async function runSchemaDocument(
     throw new Error('nodes 배열이 비어 있어 실행할 수 없습니다.');
   }
 
-  if (!containerOverride && (options.targetMode === 'replace' || isPreview)) {
+  if (!containerOverride && normalized.mode === 'replace') {
     removeExistingFrame(page, normalized.frameName);
   }
 
@@ -264,6 +413,20 @@ export async function runSchemaDocument(
   const slotId = slotOverride ?? normalizeSlotName(doc.meta?.slot);
   const slotTarget = resolveSlotContainer(previewRoot ?? baseContainer, slotId, surface);
 
+  const ownerIdParts = [doc.meta?.page, doc.meta?.section, doc.meta?.slot];
+  if (typeof doc.meta?.order === 'number') {
+    ownerIdParts.push(String(doc.meta.order));
+  }
+  const ownerId =
+    ownerIdParts
+      .filter((value): value is string => typeof value === 'string' && value.length > 0)
+      .join('::') ||
+    doc.meta?.title ||
+    null;
+
+  const mergeMode: 'append' | 'replace' | 'update' =
+    normalized.mode === 'update' ? 'update' : normalized.mode === 'replace' ? 'replace' : 'append';
+
   const createdNodes = await syncSlotChildren(
     slotTarget,
     doc.nodes as NodeSpec[],
@@ -275,7 +438,11 @@ export async function runSchemaDocument(
     },
     surface,
     slotId,
-    isPreview ? 'replace' : options.targetMode === 'replace' ? 'replace' : 'append',
+    mergeMode,
+    {
+      section: doc.meta?.section ?? null,
+      ownerId,
+    },
   );
 
   const slotReport = buildSlotReport(createdNodes, doc.meta?.section ? [doc.meta.section] : [], []);

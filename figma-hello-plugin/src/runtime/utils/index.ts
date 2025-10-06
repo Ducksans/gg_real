@@ -4,6 +4,8 @@ export const PLUGINDATA_KEYS = {
   slotId: '__auto_slotId',
   slotHash: '__auto_slotHash',
   nodeKey: '__auto_nodeKey',
+  ownerSection: '__auto_ownerSection',
+  ownerId: '__auto_ownerId',
 } as const;
 
 export const normalizeSlotName = (slot?: string | null): string | null => {

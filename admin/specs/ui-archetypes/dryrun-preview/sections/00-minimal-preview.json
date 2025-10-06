@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "page": "dryrun-preview",
+    "section": "minimal-preview",
+    "order": 0,
+    "label": "Dry Run 미니 프리뷰",
+    "description": "테스트용 단순 프리뷰 캔버스",
+    "designSurface": "plugin",
+    "designSurfaceLabel": "Plugin UI",
+    "route": "/plugin/dryrun-preview",
+    "routeLabel": "Dry Run Preview",
+    "slot": "preview",
+    "slotLabel": "Preview Slot"
+  },
+  "target": {
+    "frameName": "GeneratedFrame",
+    "mode": "replace"
+  },
+  "nodes": [
+    {
+      "type": "frame",
+      "name": "PreviewPlaceholder",
+      "tokens": { "fill": "color.surface.card", "radius": "radius.lg" },
+      "size": { "width": 600, "height": 360 },
+      "layout": { "type": "none" },
+      "position": { "x": 0, "y": 0 },
+      "children": []
+    }
+  ]
+}

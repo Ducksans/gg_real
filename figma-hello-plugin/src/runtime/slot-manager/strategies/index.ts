@@ -1,6 +1,7 @@
 import type { SurfaceConfig } from '../../surface-config';
 
 import { applySlotLayout } from '../transformers/auto-layout';
+import { PLUGINDATA_KEYS } from '../../utils';
 
 const ensureSlotContainerInternal = (
   root: FrameNode,
@@ -22,7 +23,24 @@ const ensureSlotContainerInternal = (
   }
 
   const slotName = `Slot:${surface.id}:${slotId}`;
-  const existing = parent.findOne((node) => node.type === 'FRAME' && node.name === slotName);
+
+  if (
+    parent.name === slotName ||
+    (parent.getPluginData(PLUGINDATA_KEYS.surfaceId) === surface.id &&
+      parent.getPluginData(PLUGINDATA_KEYS.slotId) === slotId)
+  ) {
+    applySlotLayout(parent, config, surface, slotId);
+    return parent;
+  }
+
+  const existing = parent.findOne((node) => {
+    if (node.type !== 'FRAME') return false;
+    const frame = node as FrameNode;
+    if (frame.name === slotName) return true;
+    const surfaceIdData = frame.getPluginData(PLUGINDATA_KEYS.surfaceId);
+    const slotIdData = frame.getPluginData(PLUGINDATA_KEYS.slotId);
+    return surfaceIdData === surface.id && slotIdData === slotId;
+  });
   if (existing) {
     applySlotLayout(existing as FrameNode, config, surface, slotId);
     return existing as FrameNode;
@@ -31,6 +49,8 @@ const ensureSlotContainerInternal = (
   const frame = figma.createFrame();
   frame.name = slotName;
   applySlotLayout(frame, config, surface, slotId);
+  frame.setPluginData(PLUGINDATA_KEYS.surfaceId, surface.id);
+  frame.setPluginData(PLUGINDATA_KEYS.slotId, slotId);
   parent.appendChild(frame);
   return frame;
 };

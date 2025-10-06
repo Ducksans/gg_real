@@ -1,12 +1,20 @@
+import { PLUGINDATA_KEYS } from '../utils';
+
+const PREVIEW_SURFACE_ID = 'plugin';
+const PREVIEW_SLOT_ID = 'preview';
+const PREVIEW_SURFACE_HASH = 'preview:surface:plugin';
+const PREVIEW_SLOT_HASH = 'preview:slot:plugin:preview';
+
 const PREVIEW_CANVAS_KEY = 'preview:canvas';
 const PREVIEW_SUMMARY_LIST_KEY = 'preview:summary:list';
 const PREVIEW_WARNINGS_LIST_KEY = 'preview:warnings:list';
 const PREVIEW_SUBTITLE_KEY = 'preview:subtitle';
 const PREVIEW_TIMESTAMP_KEY = 'preview:timestamp';
 const PREVIEW_TITLE_KEY = 'preview:title';
+const PREVIEW_SLOT_FRAME_KEY = 'preview:slot:preview';
 
-const INTER_REGULAR: FontName = { family: 'Inter', style: 'Regular' };
-const INTER_BOLD: FontName = { family: 'Inter', style: 'Bold' };
+const FONT_REGULAR: FontName = { family: 'Roboto', style: 'Regular' };
+const FONT_BOLD: FontName = { family: 'Roboto', style: 'Bold' };
 
 const WHITE_FILL: Paint = {
   type: 'SOLID',
@@ -62,6 +70,7 @@ interface PreviewTemplate {
   subtitle: TextNode | null;
   timestamp: TextNode | null;
   title: TextNode | null;
+  slotFrame: FrameNode | null;
 }
 
 interface PreviewSummaryPayload {
@@ -76,8 +85,8 @@ interface PreviewSummaryPayload {
 }
 
 const loadFonts = async () => {
-  await figma.loadFontAsync(INTER_REGULAR);
-  await figma.loadFontAsync(INTER_BOLD);
+  await figma.loadFontAsync(FONT_REGULAR);
+  await figma.loadFontAsync(FONT_BOLD);
 };
 
 const setText = (
@@ -85,7 +94,7 @@ const setText = (
   value: string,
   options?: { bold?: boolean; size?: number; fill?: Paint },
 ) => {
-  node.fontName = options?.bold ? INTER_BOLD : INTER_REGULAR;
+  node.fontName = options?.bold ? FONT_BOLD : FONT_REGULAR;
   if (options?.size) {
     node.fontSize = options.size;
   }
@@ -186,12 +195,13 @@ const ensurePreviewTemplateInternal = async (frame: FrameNode) => {
   if (!body) {
     body = figma.createFrame();
     body.name = 'Preview:Body';
-    body.layoutMode = 'HORIZONTAL';
+    body.layoutMode = 'NONE';
     body.primaryAxisSizingMode = 'AUTO';
     body.counterAxisSizingMode = 'AUTO';
-    body.itemSpacing = 24;
-    body.padding = 0 as any;
-    body.counterAxisAlignItems = 'STRETCH';
+    body.paddingTop = 0;
+    body.paddingRight = 0;
+    body.paddingBottom = 0;
+    body.paddingLeft = 0;
     body.fills = [];
     frame.appendChild(body);
   }
@@ -226,20 +236,63 @@ const ensurePreviewTemplateInternal = async (frame: FrameNode) => {
   if (!canvas || canvas.removed) {
     canvas = figma.createFrame();
     canvas.name = 'Preview:Canvas';
-    canvas.layoutMode = 'VERTICAL';
+    canvas.layoutMode = 'NONE';
     canvas.primaryAxisSizingMode = 'AUTO';
     canvas.counterAxisSizingMode = 'AUTO';
-    canvas.itemSpacing = 16;
     canvas.paddingTop = 24;
     canvas.paddingRight = 24;
     canvas.paddingBottom = 24;
     canvas.paddingLeft = 24;
     canvas.cornerRadius = 18;
     canvas.fills = [PREVIEW_CANVAS_FILL];
-    canvas.layoutGrow = 1;
     body.appendChild(canvas);
     setNodePluginData(frame, PREVIEW_CANVAS_KEY, canvas);
   }
+
+  canvas.resizeWithoutConstraints(1200, 900);
+  canvas.x = 0;
+  canvas.y = 0;
+
+  let slotFrame = getNodeById<FrameNode>(frame, PREVIEW_SLOT_FRAME_KEY);
+  if (!slotFrame || slotFrame.removed) {
+    slotFrame = figma.createFrame();
+    slotFrame.name = 'Slot:plugin:preview';
+    slotFrame.layoutMode = 'NONE';
+    slotFrame.primaryAxisSizingMode = 'AUTO';
+    slotFrame.counterAxisSizingMode = 'AUTO';
+    slotFrame.paddingTop = 0;
+    slotFrame.paddingRight = 0;
+    slotFrame.paddingBottom = 0;
+    slotFrame.paddingLeft = 0;
+    slotFrame.strokes = [];
+    slotFrame.fills = [];
+    canvas.appendChild(slotFrame);
+    setNodePluginData(frame, PREVIEW_SLOT_FRAME_KEY, slotFrame);
+  } else if (slotFrame.parent !== canvas) {
+    canvas.appendChild(slotFrame);
+  }
+
+  slotFrame.setPluginData(PLUGINDATA_KEYS.surfaceId, PREVIEW_SURFACE_ID);
+  slotFrame.setPluginData(PLUGINDATA_KEYS.surfaceHash, PREVIEW_SURFACE_HASH);
+  slotFrame.setPluginData(PLUGINDATA_KEYS.slotId, PREVIEW_SLOT_ID);
+  slotFrame.setPluginData(PLUGINDATA_KEYS.slotHash, PREVIEW_SLOT_HASH);
+
+  console.log('[ensurePreviewTemplate:slotFrame]', {
+    slotFrame: slotFrame.name,
+    layoutMode: slotFrame.layoutMode,
+    width: slotFrame.width,
+    height: slotFrame.height,
+  });
+
+  [...canvas.children]
+    .filter(
+      (child) =>
+        child.id !== slotFrame.id &&
+        child.type === 'FRAME' &&
+        (child.name === 'Slot:plugin:preview' ||
+          child.getPluginData(PLUGINDATA_KEYS.slotId) === PREVIEW_SLOT_ID),
+    )
+    .forEach((duplicate) => duplicate.remove());
 
   if (!summary || summary.removed) {
     summary = figma.createFrame();
@@ -257,6 +310,9 @@ const ensurePreviewTemplateInternal = async (frame: FrameNode) => {
     summary.resizeWithoutConstraints(480, 400);
     body.appendChild(summary);
   }
+
+  summary.x = canvas.width + 40;
+  summary.y = 0;
 
   if (!summaryList || summaryList.removed) {
     summaryList = figma.createFrame();
@@ -290,6 +346,11 @@ const ensurePreviewTemplateInternal = async (frame: FrameNode) => {
     setNodePluginData(frame, PREVIEW_WARNINGS_LIST_KEY, warningsList);
   }
 
+  body.resizeWithoutConstraints(
+    canvas.width + 40 + summary.width,
+    Math.max(canvas.height, summary.height),
+  );
+
   frame.setPluginData(PREVIEW_LOCK_KEY, 'true');
 
   await loadFonts();
@@ -305,6 +366,7 @@ const ensurePreviewTemplateInternal = async (frame: FrameNode) => {
     subtitle,
     timestamp,
     title,
+    slotFrame,
   } satisfies PreviewTemplate;
 };
 
@@ -395,4 +457,5 @@ export const getPreviewTemplateNodes = (frame: FrameNode): PreviewTemplate => ({
   subtitle: getNodeById<TextNode>(frame, PREVIEW_SUBTITLE_KEY),
   timestamp: getNodeById<TextNode>(frame, PREVIEW_TIMESTAMP_KEY),
   title: getNodeById<TextNode>(frame, PREVIEW_TITLE_KEY),
+  slotFrame: getNodeById<FrameNode>(frame, PREVIEW_SLOT_FRAME_KEY),
 });

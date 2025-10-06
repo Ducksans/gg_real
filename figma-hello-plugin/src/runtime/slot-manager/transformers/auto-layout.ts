@@ -16,37 +16,35 @@ export const calculateNextY = (page: PageNode): number => {
 };
 
 export const ensureAutoLayout = (frame: FrameNode) => {
-  frame.layoutMode = 'VERTICAL';
+  frame.layoutMode = 'NONE';
   frame.primaryAxisSizingMode = 'AUTO';
   frame.counterAxisSizingMode = 'AUTO';
-  frame.itemSpacing = frame.itemSpacing || 32;
-  frame.paddingTop = frame.paddingTop || 32;
-  frame.paddingRight = frame.paddingRight || 32;
-  frame.paddingBottom = frame.paddingBottom || 32;
-  frame.paddingLeft = frame.paddingLeft || 32;
+  frame.itemSpacing = 0;
+  frame.paddingTop = 0;
+  frame.paddingRight = 0;
+  frame.paddingBottom = 0;
+  frame.paddingLeft = 0;
   if (frame.fills === figma.mixed || frame.fills.length === 0) {
     frame.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
   }
 };
 
 export const applySurfaceLayout = (root: FrameNode, surface: SurfaceConfig) => {
-  root.layoutMode = 'VERTICAL';
+  console.log('[applySurfaceLayout:before]', {
+    frameName: root.name,
+    surfaceId: surface.id,
+    layoutMode: root.layoutMode,
+  });
+  root.layoutMode = 'NONE';
   const surfaceHash = computeSurfaceHash(surface);
 
   const hasFixedHeight = surface.height !== null && typeof surface.height === 'number';
-  root.primaryAxisSizingMode = hasFixedHeight ? 'FIXED' : 'AUTO';
+  root.primaryAxisSizingMode = 'FIXED';
   root.counterAxisSizingMode = 'FIXED';
-  root.resizeWithoutConstraints(
-    surface.width,
-    hasFixedHeight ? surface.height : Math.max(root.height, 10),
-  );
-  root.itemSpacing = surface.spacing;
 
-  const padding = surface.padding ?? {};
-  root.paddingTop = padding.top ?? 0;
-  root.paddingRight = padding.right ?? 0;
-  root.paddingBottom = padding.bottom ?? 0;
-  root.paddingLeft = padding.left ?? 0;
+  const width = surface.width ?? Math.max(root.width, 10);
+  const height = hasFixedHeight ? surface.height! : Math.max(root.height, 10);
+  root.resizeWithoutConstraints(width, height);
 
   root.strokes = [];
   const backgroundPaint = surface.background ? resolvePaintToken(surface.background) : null;
@@ -60,6 +58,12 @@ export const applySurfaceLayout = (root: FrameNode, surface: SurfaceConfig) => {
   root.setPluginData(PLUGINDATA_KEYS.surfaceHash, surfaceHash);
   root.setPluginData(PLUGINDATA_KEYS.slotId, '');
   root.setPluginData(PLUGINDATA_KEYS.slotHash, surfaceHash);
+  console.log('[applySurfaceLayout:after]', {
+    frameName: root.name,
+    layoutMode: root.layoutMode,
+    width: root.width,
+    height: root.height,
+  });
 };
 
 export const applySlotLayout = (
@@ -68,41 +72,38 @@ export const applySlotLayout = (
   surface: SurfaceConfig,
   slotId: string,
 ) => {
-  frame.layoutMode = config.layout === 'HORIZONTAL' ? 'HORIZONTAL' : 'VERTICAL';
+  console.log('[applySlotLayout:before]', {
+    frameName: frame.name,
+    slotId,
+    layoutMode: frame.layoutMode,
+  });
+  frame.layoutMode = 'NONE';
   frame.primaryAxisSizingMode = 'AUTO';
   frame.counterAxisSizingMode = 'AUTO';
-  frame.itemSpacing = config.spacing ?? (frame.layoutMode === 'HORIZONTAL' ? 16 : 12);
-
-  const padding = config.padding ?? {};
-  frame.paddingTop = padding.top ?? 0;
-  frame.paddingRight = padding.right ?? 0;
-  frame.paddingBottom = padding.bottom ?? 0;
-  frame.paddingLeft = padding.left ?? 0;
-
+  frame.paddingTop = config.padding?.top ?? 0;
+  frame.paddingRight = config.padding?.right ?? 0;
+  frame.paddingBottom = config.padding?.bottom ?? 0;
+  frame.paddingLeft = config.padding?.left ?? 0;
   frame.strokes = [];
   frame.fills = [];
+  frame.layoutGrow = 0;
 
-  frame.layoutGrow =
-    typeof config.grow === 'number' ? config.grow : config.width === 'fill' ? 1 : 0;
+  const surfaceWidth = surface.width ?? Math.max(frame.width, 10);
+  const targetWidth =
+    typeof config.width === 'number'
+      ? config.width
+      : config.width === 'fill'
+        ? surfaceWidth
+        : Math.max(frame.width, 10);
 
-  if (config.width && config.width !== 'hug') {
-    if (config.width === 'fill') {
-      frame.primaryAxisSizingMode = 'AUTO';
-      frame.layoutGrow = config.grow ?? 1;
-    } else if (typeof config.width === 'number') {
-      frame.primaryAxisSizingMode = 'FIXED';
-      frame.resizeWithoutConstraints(config.width, Math.max(frame.height, 10));
-    }
-  } else if (frame.layoutMode === 'HORIZONTAL') {
-    frame.counterAxisSizingMode = 'AUTO';
-  }
+  const targetHeight =
+    typeof config.height === 'number'
+      ? config.height
+      : config.height === 'fill'
+        ? (surface.height ?? Math.max(frame.height, 10))
+        : Math.max(frame.height, 10);
 
-  if (config.height && config.height !== 'hug') {
-    if (typeof config.height === 'number') {
-      frame.counterAxisSizingMode = 'FIXED';
-      frame.resizeWithoutConstraints(Math.max(frame.width, 10), config.height);
-    }
-  }
+  frame.resizeWithoutConstraints(targetWidth ?? Math.max(frame.width, 10), targetHeight);
 
   const surfaceHash = computeSurfaceHash(surface);
   const slotHash = computeSlotHash(surface.slots[slotId] ?? config);
@@ -110,4 +111,11 @@ export const applySlotLayout = (
   frame.setPluginData(PLUGINDATA_KEYS.surfaceHash, surfaceHash);
   frame.setPluginData(PLUGINDATA_KEYS.slotId, slotId);
   frame.setPluginData(PLUGINDATA_KEYS.slotHash, slotHash);
+  console.log('[applySlotLayout:after]', {
+    frameName: frame.name,
+    slotId,
+    layoutMode: frame.layoutMode,
+    width: frame.width,
+    height: frame.height,
+  });
 };

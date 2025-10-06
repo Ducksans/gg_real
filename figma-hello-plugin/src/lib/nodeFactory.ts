@@ -63,7 +63,7 @@ async function createNode(spec: NodeSpec, ctx: BuildContext): Promise<SceneNode 
 
 async function createTextNode(spec: Extract<NodeSpec, { type: 'text' }>, ctx: BuildContext) {
   const text = figma.createText();
-  const defaultFont: FontName = { family: 'Inter', style: 'Regular' };
+  const defaultFont: FontName = { family: 'Roboto', style: 'Regular' };
   await figma.loadFontAsync(defaultFont);
   text.fontName = defaultFont;
 
